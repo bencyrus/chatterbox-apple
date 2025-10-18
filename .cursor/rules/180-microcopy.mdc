@@ -1,0 +1,10 @@
+---
+description: Short, consistent microcopy rules.
+globs: ["**/*.swift", "Resources/Strings/**"]
+alwaysApply: true
+---
+
+# Microcopy
+
+- Be concise and consistent; verbs-first labels (e.g., "Send code").
+- Follow Apple's HIG tone and capitalization.

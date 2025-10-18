@@ -1,0 +1,10 @@
+---
+description: Platform targeting and compatibility policy.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Target
+
+- Target iOS 17+ unless specified otherwise. If lower, ensure compatible APIs.
+- Prefer modern APIs (Observation, NavigationStack) aligned with the target.

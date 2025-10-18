@@ -1,0 +1,37 @@
+---
+description: Networking policy and OTP login flow using URLSession and secure storage.
+globs: ["**/*.swift"]
+alwaysApply: true
+---
+
+# Transport & Configuration
+
+- Use `URLSession` with `async/await`. No third-party networking libraries.
+- Enforce ATS (HTTPS). Configure timeouts and caching per endpoint.
+
+# Request Building
+
+- Centralize base URL and endpoints in Core Networking.
+- Encode/validate request bodies (JSONEncoder with configured date/number strategies).
+- Add idempotency keys for retryable POSTs when applicable.
+
+# Response Handling
+
+- Decode with `JSONDecoder`; handle decoding failures explicitly.
+- Map HTTP errors to domain errors; include safe server error context (no PII) in logs.
+
+# Auth — OTP Flow
+
+- Endpoints assumed:
+  - Request code: POST phone/email
+  - Verify code: POST code + identifier → returns access/refresh tokens
+- Store tokens in Keychain. Never log tokens. Refresh on 401 via token refresh flow.
+- Rate-limit OTP requests; lockout behavior mirrors server guidance.
+
+# Certificate Pinning (if required)
+
+- If backend provides pins, use `URLSessionDelegate` pinning with rotation support; otherwise document why not.
+
+# Privacy
+
+- Redact sensitive fields in logs using `OSLog` privacy attributes.

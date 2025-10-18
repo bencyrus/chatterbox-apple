@@ -1,0 +1,10 @@
+---
+description: Consistent date/time handling.
+globs: ["**/*.swift"]
+alwaysApply: true
+---
+
+# Policy
+
+- Use ISO 8601 for API date/time; set `JSONDecoder.dateDecodingStrategy` appropriately.
+- Keep internal times in UTC; localize only for display.

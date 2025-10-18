@@ -1,0 +1,27 @@
+"tabs.home" = "Home";
+"tabs.settings" = "Settings";
+
+"login.title" = "Login";
+"login.identifier_placeholder" = "Email or phone";
+"login.code_placeholder" = "6-digit code";
+"login.request_code" = "Send code";
+"login.verify_and_continue" = "Verify & continue";
+
+"home.title" = "Home";
+"home.latest_jwt" = "Latest JWT";
+"home.no_token" = "No token yet";
+
+"settings.title" = "Settings";
+"settings.logout" = "Log out";
+
+"errors.missing_identifier" = "Enter your email or phone";
+"errors.missing_code" = "Enter the 6-digit code";
+"errors.request_failed" = "Could not send code. Try again.";
+"errors.invalid_code" = "Invalid code. Check and try again.";
+
+"a11y.identifier_field" = "Identifier";
+"a11y.code_field" = "One-time code";
+"a11y.error" = "Error";
+"a11y.logout" = "Log out";
+
+

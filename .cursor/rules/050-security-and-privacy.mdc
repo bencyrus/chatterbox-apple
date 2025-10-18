@@ -1,0 +1,23 @@
+---
+description: Security, privacy, secrets, data handling, and permissions.
+globs: ["**/*.swift", "Resources/**", "App/**"]
+alwaysApply: true
+---
+
+# Data Protection
+
+- Store tokens/keys in Keychain with appropriate accessibility.
+- Use CryptoKit for cryptographic operations; do not implement custom crypto.
+
+# Permissions
+
+- Request microphone permission just-in-time with clear rationale.
+- Include required Info.plist usage descriptions.
+
+# PII & Logging
+
+- No PII or secrets in logs. Use `os.Logger` with privacy redaction.
+
+# Threat Awareness
+
+- For features handling sensitive data, include a threat consideration step during implementation (rules only, no docs now).

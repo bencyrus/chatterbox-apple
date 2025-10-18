@@ -1,0 +1,39 @@
+---
+description: Global governance for quality, security, documentation policy, and change history.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Purpose
+
+Set non-negotiable guardrails: clean system design, security-first, and rigorous traceability.
+
+# Core Directives
+
+- Follow Apple's API Design Guidelines and Swift conventions.
+- Prefer clarity and correctness over cleverness.
+- Treat the app as production-grade from day one.
+
+# Documentation Policy (rules only)
+
+- After any code/config/test/resource change, Cursor must update project documentation and change logs. Do NOT generate docs now; this file only defines the rule.
+
+# Prohibited
+
+- Force unwraps (`!`) and `try!`.
+- Global mutable state.
+- Printing secrets or PII.
+- Dead/commented-out code.
+
+# Required
+
+- Input validation and explicit error handling.
+- Accessibility and localization for user-facing UI.
+- Tests for core business logic and critical flows.
+
+# Review Checklist
+
+- Architecture consistent with MVVM + Use Cases + Repository?
+- Security/privacy intact? No sensitive logs?
+- Documentation policy considered for future updates?
+- Tests added/updated as needed?

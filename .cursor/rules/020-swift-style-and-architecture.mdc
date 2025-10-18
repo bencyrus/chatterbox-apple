@@ -1,0 +1,35 @@
+---
+description: Swift style, MVVM with Use Cases/Repositories, and modern Swift practices.
+globs: ["**/*.swift"]
+alwaysApply: true
+---
+
+# Language & Concurrency
+
+- Use Swift 5.9+ with `async/await`.
+- Prefer value types; use classes only for identity/reference semantics.
+- Avoid `Any` and unsafe casts; model domain types precisely.
+- Prefer guard-clauses and early returns.
+
+# Architecture
+
+- MVVM + Use Cases + Repository pattern:
+  - View: SwiftUI `struct` views only
+  - ViewModel: Observation framework `@Observable` for state; simple intents
+  - Use Cases: orchestrate domain logic
+  - Repositories: abstract IO behind protocols
+
+# State Management
+
+- Prefer Observation (`@Observable`) and `@State` for local view state.
+- Avoid legacy `ObservableObject/@Published/@StateObject` unless backward compatibility is required; document deviations when used.
+
+# Error Handling
+
+- Use typed errors (`enum`). Map lower-level errors to domain errors.
+- No silent catches; present user-safe messages.
+
+# Comments & Docs
+
+- Use doc comments for public APIs and non-obvious rationale.
+- No redundant comments; code should be self-explanatory.

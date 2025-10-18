@@ -1,0 +1,11 @@
+---
+description: User-facing error/message rules.
+globs: ["**/*.swift"]
+alwaysApply: true
+---
+
+# Messaging
+
+- Clear, actionable language; no internal codes exposed to users.
+- Provide retry guidance where appropriate.
+- Localize all messages.

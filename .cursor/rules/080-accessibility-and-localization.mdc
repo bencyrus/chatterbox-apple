@@ -1,0 +1,15 @@
+---
+description: Accessibility (A11y) and localization (L10n) requirements.
+globs: ["**/*.swift", "Resources/Strings/**"]
+alwaysApply: true
+---
+
+# Accessibility
+
+- Add labels, hints, and traits to interactive elements.
+- Support Dynamic Type and VoiceOver paths.
+
+# Localization
+
+- Localize all user-facing strings via `Localizable.strings`.
+- Use format strings with placeholders; avoid string concatenation.

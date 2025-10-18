@@ -1,0 +1,10 @@
+---
+description: Feature flagging without third-party SDKs.
+globs: ["**/*.swift", "Resources/**"]
+alwaysApply: true
+---
+
+# Flags
+
+- Implement minimal, local feature flags guarded at compile-time or via config.
+- Remove stale flags promptly.

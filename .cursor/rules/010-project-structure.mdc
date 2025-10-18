@@ -1,0 +1,30 @@
+---
+description: Enforce clean, modular project structure and naming.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Directory Layout (to be created during implementation)
+
+- `App/` — App entry, lifecycle, DI composition root
+- `Core/` — Cross-cutting: Networking, Security, Storage, Logging, Utilities
+- `Features/` — Feature modules: Auth, Recording, etc.
+- `UI/` — Reusable components, theme, modifiers
+- `Resources/` — Assets, localized strings, fonts
+- `Tests/` — Unit tests mirroring structure
+- `UITests/` — UI tests
+
+# Naming
+
+- Types: PascalCase; methods/vars: camelCase; booleans prefixed with `is`/`has`/`should`.
+- File names mirror primary type and purpose.
+
+# Modularity
+
+- Features contain `View/`, `ViewModel/`, `UseCases/`, `Repositories/`, `Models/` where applicable.
+- No circular dependencies. Cross-feature usage via `Core` abstractions or coordinators.
+
+# Ownership
+
+- Business logic in Use Cases and Repositories, not Views.
+- Views are declarative and bind-only. Keep views small.

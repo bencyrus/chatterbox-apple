@@ -1,0 +1,15 @@
+---
+description: Logging, metrics, and diagnostics.
+globs: ["**/*.swift"]
+alwaysApply: true
+---
+
+# Logging
+
+- Use `os.Logger` with subsystem/category.
+- Redact sensitive data using privacy attributes.
+
+# Metrics & Diagnostics
+
+- Add lightweight counters/timers as needed without third-party SDKs unless approved.
+- Prompt user before transmitting diagnostics off-device.
