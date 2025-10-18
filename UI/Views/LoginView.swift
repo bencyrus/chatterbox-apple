@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var vm: AuthViewModel
+    @State private var authViewModel: AuthViewModel
 
     init(viewModel: AuthViewModel) {
-        _vm = State(initialValue: viewModel)
+        _authViewModel = State(initialValue: viewModel)
     }
 
     var body: some View {
@@ -15,36 +15,29 @@ struct LoginView: View {
                 .foregroundColor(.primary)
 
             VStack(spacing: 12) {
-                TextField(Strings.Login.identifierPlaceholder, text: $vm.identifier)
+                TextField(Strings.Login.identifierPlaceholder, text: $authViewModel.identifier)
                     .autocorrectionDisabled(true)
                     .textFieldStyle(.plain)
                     .accessibilityLabel(Text(Strings.A11y.identifierField))
 
-                HStack(spacing: 12) {
-                    TextField(Strings.Login.codePlaceholder, text: $vm.code)
-                        .textFieldStyle(.plain)
-                        .accessibilityLabel(Text(Strings.A11y.codeField))
-
-                    Button(Strings.Login.requestCode) {
-                        Task { await vm.requestCode() }
-                    }
-                    .buttonStyle(.bordered)
-                    .disabled(vm.isRequesting)
+                Button(Strings.Login.requestLink) {
+                    Task { await authViewModel.requestMagicLink() }
                 }
+                .buttonStyle(.bordered)
+                .disabled(authViewModel.isRequesting)
             }
 
-            if !vm.errorMessage.isEmpty {
-                Text(vm.errorMessage)
+            if !authViewModel.errorMessage.isEmpty {
+                Text(authViewModel.errorMessage)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .accessibilityLabel(Text(Strings.A11y.errorLabel))
             }
 
-            Button(Strings.Login.verifyAndContinue) {
-                Task { await vm.verifyCode() }
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(vm.isVerifying)
+            Text(Strings.Login.linkSentHint)
+                .font(.footnote)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
 
             Spacer()
         }

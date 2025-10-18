@@ -7,8 +7,8 @@ final class AppEnvironment {
     var baseURL: URL
 
     // RPC paths
-    let requestLoginCodePath: String = "/rpc/request_login_code"
-    let loginWithCodePath: String = "/rpc/login_with_code"
+    let requestMagicLinkPath: String = "/rpc/request_magic_link"
+    let loginWithMagicTokenPath: String = "/rpc/login_with_magic_token"
 
     // Gateway token refresh headers (outgoing from gateway to client)
     let newAccessTokenHeaderOut: String = "X-New-Access-Token"

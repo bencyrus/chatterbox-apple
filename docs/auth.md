@@ -3,7 +3,7 @@ Last verified: 2025-10-18
 
 ← Back to [`README.md`](../README.md)
 
-## Auth (OTP Login)
+## Auth (Magic Token)
 
 ### Why this exists
 
@@ -15,8 +15,7 @@ Last verified: 2025-10-18
 
 ### How it works
 
-- Request code: `POST /rpc/request_login_code`
-- Verify code: `POST /rpc/login_with_code`
+- Magic Token: Request link `POST /rpc/request_magic_link`; app opens via HTTPS universal link and exchanges via `POST /rpc/login_with_magic_token`.
 - Tokens captured from gateway response headers and stored via `TokenManager`.
 
 ### Components
@@ -30,7 +29,12 @@ Last verified: 2025-10-18
 
 ### UX notes
 
-- Rate-limit code requests, validate identifiers, and show clear error messages.
+- Validate identifiers; show clear error messages.
+- Magic links open the app and log in automatically; provide a fallback to copy/paste token only in development.
+
+### Deep links
+
+- Universal Link: `https://<your-domain>/auth/magic?token=<token>` (configure Associated Domains).
 
 ### See also
 

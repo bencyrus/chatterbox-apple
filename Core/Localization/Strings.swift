@@ -8,9 +8,8 @@ enum Strings {
     enum Login {
         static let title = NSLocalizedString("login.title", comment: "Login title")
         static let identifierPlaceholder = NSLocalizedString("login.identifier_placeholder", comment: "Identifier placeholder")
-        static let codePlaceholder = NSLocalizedString("login.code_placeholder", comment: "Code placeholder")
-        static let requestCode = NSLocalizedString("login.request_code", comment: "Request code button")
-        static let verifyAndContinue = NSLocalizedString("login.verify_and_continue", comment: "Verify button")
+        static let requestLink = NSLocalizedString("login.request_link", comment: "Request link button")
+        static let linkSentHint = NSLocalizedString("login.link_sent_hint", comment: "Hint about checking email/SMS")
     }
     enum Home {
         static let title = NSLocalizedString("home.title", comment: "Home title")
@@ -23,13 +22,10 @@ enum Strings {
     }
     enum Errors {
         static let missingIdentifier = NSLocalizedString("errors.missing_identifier", comment: "Missing identifier")
-        static let missingCode = NSLocalizedString("errors.missing_code", comment: "Missing code")
         static let requestFailed = NSLocalizedString("errors.request_failed", comment: "Request failed")
-        static let invalidCode = NSLocalizedString("errors.invalid_code", comment: "Invalid code")
     }
     enum A11y {
         static let identifierField = NSLocalizedString("a11y.identifier_field", comment: "Identifier field")
-        static let codeField = NSLocalizedString("a11y.code_field", comment: "Code field")
         static let errorLabel = NSLocalizedString("a11y.error", comment: "Error label")
         static let logout = NSLocalizedString("a11y.logout", comment: "Logout button")
     }
