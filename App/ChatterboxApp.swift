@@ -12,10 +12,10 @@ struct ChatterboxApp: App {
                 .environment(tokenManager)
                 .environment(environment)
                 .onOpenURL { url in
-                    // Restrict to HTTPS universal links in production
+                    // Restrict to HTTPS universal links in production and expected host
                     guard url.scheme?.lowercased() == "https" else { return }
-                    let path = url.path.lowercased()
-                    if path == "/auth/magic" {
+                    guard let host = url.host?.lowercased(), environment.universalLinkAllowedHosts.contains(host) else { return }
+                    if url.path.lowercased() == environment.magicLinkPath.lowercased() {
                         NotificationCenter.default.post(name: .didOpenMagicTokenURL, object: url)
                     }
                 }

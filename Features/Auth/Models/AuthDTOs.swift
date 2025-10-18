@@ -1,15 +1,10 @@
 import Foundation
 
-struct RequestCodeBody: Encodable {
+struct RequestMagicLinkBody: Encodable {
     let identifier: String
 }
 
-struct VerifyCodeBody: Encodable {
-    let identifier: String
-    let code: String
-}
-
-struct VerifyResponse: Decodable {
+struct LoginWithMagicTokenResponse: Decodable {
     let access_token: String
     let refresh_token: String
 }

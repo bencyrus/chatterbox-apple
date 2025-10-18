@@ -16,3 +16,17 @@ Carthage/
 fastlane/report.xml
 fastlane/test_output/
 
+
+
+# Swift Package Manager build artifacts
+.build/
+
+# Editor/IDE settings (local only)
+.vscode/
+.idea/
+
+# Xcode archive outputs
+*.xcarchive
+*.ipa
+*.dSYM
+*.dSYM.zip

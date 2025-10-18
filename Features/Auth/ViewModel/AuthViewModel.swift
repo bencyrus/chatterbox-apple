@@ -42,9 +42,13 @@ final class AuthViewModel {
               let token = tokenItem.value, !token.isEmpty else {
             return
         }
-        Task { [weak self] in
-            do { try await self?.loginWithMagicTokenUC.execute(token: token) } catch {
-                await MainActor.run { self?.errorMessage = Strings.Errors.requestFailed }
+        let loginUseCase = loginWithMagicTokenUC
+        let viewModel = self
+        Task {
+            do {
+                try await loginUseCase.execute(token: token)
+            } catch {
+                await MainActor.run { viewModel.errorMessage = Strings.Errors.requestFailed }
             }
         }
     }

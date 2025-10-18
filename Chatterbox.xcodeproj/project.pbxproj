@@ -27,6 +27,7 @@
 /* Begin PBXFileReference section */
 		82174F972EA3B9E0007AEF26 /* architecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = architecture.md; sourceTree = "<group>"; };
 		82174F982EA3B9E0007AEF26 /* auth.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = auth.md; sourceTree = "<group>"; };
+		82174F9D2EA42509007AEF26 /* Chatterbox-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Chatterbox-Info.plist"; sourceTree = "<group>"; };
 		82250BAC2EA34A1B0023B10D /* Chatterbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chatterbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82250BDA2EA34BF20023B10D /* ChatterboxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatterboxApp.swift; sourceTree = "<group>"; };
 		82250BDB2EA34BF20023B10D /* CompositionRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionRoot.swift; sourceTree = "<group>"; };
@@ -69,6 +70,7 @@
 		82250BA32EA34A1B0023B10D = {
 			isa = PBXGroup;
 			children = (
+				82174F9D2EA42509007AEF26 /* Chatterbox-Info.plist */,
 				82174F992EA3B9E0007AEF26 /* docs */,
 				82250BDC2EA34BF20023B10D /* App */,
 				82250BE52EA34BF20023B10D /* Core */,
@@ -457,6 +459,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Chatterbox-Info.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -495,6 +498,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Chatterbox-Info.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

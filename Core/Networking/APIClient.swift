@@ -1,9 +1,11 @@
 import Foundation
+import os
 
 enum NetworkError: Error, Equatable {
     case invalidURL
     case encodingFailed
     case requestFailed(Int)
+    case requestFailedWithBody(Int, String)
     case noData
     case decodingFailed
 }
@@ -17,6 +19,7 @@ final class APIClient: HTTPClient {
     private let session: URLSession
     private let tokenProvider: TokenProvider
     private weak var tokenSink: TokenSink?
+    private let logger = Logger(subsystem: "com.chatterbox.ios", category: "network")
 
     init(baseURL: URL, tokenProvider: TokenProvider, tokenSink: TokenSink?, session: URLSession = .shared) {
         self.baseURL = baseURL
@@ -35,7 +38,13 @@ final class APIClient: HTTPClient {
         let (data, response) = try await session.data(for: req)
         guard let http = response as? HTTPURLResponse else { throw NetworkError.noData }
         captureRefreshedTokens(from: http)
-        guard (200..<300).contains(http.statusCode) else { throw NetworkError.requestFailed(http.statusCode) }
+        guard (200..<300).contains(http.statusCode) else {
+            let responseBody = String(data: data, encoding: .utf8) ?? ""
+            #if DEBUG
+            logger.error("HTTP \(http.statusCode) \(path, privacy: .public) body: \(responseBody, privacy: .private)")
+            #endif
+            throw NetworkError.requestFailedWithBody(http.statusCode, responseBody)
+        }
         return (data, http)
     }
 
