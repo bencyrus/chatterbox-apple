@@ -24,25 +24,30 @@ struct LoginView: View {
                     Task { await authViewModel.requestMagicLink() }
                 }
                 .buttonStyle(.bordered)
-                .disabled(authViewModel.isRequesting)
+                .disabled(authViewModel.isRequesting || authViewModel.cooldownSecondsRemaining > 0)
             }
 
-            if !authViewModel.errorMessage.isEmpty {
-                Text(authViewModel.errorMessage)
+            if authViewModel.cooldownSecondsRemaining > 0 {
+                Text(String(format: Strings.Login.cooldownMessage, authViewModel.cooldownSecondsRemaining))
+                    .font(.footnote)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
-                    .accessibilityLabel(Text(Strings.A11y.errorLabel))
+            } else {
+                Text(Strings.Login.linkSentHint)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
             }
-
-            Text(Strings.Login.linkSentHint)
-                .font(.footnote)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
 
             Spacer()
         }
         .padding()
         .background(Color.black.opacity(0.95))
+        .alert(Strings.Errors.signInErrorTitle, isPresented: $authViewModel.isShowingErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(authViewModel.errorAlertMessage)
+        }
     }
 }
 

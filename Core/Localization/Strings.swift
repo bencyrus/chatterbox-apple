@@ -10,6 +10,8 @@ enum Strings {
         static let identifierPlaceholder = NSLocalizedString("login.identifier_placeholder", comment: "Identifier placeholder")
         static let requestLink = NSLocalizedString("login.request_link", comment: "Request link button")
         static let linkSentHint = NSLocalizedString("login.link_sent_hint", comment: "Hint about checking email/SMS")
+        static let linkSentAt = NSLocalizedString("login.link_sent_at", comment: "Link sent at time label")
+        static let cooldownMessage = NSLocalizedString("login.cooldown_message", comment: "Cooldown countdown label")
     }
     enum Home {
         static let title = NSLocalizedString("home.title", comment: "Home title")
@@ -23,6 +25,8 @@ enum Strings {
     enum Errors {
         static let missingIdentifier = NSLocalizedString("errors.missing_identifier", comment: "Missing identifier")
         static let requestFailed = NSLocalizedString("errors.request_failed", comment: "Request failed")
+        static let invalidMagicLink = NSLocalizedString("errors.invalid_magic_link", comment: "Invalid magic link")
+        static let signInErrorTitle = NSLocalizedString("errors.sign_in_error_title", comment: "Sign-in error title")
     }
     enum A11y {
         static let identifierField = NSLocalizedString("a11y.identifier_field", comment: "Identifier field")

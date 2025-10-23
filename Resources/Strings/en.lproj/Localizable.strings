@@ -5,6 +5,8 @@
 "login.identifier_placeholder" = "Email or phone";
 "login.request_link" = "Send sign-in link";
 "login.link_sent_hint" = "We'll send a magic link via email or SMS.";
+"login.link_sent_at" = "Link sent.";
+"login.cooldown_message" = "You can request another in %ds";
 
 "home.title" = "Home";
 "home.latest_jwt" = "Latest JWT";
@@ -14,7 +16,9 @@
 "settings.logout" = "Log out";
 
 "errors.missing_identifier" = "Enter your email or phone";
-"errors.request_failed" = "Could not send code. Try again.";
+"errors.request_failed" = "Could not send link. Try again.";
+"errors.invalid_magic_link" = "This sign-in link has already been used or expired.";
+"errors.sign_in_error_title" = "Sign in failed";
 
 "a11y.identifier_field" = "Identifier";
 "a11y.error" = "Error";
