@@ -16,6 +16,9 @@ final class AppEnvironment {
     // Path that the app expects for magic login
     var magicLinkPath: String
 
+    // UX: cooldown seconds between magic-link requests
+    let magicLinkCooldownSeconds: Int
+
     // Gateway token refresh headers (outgoing from gateway to client)
     let newAccessTokenHeaderOut: String = "X-New-Access-Token"
     let newRefreshTokenHeaderOut: String = "X-New-Refresh-Token"
@@ -50,6 +53,15 @@ final class AppEnvironment {
             fatalError("Info.plist 'MAGIC_LINK_PATH' must be a non-empty string starting with '/'.")
         }
         self.magicLinkPath = magicPath
+
+        // Optional: cooldown; default to 60 if missing or invalid
+        if let cooldown = info.object(forInfoDictionaryKey: "MAGIC_LINK_COOLDOWN_SECONDS") as? NSNumber {
+            self.magicLinkCooldownSeconds = max(0, cooldown.intValue)
+        } else if let cooldownStr = info.object(forInfoDictionaryKey: "MAGIC_LINK_COOLDOWN_SECONDS") as? String, let v = Int(cooldownStr) {
+            self.magicLinkCooldownSeconds = max(0, v)
+        } else {
+            self.magicLinkCooldownSeconds = 60
+        }
     }
 }
 

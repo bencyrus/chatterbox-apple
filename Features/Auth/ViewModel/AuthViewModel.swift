@@ -15,11 +15,13 @@ final class AuthViewModel {
     private let logoutUC: LogoutUseCase
     private let requestMagicLinkUC: RequestMagicLinkUseCase
     private let loginWithMagicTokenUC: LoginWithMagicTokenUseCase
+    private let environment: AppEnvironment
 
-    init(logout: LogoutUseCase, requestMagicLink: RequestMagicLinkUseCase, loginWithMagicToken: LoginWithMagicTokenUseCase) {
+    init(logout: LogoutUseCase, requestMagicLink: RequestMagicLinkUseCase, loginWithMagicToken: LoginWithMagicTokenUseCase, environment: AppEnvironment) {
         self.logoutUC = logout
         self.requestMagicLinkUC = requestMagicLink
         self.loginWithMagicTokenUC = loginWithMagicToken
+        self.environment = environment
     }
 
 
@@ -35,8 +37,8 @@ final class AuthViewModel {
         defer { isRequesting = false }
         do {
             try await requestMagicLinkUC.execute(identifier: identifier)
-            // Start a 60s cooldown
-            startCooldown(seconds: 60)
+            // Start cooldown from environment
+            startCooldown(seconds: environment.magicLinkCooldownSeconds)
         } catch {
             presentSignInError(message: Strings.Errors.requestFailed)
         }

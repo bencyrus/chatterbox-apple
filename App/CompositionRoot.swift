@@ -30,7 +30,8 @@ struct CompositionRootView: View {
         return AuthViewModel(
             logout: logoutUC,
             requestMagicLink: requestMagic,
-            loginWithMagicToken: loginWithMagic
+            loginWithMagicToken: loginWithMagic,
+            environment: env
         )
     }
 }
