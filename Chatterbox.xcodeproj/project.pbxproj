@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8208623E2ECAA97200D08D17 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8208623D2ECAA97200D08D17 /* Assets.xcassets */; };
 		82250C2A2EA34BF20023B10D /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82250BFC2EA34BF20023B10D /* RootTabView.swift */; };
 		82250C2B2EA34BF20023B10D /* CompositionRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82250BDB2EA34BF20023B10D /* CompositionRoot.swift */; };
 		82250C2C2EA34BF20023B10D /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82250BE82EA34BF20023B10D /* AuthRepository.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8208623D2ECAA97200D08D17 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		82174F972EA3B9E0007AEF26 /* architecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = architecture.md; sourceTree = "<group>"; };
 		82174F982EA3B9E0007AEF26 /* auth.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = auth.md; sourceTree = "<group>"; };
 		82174F9D2EA42509007AEF26 /* Chatterbox-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Chatterbox-Info.plist"; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 			isa = PBXGroup;
 			children = (
 				82250BF42EA34BF20023B10D /* Strings */,
+				8208623D2ECAA97200D08D17 /* Assets.xcassets */,
 			);
 			path = Resources;
 			sourceTree = SOURCE_ROOT;
@@ -260,7 +263,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					82250BAB2EA34A1B0023B10D = {
 						CreatedOnToolsVersion = 16.2;
@@ -291,6 +294,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8208623E2ECAA97200D08D17 /* Assets.xcassets in Resources */,
 				82250C3D2EA34BF20023B10D /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -367,8 +371,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 37M6N7ZKYM;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -390,6 +396,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -429,8 +436,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 37M6N7ZKYM;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -445,6 +454,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
@@ -457,8 +467,8 @@
 				CODE_SIGN_ENTITLEMENTS = Chatterbox.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 37M6N7ZKYM;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -497,8 +507,8 @@
 				CODE_SIGN_ENTITLEMENTS = Chatterbox.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 37M6N7ZKYM;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
