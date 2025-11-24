@@ -32,4 +32,18 @@
 
 "common.ok" = "OK";
 
+"debug.network_log_title" = "Network debug";
+"debug.network_log_detail_title" = "Request details";
+"debug.clear_logs" = "Clear";
+"debug.request_section_title" = "Request";
+"debug.response_section_title" = "Response";
+"debug.method_label" = "Method";
+"debug.url_label" = "URL";
+"debug.headers_label" = "Headers";
+"debug.body_label" = "Body";
+"debug.status_label" = "Status";
+"debug.error_label" = "Error";
+
+"debug.json_viewer_title" = "JSON - Body";
+
 

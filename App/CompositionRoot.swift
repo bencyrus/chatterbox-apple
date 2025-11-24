@@ -4,6 +4,7 @@ import Observation
 struct CompositionRootView: View {
     @Environment(TokenManager.self) private var tokenManager
     @Environment(AppEnvironment.self) private var env
+    @Environment(NetworkLogStore.self) private var networkLogStore
 
     var body: some View {
         Group {
@@ -27,7 +28,12 @@ struct CompositionRootView: View {
     }
 
     private func makeAuthViewModel() -> AuthViewModel {
-        let client = APIClient(baseURL: env.baseURL, tokenProvider: tokenManager, tokenSink: tokenManager)
+        let client = APIClient(
+            baseURL: env.baseURL,
+            tokenProvider: tokenManager,
+            tokenSink: tokenManager,
+            networkLogStore: networkLogStore
+        )
         let repo = PostgrestAuthRepository(client: client, environment: env)
         let logoutUC = LogoutUseCase(tokenSink: tokenManager)
         let requestMagic = RequestMagicLinkUseCase(repository: repo)
@@ -41,7 +47,12 @@ struct CompositionRootView: View {
     }
 
     private func makeAuthenticatedViewModels() -> (AuthViewModel, SettingsViewModel) {
-        let client = APIClient(baseURL: env.baseURL, tokenProvider: tokenManager, tokenSink: tokenManager)
+        let client = APIClient(
+            baseURL: env.baseURL,
+            tokenProvider: tokenManager,
+            tokenSink: tokenManager,
+            networkLogStore: networkLogStore
+        )
         let authRepo = PostgrestAuthRepository(client: client, environment: env)
         let logoutUC = LogoutUseCase(tokenSink: tokenManager)
         let requestMagic = RequestMagicLinkUseCase(repository: authRepo)

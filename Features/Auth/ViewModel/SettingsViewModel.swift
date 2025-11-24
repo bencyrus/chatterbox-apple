@@ -18,6 +18,8 @@ final class SettingsViewModel {
     var errorAlertMessage: String = ""
     var isShowingErrorAlert: Bool = false
 
+    var isDeveloperUser: Bool = false
+
     private var accountId: Int64?
 
     init(accountRepository: AccountRepository) {
@@ -37,6 +39,11 @@ final class SettingsViewModel {
             let (me, config) = try await (meTask, configTask)
 
             accountId = me.account.account.accountId
+            if let email = me.account.account.email {
+                isDeveloperUser = email.lowercased() == "imatiwx@gmail.com"
+            } else {
+                isDeveloperUser = false
+            }
 
             availableLanguages = config.availableLanguageCodes
 

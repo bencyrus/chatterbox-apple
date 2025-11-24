@@ -23,6 +23,20 @@ enum Strings {
         static let logout = NSLocalizedString("settings.logout", comment: "Logout button")
         static let languagePickerTitle = NSLocalizedString("settings.language_picker_title", comment: "Language picker title")
     }
+    enum Debug {
+        static let networkLogTitle = NSLocalizedString("debug.network_log_title", comment: "Network debug console title")
+        static let networkLogDetailTitle = NSLocalizedString("debug.network_log_detail_title", comment: "Network log detail title")
+        static let clearLogs = NSLocalizedString("debug.clear_logs", comment: "Clear logs button")
+        static let requestSectionTitle = NSLocalizedString("debug.request_section_title", comment: "Request section title")
+        static let responseSectionTitle = NSLocalizedString("debug.response_section_title", comment: "Response section title")
+        static let methodLabel = NSLocalizedString("debug.method_label", comment: "HTTP method label")
+        static let urlLabel = NSLocalizedString("debug.url_label", comment: "URL label")
+        static let headersLabel = NSLocalizedString("debug.headers_label", comment: "Headers label")
+        static let bodyLabel = NSLocalizedString("debug.body_label", comment: "Body label")
+        static let statusLabel = NSLocalizedString("debug.status_label", comment: "Status code label")
+        static let errorLabel = NSLocalizedString("debug.error_label", comment: "Error description label")
+        static let jsonViewerTitle = NSLocalizedString("debug.json_viewer_title", comment: "JSON viewer title")
+    }
     enum Errors {
         static let missingIdentifier = NSLocalizedString("errors.missing_identifier", comment: "Missing identifier")
         static let requestFailed = NSLocalizedString("errors.request_failed", comment: "Request failed")

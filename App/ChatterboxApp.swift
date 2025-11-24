@@ -4,12 +4,14 @@ import Observation
 @main
 struct ChatterboxApp: App {
     @State private var tokenManager = TokenManager()
+    @State private var networkLogStore = NetworkLogStore()
     private let environment = AppEnvironment()
 
     var body: some Scene {
         WindowGroup {
             CompositionRootView()
                 .environment(tokenManager)
+                .environment(networkLogStore)
                 .environment(environment)
                 .onOpenURL { url in
                     // Restrict to HTTPS universal links in production and expected host

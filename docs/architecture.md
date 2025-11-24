@@ -26,7 +26,7 @@ Last verified: 2025-10-18
   - [`App/CompositionRoot.swift`](../App/CompositionRoot.swift)
 - `Core/`
   - Config: [`Core/Config/Environment.swift`](../Core/Config/Environment.swift)
-  - Networking: [`Core/Networking/APIClient.swift`](../Core/Networking/APIClient.swift)
+  - Networking + debug logging: [`Core/Networking/APIClient.swift`](../Core/Networking/APIClient.swift)
   - Security: [`Core/Security/TokenManager.swift`](../Core/Security/TokenManager.swift)
   - Localization helpers: [`Core/Localization/Strings.swift`](../Core/Localization/Strings.swift)
 - `Features/Auth/`
@@ -35,7 +35,7 @@ Last verified: 2025-10-18
   - Use Cases: [`Features/Auth/UseCases/AuthUseCases.swift`](../Features/Auth/UseCases/AuthUseCases.swift)
   - ViewModel: [`Features/Auth/ViewModel/AuthViewModel.swift`](../Features/Auth/ViewModel/AuthViewModel.swift)
 - `UI/`
-  - Views: [`UI/Views/LoginView.swift`](../UI/Views/LoginView.swift), [`UI/Views/HomeView.swift`](../UI/Views/HomeView.swift), [`UI/Views/SettingsView.swift`](../UI/Views/SettingsView.swift), [`UI/Views/RootTabView.swift`](../UI/Views/RootTabView.swift)
+  - Views: [`UI/Views/LoginView.swift`](../UI/Views/LoginView.swift), [`UI/Views/HomeView.swift`](../UI/Views/HomeView.swift), [`UI/Views/SettingsView.swift`](../UI/Views/SettingsView.swift), [`UI/Views/RootTabView.swift`](../UI/Views/RootTabView.swift) (includes the developer hammer overlay and network debug console)
 - `Resources/`
   - Localized strings: [`Resources/Strings/en.lproj/Localizable.strings`](../Resources/Strings/en.lproj/Localizable.strings)
 

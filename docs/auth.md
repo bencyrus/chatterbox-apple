@@ -20,12 +20,12 @@ Last verified: 2025-10-18
 
 ### Components
 
-- API client: [`Core/Networking/APIClient.swift`](../Core/Networking/APIClient.swift)
+- API client + network debug logging: [`Core/Networking/APIClient.swift`](../Core/Networking/APIClient.swift)
 - Token storage: [`Core/Security/TokenManager.swift`](../Core/Security/TokenManager.swift)
 - Use cases: [`Features/Auth/UseCases/AuthUseCases.swift`](../Features/Auth/UseCases/AuthUseCases.swift)
 - Repository: [`Features/Auth/Repositories/AuthRepository.swift`](../Features/Auth/Repositories/AuthRepository.swift)
 - View model: [`Features/Auth/ViewModel/AuthViewModel.swift`](../Features/Auth/ViewModel/AuthViewModel.swift)
-- UI: [`UI/Views/LoginView.swift`](../UI/Views/LoginView.swift)
+- UI: [`UI/Views/LoginView.swift`](../UI/Views/LoginView.swift), developer network console exposed via hammer icon overlay in [`UI/Views/RootTabView.swift`](../UI/Views/RootTabView.swift)
 
 ### UX notes
 
