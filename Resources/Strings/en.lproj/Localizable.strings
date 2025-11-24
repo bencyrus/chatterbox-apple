@@ -14,14 +14,22 @@
 
 "settings.title" = "Settings";
 "settings.logout" = "Log out";
+"settings.language_picker_title" = "Learning language";
 
 "errors.missing_identifier" = "Enter your email or phone";
 "errors.request_failed" = "Could not send link. Try again.";
 "errors.invalid_magic_link" = "This sign-in link has already been used or expired.";
 "errors.sign_in_error_title" = "Sign in failed";
+"errors.settings_load_title" = "Couldn't load settings";
+"errors.settings_load_failed" = "We couldn't load your language settings. Try again.";
+"errors.settings_save_title" = "Couldn't save language";
+"errors.settings_save_failed" = "We couldn't update your language. Try again.";
+"errors.settings_account_missing" = "We couldn't find your account. Please sign in again.";
 
 "a11y.identifier_field" = "Identifier";
 "a11y.error" = "Error";
 "a11y.logout" = "Log out";
+
+"common.ok" = "OK";
 
 

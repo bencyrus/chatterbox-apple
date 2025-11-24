@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct RootTabView: View {
+    let settingsViewModel: SettingsViewModel
+
     var body: some View {
         TabView {
             NavigationStack {
@@ -13,7 +15,7 @@ struct RootTabView: View {
             }
 
             NavigationStack {
-                SettingsView()
+                SettingsView(viewModel: settingsViewModel)
                     .navigationTitle(Strings.Settings.title)
             }
             .tabItem {

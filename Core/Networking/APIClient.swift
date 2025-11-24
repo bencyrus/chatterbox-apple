@@ -12,6 +12,7 @@ enum NetworkError: Error, Equatable {
 
 protocol HTTPClient {
     func postJSON<T: Encodable>(path: String, body: T) async throws -> (Data, HTTPURLResponse)
+    func getJSON(path: String) async throws -> (Data, HTTPURLResponse)
 }
 
 final class APIClient: HTTPClient {
@@ -35,6 +36,24 @@ final class APIClient: HTTPClient {
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         if let token = tokenProvider.accessToken { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
         req.httpBody = try JSONEncoder().encode(body)
+        let (data, response) = try await session.data(for: req)
+        guard let http = response as? HTTPURLResponse else { throw NetworkError.noData }
+        captureRefreshedTokens(from: http)
+        guard (200..<300).contains(http.statusCode) else {
+            let responseBody = String(data: data, encoding: .utf8) ?? ""
+            #if DEBUG
+            logger.error("HTTP \(http.statusCode) \(path, privacy: .public) body: \(responseBody, privacy: .private)")
+            #endif
+            throw NetworkError.requestFailedWithBody(http.statusCode, responseBody)
+        }
+        return (data, http)
+    }
+
+    func getJSON(path: String) async throws -> (Data, HTTPURLResponse) {
+        guard let url = URL(string: path, relativeTo: baseURL) else { throw NetworkError.invalidURL }
+        var req = URLRequest(url: url)
+        req.httpMethod = "GET"
+        if let token = tokenProvider.accessToken { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
         let (data, response) = try await session.data(for: req)
         guard let http = response as? HTTPURLResponse else { throw NetworkError.noData }
         captureRefreshedTokens(from: http)

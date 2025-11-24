@@ -9,6 +9,9 @@ final class AppEnvironment {
     // RPC paths
     let requestMagicLinkPath: String = "/rpc/request_magic_link"
     let loginWithMagicTokenPath: String = "/rpc/login_with_magic_token"
+    let mePath: String = "/rpc/me"
+    let appConfigPath: String = "/rpc/app_config"
+    let setActiveProfilePath: String = "/rpc/set_active_profile"
 
     // Universal link configuration (opens the app)
     // Only these hosts are accepted for magic login links

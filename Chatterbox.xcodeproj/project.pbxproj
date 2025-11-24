@@ -23,6 +23,9 @@
 		82250C3A2EA34BF20023B10D /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82250BE32EA34BF20023B10D /* TokenManager.swift */; };
 		82250C3B2EA34BF20023B10D /* AuthDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82250BE62EA34BF20023B10D /* AuthDTOs.swift */; };
 		82250C3D2EA34BF20023B10D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 82250BF32EA34BF20023B10D /* Localizable.strings */; };
+		82A001002EFF000000000001 /* ProfileDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0010F2EFF000000000001 /* ProfileDTOs.swift */; };
+		82A001012EFF000000000001 /* AccountRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001102EFF000000000001 /* AccountRepository.swift */; };
+		82A001022EFF000000000001 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001112EFF000000000001 /* SettingsViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +50,9 @@
 		82250BFB2EA34BF20023B10D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		82250BFC2EA34BF20023B10D /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		82250BFD2EA34BF20023B10D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		82A0010F2EFF000000000001 /* ProfileDTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDTOs.swift; sourceTree = "<group>"; };
+		82A001102EFF000000000001 /* AccountRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRepository.swift; sourceTree = "<group>"; };
+		82A001112EFF000000000001 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		829F04342EA9C4B800E2A8F6 /* Chatterbox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chatterbox.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				82250BE62EA34BF20023B10D /* AuthDTOs.swift */,
+				82A0010F2EFF000000000001 /* ProfileDTOs.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -158,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				82250BE82EA34BF20023B10D /* AuthRepository.swift */,
+				82A001102EFF000000000001 /* AccountRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -174,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				82250BEC2EA34BF20023B10D /* AuthViewModel.swift */,
+				82A001112EFF000000000001 /* SettingsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -320,6 +329,9 @@
 				82250C392EA34BF20023B10D /* Strings.swift in Sources */,
 				82250C3A2EA34BF20023B10D /* TokenManager.swift in Sources */,
 				82250C3B2EA34BF20023B10D /* AuthDTOs.swift in Sources */,
+				82A001002EFF000000000001 /* ProfileDTOs.swift in Sources */,
+				82A001012EFF000000000001 /* AccountRepository.swift in Sources */,
+				82A001022EFF000000000001 /* SettingsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
