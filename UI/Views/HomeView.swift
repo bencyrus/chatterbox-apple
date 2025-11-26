@@ -17,29 +17,29 @@ struct HomeView: View {
                 }
             }
 
-        Group {
-            if viewModel.isLoading && viewModel.cues.isEmpty {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if viewModel.cues.isEmpty {
-                Text(Strings.Home.emptyState)
+            Group {
+                if viewModel.isLoading && viewModel.cues.isEmpty {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if viewModel.cues.isEmpty {
+                    Text(Strings.Home.emptyState)
                         .foregroundColor(AppColors.textPrimary)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .multilineTextAlignment(.center)
-                    .padding()
-            } else {
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                } else {
                     ScrollView {
                         LazyVStack(spacing: 12) {
-                            ForEach(viewModel.cues, id: \.content.cueContentId) { cue in
-                    NavigationLink {
-                        CueDetailView(cue: cue)
-                    } label: {
+                            ForEach(Array(viewModel.cues.enumerated()), id: \.offset) { _, cue in
+                                NavigationLink {
+                                    CueDetailView(cue: cue)
+                                } label: {
                                     CueCardView(cue: cue)
-                }
+                                }
                                 .buttonStyle(.plain)
-            }
-        }
+                            }
+                        }
                         .padding(.vertical, 8)
                     }
                 }
@@ -74,7 +74,11 @@ private struct CueCardView: View {
         Text(cue.content.title)
             .font(.headline)
             .foregroundColor(AppColors.textPrimary)
+            .multilineTextAlignment(.leading)
+            .lineLimit(3)
             .frame(maxWidth: .infinity, alignment: .leading)
+            // Slightly taller than exactly 3 line-heights so three full lines fit comfortably
+            .frame(height: 22 * 3.5, alignment: .topLeading)
             .padding()
             .background(AppColors.darkBeige)
             .cornerRadius(12)

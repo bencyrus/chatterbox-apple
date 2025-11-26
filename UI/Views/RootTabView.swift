@@ -127,7 +127,7 @@ struct DebugNetworkLogView: View {
                         .font(.callout.bold())
                         .foregroundColor(.white)
                         .padding(.horizontal, 18)
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 12)
                         .background(Color.black, in: Capsule())
                         .contentShape(Capsule())
                     }
@@ -526,13 +526,13 @@ private func jsonBodyLink(_ title: String, body: String) -> some View {
     } label: {
         HStack(spacing: 8) {
             Image(systemName: "doc.text.magnifyingglass")
-                .font(.footnote)
+                .font(.callout)
             Text("View JSON body")
-                .font(.footnote.bold())
+                .font(.callout.bold())
         }
         .foregroundColor(.white)
-        .padding(.horizontal, 14)
-        .padding(.vertical, 8)
+        .padding(.horizontal, 18)
+        .padding(.vertical, 12)
         .background(Color.black, in: Capsule())
     }
 }

@@ -55,6 +55,8 @@ final class HomeViewModel {
             let profile = try await resolveActiveProfile()
             let count = 5
 
+            // Let the backend control ordering, shuffling, and any duplicates.
+            // The app simply renders whatever list of cues it receives.
             let loadedCues: [Cue]
             if useShuffle {
                 loadedCues = try await cueRepository.shuffleCues(
@@ -68,16 +70,7 @@ final class HomeViewModel {
                 )
             }
 
-            // Deduplicate by cueContentId to avoid duplicate IDs in the list
-            var seenContentIds = Set<Int64>()
-            let uniqueCues = loadedCues.filter { cue in
-                let id = cue.content.cueContentId
-                if seenContentIds.contains(id) { return false }
-                seenContentIds.insert(id)
-                return true
-            }
-
-            cues = uniqueCues
+            cues = loadedCues
         } catch {
             // Ignore benign cancellation errors caused by overlapping requests when
             // navigation or profile changes trigger a new load and cancel the old one.
