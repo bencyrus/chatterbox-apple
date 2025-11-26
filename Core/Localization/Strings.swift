@@ -15,8 +15,8 @@ enum Strings {
     }
     enum Home {
         static let title = NSLocalizedString("home.title", comment: "Home title")
-        static let latestJWT = NSLocalizedString("home.latest_jwt", comment: "Latest JWT label")
-        static let noToken = NSLocalizedString("home.no_token", comment: "No token text")
+        static let emptyState = NSLocalizedString("home.empty_state", comment: "Message shown when there are no cues yet")
+        static let shuffle = NSLocalizedString("home.shuffle", comment: "Shuffle cues button")
     }
     enum Settings {
         static let title = NSLocalizedString("settings.title", comment: "Settings title")
@@ -47,6 +47,9 @@ enum Strings {
         static let settingsSaveTitle = NSLocalizedString("errors.settings_save_title", comment: "Settings save error title")
         static let settingsSaveFailed = NSLocalizedString("errors.settings_save_failed", comment: "Settings save failed")
         static let settingsAccountMissing = NSLocalizedString("errors.settings_account_missing", comment: "Settings account missing")
+        static let homeLoadTitle = NSLocalizedString("errors.home_load_title", comment: "Home cues load error title")
+        static let homeLoadFailed = NSLocalizedString("errors.home_load_failed", comment: "Home cues load failed")
+        static let okButton = NSLocalizedString("errors.ok_button", comment: "OK button for error alerts")
     }
     enum A11y {
         static let identifierField = NSLocalizedString("a11y.identifier_field", comment: "Identifier field")
@@ -55,6 +58,9 @@ enum Strings {
     }
     enum Common {
         static let ok = NSLocalizedString("common.ok", comment: "OK button")
+    }
+    enum CueDetail {
+        static let title = NSLocalizedString("cue_detail.title", comment: "Cue detail navigation title")
     }
 }
 

@@ -27,6 +27,7 @@ struct ChatterboxApp: App {
 
 extension Notification.Name {
     static let didOpenMagicTokenURL = Notification.Name("didOpenMagicTokenURL")
+    static let activeProfileDidChange = Notification.Name("activeProfileDidChange")
 }
 
 

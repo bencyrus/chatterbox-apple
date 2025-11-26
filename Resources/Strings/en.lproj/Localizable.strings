@@ -9,8 +9,8 @@
 "login.cooldown_message" = "You can request another in %ds";
 
 "home.title" = "Home";
-"home.latest_jwt" = "Latest JWT";
-"home.no_token" = "No token yet";
+"home.empty_state" = "No cards yet. Once you start learning, your cards will appear here.";
+"home.shuffle" = "Shuffle";
 
 "settings.title" = "Settings";
 "settings.logout" = "Log out";
@@ -25,12 +25,17 @@
 "errors.settings_save_title" = "Couldn't save language";
 "errors.settings_save_failed" = "We couldn't update your language. Try again.";
 "errors.settings_account_missing" = "We couldn't find your account. Please sign in again.";
+"errors.home_load_title" = "Couldn't load cards";
+"errors.home_load_failed" = "We couldn't load your cards. Try again.";
+"errors.ok_button" = "OK";
 
 "a11y.identifier_field" = "Identifier";
 "a11y.error" = "Error";
 "a11y.logout" = "Log out";
 
 "common.ok" = "OK";
+
+"cue_detail.title" = "Card";
 
 "debug.network_log_title" = "Network debug";
 "debug.network_log_detail_title" = "Request details";

@@ -9,8 +9,11 @@ struct CompositionRootView: View {
     var body: some View {
         Group {
             if tokenManager.hasValidAccessToken {
-                let (authVM, settingsVM) = makeAuthenticatedViewModels()
-                RootTabView(settingsViewModel: settingsVM)
+                let (authVM, homeVM, settingsVM) = makeAuthenticatedViewModels()
+                RootTabView(
+                    homeViewModel: homeVM,
+                    settingsViewModel: settingsVM
+                )
                     .onReceive(NotificationCenter.default.publisher(for: .didOpenMagicTokenURL)) { note in
                         guard let url = note.object as? URL else { return }
                         authVM.handleIncomingMagicToken(url: url)
@@ -46,7 +49,7 @@ struct CompositionRootView: View {
         )
     }
 
-    private func makeAuthenticatedViewModels() -> (AuthViewModel, SettingsViewModel) {
+    private func makeAuthenticatedViewModels() -> (AuthViewModel, HomeViewModel, SettingsViewModel) {
         let client = APIClient(
             baseURL: env.baseURL,
             tokenProvider: tokenManager,
@@ -65,9 +68,15 @@ struct CompositionRootView: View {
         )
 
         let accountRepo = PostgrestAccountRepository(client: client, environment: env)
+        let activeProfileHelper = ActiveProfileHelper(accountRepository: accountRepo)
+        let cueRepo = PostgrestCueRepository(client: client, environment: env)
+        let homeVM = HomeViewModel(
+            activeProfileHelper: activeProfileHelper,
+            cueRepository: cueRepo
+        )
         let settingsVM = SettingsViewModel(accountRepository: accountRepo)
 
-        return (authVM, settingsVM)
+        return (authVM, homeVM, settingsVM)
     }
 }
 

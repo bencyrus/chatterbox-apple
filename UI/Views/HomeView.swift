@@ -1,26 +1,65 @@
 import SwiftUI
 
 struct HomeView: View {
-    @Environment(TokenManager.self) private var tokenManager
+    @State private var viewModel: HomeViewModel
+
+    init(viewModel: HomeViewModel) {
+        _viewModel = State(initialValue: viewModel)
+    }
 
     var body: some View {
-        VStack(spacing: 16) {
-            Text(Strings.Home.latestJWT)
-                .font(.headline)
-            ScrollView {
-                Text(tokenManager.accessToken ?? Strings.Home.noToken)
-                    .font(.footnote.monospaced())
-                    .foregroundColor(.white)
+        Group {
+            if viewModel.isLoading && viewModel.cues.isEmpty {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if viewModel.cues.isEmpty {
+                Text(Strings.Home.emptyState)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .multilineTextAlignment(.center)
                     .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-                    .textSelection(.enabled)
+            } else {
+                List(viewModel.cues, id: \.content.cueContentId) { cue in
+                    NavigationLink {
+                        CueDetailView(cue: cue)
+                    } label: {
+                        Text(cue.content.title)
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                            .accessibilityIdentifier("home.cue.\(cue.content.cueContentId).title")
+                    }
+                }
+                .listStyle(.plain)
             }
         }
-        .padding()
-        .background(Color.black.opacity(0.95))
+        .task {
+            await viewModel.loadInitialCues()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .activeProfileDidChange)) { _ in
+            Task {
+                await viewModel.reloadForActiveProfileChange()
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    Task {
+                        await viewModel.shuffleCues()
+                    }
+                } label: {
+                    Text(Strings.Home.shuffle)
+                }
+                .accessibilityIdentifier("home.shuffle")
+            }
+        }
+        .alert(
+            viewModel.errorAlertTitle,
+            isPresented: $viewModel.isShowingErrorAlert
+        ) {
+            Button(Strings.Errors.okButton, role: .cancel) { }
+        } message: {
+            Text(viewModel.errorAlertMessage)
+        }
     }
 }
-
 

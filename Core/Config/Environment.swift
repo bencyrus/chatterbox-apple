@@ -12,6 +12,8 @@ final class AppEnvironment {
     let mePath: String = "/rpc/me"
     let appConfigPath: String = "/rpc/app_config"
     let setActiveProfilePath: String = "/rpc/set_active_profile"
+    let getCuesPath: String = "/rpc/get_cues"
+    let shuffleCuesPath: String = "/rpc/shuffle_cues"
 
     // Universal link configuration (opens the app)
     // Only these hosts are accepted for magic login links

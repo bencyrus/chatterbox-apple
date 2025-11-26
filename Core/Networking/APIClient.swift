@@ -291,6 +291,9 @@ final class APIClient: HTTPClient {
 
         guard (200..<300).contains(http.statusCode) else {
             let responseBody = String(data: data, encoding: .utf8) ?? ""
+            if http.statusCode == 401 {
+                tokenSink?.clearTokens()
+            }
             #if DEBUG
             logger.error("HTTP \(http.statusCode) \(path, privacy: .public) body: \(responseBody, privacy: .private)")
             #endif
@@ -346,6 +349,9 @@ final class APIClient: HTTPClient {
 
         guard (200..<300).contains(http.statusCode) else {
             let responseBody = String(data: data, encoding: .utf8) ?? ""
+            if http.statusCode == 401 {
+                tokenSink?.clearTokens()
+            }
             #if DEBUG
             logger.error("HTTP \(http.statusCode) \(path, privacy: .public) body: \(responseBody, privacy: .private)")
             #endif

@@ -26,6 +26,11 @@
 		82A001002EFF000000000001 /* ProfileDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0010F2EFF000000000001 /* ProfileDTOs.swift */; };
 		82A001012EFF000000000001 /* AccountRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001102EFF000000000001 /* AccountRepository.swift */; };
 		82A001022EFF000000000001 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001112EFF000000000001 /* SettingsViewModel.swift */; };
+		82A001172EFF000000000002 /* CueDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001122EFF000000000002 /* CueDTOs.swift */; };
+		82A001182EFF000000000002 /* CueRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001132EFF000000000002 /* CueRepository.swift */; };
+		82A001192EFF000000000002 /* ActiveProfileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001142EFF000000000002 /* ActiveProfileHelper.swift */; };
+		82A0011A2EFF000000000002 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001152EFF000000000002 /* HomeViewModel.swift */; };
+		82A0011B2EFF000000000002 /* CueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001162EFF000000000002 /* CueDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +59,11 @@
 		82A001102EFF000000000001 /* AccountRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRepository.swift; sourceTree = "<group>"; };
 		82A001112EFF000000000001 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		829F04342EA9C4B800E2A8F6 /* Chatterbox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chatterbox.entitlements; sourceTree = "<group>"; };
+		82A001122EFF000000000002 /* CueDTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueDTOs.swift; sourceTree = "<group>"; };
+		82A001132EFF000000000002 /* CueRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueRepository.swift; sourceTree = "<group>"; };
+		82A001142EFF000000000002 /* ActiveProfileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveProfileHelper.swift; sourceTree = "<group>"; };
+		82A001152EFF000000000002 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		82A001162EFF000000000002 /* CueDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				82250BEE2EA34BF20023B10D /* Auth */,
+				82A0011C2EFF000000000002 /* Cues */,
 			);
 			path = Features;
 			sourceTree = SOURCE_ROOT;
@@ -230,8 +241,44 @@
 				82250BFB2EA34BF20023B10D /* LoginView.swift */,
 				82250BFC2EA34BF20023B10D /* RootTabView.swift */,
 				82250BFD2EA34BF20023B10D /* SettingsView.swift */,
+				82A001162EFF000000000002 /* CueDetailView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		82A0011C2EFF000000000002 /* Cues */ = {
+			isa = PBXGroup;
+			children = (
+				82A0011D2EFF000000000002 /* Models */,
+				82A0011E2EFF000000000002 /* Repositories */,
+				82A0011F2EFF000000000002 /* ViewModel */,
+			);
+			path = Cues;
+			sourceTree = "<group>";
+		};
+		82A0011D2EFF000000000002 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				82A001122EFF000000000002 /* CueDTOs.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		82A0011E2EFF000000000002 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				82A001132EFF000000000002 /* CueRepository.swift */,
+				82A001142EFF000000000002 /* ActiveProfileHelper.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		82A0011F2EFF000000000002 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				82A001152EFF000000000002 /* HomeViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		82250BFF2EA34BF20023B10D /* UI */ = {
@@ -332,6 +379,11 @@
 				82A001002EFF000000000001 /* ProfileDTOs.swift in Sources */,
 				82A001012EFF000000000001 /* AccountRepository.swift in Sources */,
 				82A001022EFF000000000001 /* SettingsViewModel.swift in Sources */,
+				82A001172EFF000000000002 /* CueDTOs.swift in Sources */,
+				82A001182EFF000000000002 /* CueRepository.swift in Sources */,
+				82A001192EFF000000000002 /* ActiveProfileHelper.swift in Sources */,
+				82A0011A2EFF000000000002 /* HomeViewModel.swift in Sources */,
+				82A0011B2EFF000000000002 /* CueDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

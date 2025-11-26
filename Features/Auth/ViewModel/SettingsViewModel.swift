@@ -50,7 +50,16 @@ final class SettingsViewModel {
             if let active = me.activeProfile {
                 selectedLanguageCode = active.languageCode
             } else {
-                selectedLanguageCode = config.defaultProfileLanguageCode
+                try await accountRepository.setActiveProfile(
+                    accountId: me.account.account.accountId,
+                    languageCode: config.defaultProfileLanguageCode
+                )
+                let refreshedMe = try await accountRepository.fetchMe()
+                if let active = refreshedMe.activeProfile {
+                    selectedLanguageCode = active.languageCode
+                } else {
+                    selectedLanguageCode = config.defaultProfileLanguageCode
+                }
             }
         } catch {
             presentError(title: Strings.Errors.settingsLoadTitle, message: Strings.Errors.settingsLoadFailed)
@@ -71,6 +80,7 @@ final class SettingsViewModel {
         do {
             try await accountRepository.setActiveProfile(accountId: currentAccountId, languageCode: newCode)
             selectedLanguageCode = newCode
+            NotificationCenter.default.post(name: .activeProfileDidChange, object: nil)
         } catch {
             presentError(title: Strings.Errors.settingsSaveTitle, message: Strings.Errors.settingsSaveFailed)
         }

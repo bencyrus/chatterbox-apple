@@ -1,18 +1,26 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 struct RootTabView: View {
+    @State private var homeViewModel: HomeViewModel
     @State private var settingsViewModel: SettingsViewModel
     @State private var isShowingDeveloperPanel: Bool = false
     @State private var isShowingLogsFullScreen: Bool = false
 
-    init(settingsViewModel: SettingsViewModel) {
+    init(
+        homeViewModel: HomeViewModel,
+        settingsViewModel: SettingsViewModel
+    ) {
+        _homeViewModel = State(initialValue: homeViewModel)
         _settingsViewModel = State(initialValue: settingsViewModel)
     }
 
     var body: some View {
         TabView {
             NavigationStack {
-                HomeView()
+                HomeView(viewModel: homeViewModel)
                     .navigationTitle(Strings.Home.title)
             }
             .tabItem {
@@ -209,6 +217,16 @@ private struct NetworkLogDetailView: View {
             .padding()
         }
         .navigationTitle(Strings.Debug.networkLogDetailTitle)
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Button("Copy request") {
+                    copyRequest()
+                }
+                Button("Copy response") {
+                    copyResponse()
+                }
+            }
+        }
     }
 
     private func section(title: String, @ViewBuilder content: () -> some View) -> some View {
@@ -243,6 +261,48 @@ private struct NetworkLogDetailView: View {
             .sorted(by: { $0.key.lowercased() < $1.key.lowercased() })
             .map { "\($0.key): \($0.value)" }
             .joined(separator: "\n")
+    }
+
+    private func copyRequest() {
+        var parts: [String] = []
+        parts.append("REQUEST")
+        parts.append("Method: \(entry.method)")
+        parts.append("URL: \(entry.fullURL)")
+        if !entry.requestHeaders.isEmpty {
+            parts.append("Headers:")
+            parts.append(pretty(headers: entry.requestHeaders))
+        }
+        if let body = entry.requestBodyPreview {
+            parts.append("Body:")
+            parts.append(body)
+        }
+        copyToPasteboard(parts.joined(separator: "\n\n"))
+    }
+
+    private func copyResponse() {
+        var parts: [String] = []
+        parts.append("RESPONSE")
+        if let status = entry.statusCode {
+            parts.append("Status: \(status)")
+        }
+        if !entry.responseHeaders.isEmpty {
+            parts.append("Headers:")
+            parts.append(pretty(headers: entry.responseHeaders))
+        }
+        if let body = entry.responseBodyPreview {
+            parts.append("Body:")
+            parts.append(body)
+        }
+        if let error = entry.errorDescription {
+            parts.append("Error: \(error)")
+        }
+        copyToPasteboard(parts.joined(separator: "\n\n"))
+    }
+
+    private func copyToPasteboard(_ text: String) {
+        #if canImport(UIKit)
+        UIPasteboard.general.string = text
+        #endif
     }
 }
 
@@ -308,6 +368,13 @@ private struct JSONExplorerView: View {
             }
         }
         .navigationTitle(Strings.Debug.jsonViewerTitle)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Copy") {
+                    copyRawBody()
+                }
+            }
+        }
     }
 
     private static func makeNode(from value: Any, key: String?) -> JSONNode {
@@ -337,6 +404,12 @@ private struct JSONExplorerView: View {
             }
             return JSONNode(key: key, kind: .value, valueDescription: description, children: [])
         }
+    }
+
+    private func copyRawBody() {
+        #if canImport(UIKit)
+        UIPasteboard.general.string = rawText
+        #endif
     }
 }
 
