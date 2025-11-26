@@ -13,6 +13,7 @@ struct ChatterboxApp: App {
                 .environment(tokenManager)
                 .environment(networkLogStore)
                 .environment(environment)
+                .preferredColorScheme(.light)
                 .onOpenURL { url in
                     // Restrict to HTTPS universal links in production and expected host
                     guard url.scheme?.lowercased() == "https" else { return }

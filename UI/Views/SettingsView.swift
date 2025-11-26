@@ -18,24 +18,29 @@ struct SettingsView: View {
                 }
             }
             .pickerStyle(.menu)
+            .tint(AppColors.textPrimary)
             .accessibilityIdentifier("settings.languagePicker")
 
             Spacer()
-            Button(Strings.Settings.logout) {
+            Button {
                 tokenManager.clearTokens()
-            }
-            .buttonStyle(.bordered)
-            .tint(.red)
+            } label: {
+                Text(Strings.Settings.logout)
+                    .font(.body)
+                    .fontWeight(.medium)
             .foregroundColor(.red)
-            .overlay(
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.red.opacity(0.6), lineWidth: 1)
+                            .stroke(Color.red, lineWidth: 1)
             )
+            }
             .accessibilityLabel(Text(Strings.A11y.logout))
             Spacer()
         }
         .padding()
-        .background(Color.black.opacity(0.95))
+        .background(AppColors.sand.ignoresSafeArea())
         .task {
             await viewModel.load()
             selectedLanguageCode = viewModel.selectedLanguageCode ?? ""
@@ -52,5 +57,3 @@ struct SettingsView: View {
         }
     }
 }
-
-

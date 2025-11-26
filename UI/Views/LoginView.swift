@@ -12,37 +12,50 @@ struct LoginView: View {
             Text(Strings.Login.title)
                 .font(.title)
                 .bold()
-                .foregroundColor(.primary)
+                .foregroundColor(AppColors.textPrimary)
 
             VStack(spacing: 12) {
                 TextField(Strings.Login.identifierPlaceholder, text: $authViewModel.identifier)
                     .autocorrectionDisabled(true)
                     .textFieldStyle(.plain)
+                    .padding()
+                    .background(AppColors.beige)
+                    .cornerRadius(8)
+                    .foregroundColor(AppColors.textPrimary)
                     .accessibilityLabel(Text(Strings.A11y.identifierField))
 
-                Button(Strings.Login.requestLink) {
+                Button {
                     Task { await authViewModel.requestMagicLink() }
+                } label: {
+                    Text(Strings.Login.requestLink)
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .foregroundColor(AppColors.textContrast)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(AppColors.textPrimary)
+                        .cornerRadius(8)
                 }
-                .buttonStyle(.bordered)
                 .disabled(authViewModel.isRequesting || authViewModel.cooldownSecondsRemaining > 0)
+                .opacity(authViewModel.isRequesting || authViewModel.cooldownSecondsRemaining > 0 ? 0.5 : 1.0)
             }
 
             if authViewModel.cooldownSecondsRemaining > 0 {
                 Text(String(format: Strings.Login.cooldownMessage, authViewModel.cooldownSecondsRemaining))
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(AppColors.textPrimary.opacity(0.6))
                     .multilineTextAlignment(.center)
             } else {
                 Text(Strings.Login.linkSentHint)
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(AppColors.textPrimary.opacity(0.6))
                     .multilineTextAlignment(.center)
             }
 
             Spacer()
         }
         .padding()
-        .background(Color.black.opacity(0.95))
+        .background(AppColors.sand.ignoresSafeArea())
         .alert(Strings.Errors.signInErrorTitle, isPresented: $authViewModel.isShowingErrorAlert) {
             Button("OK", role: .cancel) {}
         } message: {
@@ -50,5 +63,3 @@ struct LoginView: View {
         }
     }
 }
-
-
