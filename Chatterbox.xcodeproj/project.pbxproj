@@ -41,7 +41,6 @@
 		82FFF00B2FFF000000000001 /* DeepLinkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF00C2FFF000000000001 /* DeepLinkParser.swift */; };
 		82FFF0142FFF000000000001 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0162FFF000000000001 /* Log.swift */; };
 		82FFF0152FFF000000000001 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0172FFF000000000001 /* Analytics.swift */; };
-		82FFF0222FFF000000000001 /* DeveloperToolsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0232FFF000000000001 /* DeveloperToolsState.swift */; };
 		82FFF01C2FFF000000000001 /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0182FFF000000000001 /* Spacing.swift */; };
 		82FFF01D2FFF000000000001 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0192FFF000000000001 /* Typography.swift */; };
 		82FFF01F2FFF000000000001 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF00A2FFF000000000001 /* Endpoints.swift */; };
@@ -91,7 +90,6 @@
 		82FFF0112FFF000000000001 /* RecordingSessionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSessionController.swift; sourceTree = "<group>"; };
 		82FFF0162FFF000000000001 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		82FFF0172FFF000000000001 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
-		82FFF0232FFF000000000001 /* DeveloperToolsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperToolsState.swift; sourceTree = "<group>"; };
 		82FFF0182FFF000000000001 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
 		82FFF0192FFF000000000001 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		82FFF01A2FFF000000000001 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
@@ -210,7 +208,6 @@
 				82FFF0082FFF000000000001 /* NetworkLogStore.swift */,
 				82FFF0162FFF000000000001 /* Log.swift */,
 				82FFF0172FFF000000000001 /* Analytics.swift */,
-				82FFF0232FFF000000000001 /* DeveloperToolsState.swift */,
 			);
 			path = Observability;
 			sourceTree = "<group>";
@@ -479,7 +476,6 @@
 				82FFF0072FFF000000000001 /* NetworkLogStore.swift in Sources */,
 				82FFF0142FFF000000000001 /* Log.swift in Sources */,
 				82FFF0152FFF000000000001 /* Analytics.swift in Sources */,
-				82FFF0222FFF000000000001 /* DeveloperToolsState.swift in Sources */,
 				82FFF00B2FFF000000000001 /* DeepLinkParser.swift in Sources */,
 				82FFF00E2FFF000000000001 /* RecordingsDirectoryProvider.swift in Sources */,
 				82FFF00F2FFF000000000001 /* RecordingSessionController.swift in Sources */,

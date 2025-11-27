@@ -6,7 +6,7 @@ import UIKit
 struct RootTabView: View {
     @State private var homeViewModel: HomeViewModel
     @State private var settingsViewModel: SettingsViewModel
-    @SwiftUI.Environment(DeveloperToolsState.self) private var developerToolsState
+    @SwiftUI.Environment(FeatureAccessContext.self) private var featureAccessContext
 
     init(
         homeViewModel: HomeViewModel,
@@ -63,8 +63,8 @@ struct RootTabView: View {
             }
 
             // Developer / debug tab using hammer icon, matching bottom nav style.
-            // Visible when the current user is marked as a developer by `/rpc/me`.
-            if developerToolsState.isDeveloperUser {
+            // Visible when the current user + app config satisfy the developer tools gate.
+            if featureAccessContext.canSee(DeveloperToolsFeature.gate) {
                 NavigationStack {
                     DebugNetworkLogView()
                 }
@@ -75,38 +75,6 @@ struct RootTabView: View {
             }
         }
         .tint(AppColors.textPrimary)
-    }
-}
-
-struct DeveloperPanelView: View {
-    let onShowLogs: () -> Void
-
-    var body: some View {
-        NavigationStack {
-            List {
-                Section {
-                    Button {
-                        onShowLogs()
-                    } label: {
-                        HStack {
-                            Image(systemName: "terminal")
-                                .foregroundColor(AppColors.green)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Logs")
-                                    .font(.body)
-                                    .foregroundColor(AppColors.textPrimary)
-                                Text("Recent HTTP requests and responses")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                    }
-                } header: {
-                    Text("Developer")
-                }
-            }
-            .navigationTitle("Developer")
-        }
     }
 }
 

@@ -9,7 +9,7 @@ struct ChatterboxApp: App {
     @State private var networkLogStore: NetworkLogStore
     @State private var coordinator: AppCoordinator
     @State private var localizationProvider = LocalizationProvider()
-    private let developerToolsState = DeveloperToolsState()
+    private let featureAccessContext = FeatureAccessContext()
     private let analyticsRecorder: AnalyticsRecording
 
     init() {
@@ -37,7 +37,7 @@ struct ChatterboxApp: App {
                 configProvider: configProvider,
                 networkLogStore: logStore,
                 analyticsRecorder: analyticsRecorder,
-                developerToolsState: developerToolsState
+                featureAccessContext: featureAccessContext
             )
         )
     }
@@ -48,7 +48,7 @@ struct ChatterboxApp: App {
                 coordinator: coordinator
             )
             .environment(networkLogStore)
-            .environment(developerToolsState)
+            .environment(featureAccessContext)
             .environment(\.locale, localizationProvider.locale)
             .preferredColorScheme(.light)
             .onOpenURL { url in

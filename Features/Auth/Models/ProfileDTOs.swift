@@ -11,8 +11,10 @@ struct MeResponse: Decodable {
         let phoneNumber: String?
         let lastLoginAt: String?
 
-        var isDeveloper: Bool {
-            flags.contains("developer")
+        /// Typed view of the account's entitlement flags.
+        var entitlements: AccountEntitlements {
+            let typedFlags = flags.compactMap(AccountFlag.init(rawValue:))
+            return AccountEntitlements(flags: typedFlags)
         }
     }
 
@@ -31,6 +33,18 @@ struct ActiveProfileSummary: Decodable {
 struct AppConfigResponse: Decodable {
     let defaultProfileLanguageCode: String
     let availableLanguageCodes: [String]
+
+    /// Backend-provided runtime flags for the app.
+    ///
+    /// These are intentionally kept as raw strings at the DTO boundary so they
+    /// can be mapped into the typed `FeatureFlag` enum by the config loader.
+    /// Example JSON:
+    /// {
+    ///   "available_language_codes": ["en", "fr", "de"],
+    ///   "default_profile_language_code": "en",
+    ///   "flags": ["developerMenuEnabled"]
+    /// }
+    let flags: [String]
 }
 
 

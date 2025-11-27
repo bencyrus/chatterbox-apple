@@ -7,7 +7,7 @@ final class AppCoordinator {
     let configProvider: ConfigProviding
     let networkLogStore: NetworkLogStore
     let analyticsRecorder: AnalyticsRecording
-    let developerToolsState: DeveloperToolsState
+    let featureAccessContext: FeatureAccessContext
 
     private let deepLinkParser = DeepLinkParser()
     private let apiClient: APIClient
@@ -18,14 +18,14 @@ final class AppCoordinator {
         configProvider: ConfigProviding,
         networkLogStore: NetworkLogStore,
         analyticsRecorder: AnalyticsRecording,
-        developerToolsState: DeveloperToolsState
+        featureAccessContext: FeatureAccessContext
     ) {
         self.environment = environment
         self.sessionController = sessionController
         self.configProvider = configProvider
         self.networkLogStore = networkLogStore
         self.analyticsRecorder = analyticsRecorder
-        self.developerToolsState = developerToolsState
+        self.featureAccessContext = featureAccessContext
 
         self.apiClient = DefaultAPIClient(
             environment: environment,
@@ -90,7 +90,8 @@ final class AppCoordinator {
         return SettingsViewModel(
             accountRepository: accountRepo,
             logoutUseCase: logoutUC,
-            developerToolsState: developerToolsState
+            featureAccessContext: featureAccessContext,
+            configProvider: configProvider
         )
     }
 }

@@ -6,7 +6,8 @@ import Observation
 final class SettingsViewModel {
     private let accountRepository: AccountRepository
     private let logoutUseCase: LogoutUseCase
-    private let developerToolsState: DeveloperToolsState
+    private let featureAccessContext: FeatureAccessContext
+    private let configProvider: ConfigProviding
 
     // MARK: - State
 
@@ -26,11 +27,13 @@ final class SettingsViewModel {
     init(
         accountRepository: AccountRepository,
         logoutUseCase: LogoutUseCase,
-        developerToolsState: DeveloperToolsState
+        featureAccessContext: FeatureAccessContext,
+        configProvider: ConfigProviding
     ) {
         self.accountRepository = accountRepository
         self.logoutUseCase = logoutUseCase
-        self.developerToolsState = developerToolsState
+        self.featureAccessContext = featureAccessContext
+        self.configProvider = configProvider
     }
 
     // MARK: - Intents
@@ -44,7 +47,9 @@ final class SettingsViewModel {
             async let configTask = accountRepository.fetchAppConfig()
 
             let me = try await meTask
-            developerToolsState.isDeveloperUser = me.account.isDeveloper
+            // Update shared feature access context based on account flags and current config.
+            featureAccessContext.accountEntitlements = me.account.entitlements
+            featureAccessContext.runtimeConfig = configProvider.snapshot
 
             let config = try await configTask
 
