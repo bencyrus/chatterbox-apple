@@ -6,6 +6,7 @@ import Observation
 final class HomeViewModel {
     private let activeProfileHelper: ActiveProfileHelper
     private let cueRepository: CueRepository
+    private let configProvider: ConfigProviding
 
     // MARK: - State
 
@@ -19,10 +20,12 @@ final class HomeViewModel {
 
     init(
         activeProfileHelper: ActiveProfileHelper,
-        cueRepository: CueRepository
+        cueRepository: CueRepository,
+        configProvider: ConfigProviding
     ) {
         self.activeProfileHelper = activeProfileHelper
         self.cueRepository = cueRepository
+        self.configProvider = configProvider
     }
 
     // MARK: - Intents
@@ -53,7 +56,7 @@ final class HomeViewModel {
 
         do {
             let profile = try await resolveActiveProfile()
-            let count = 5
+            let count = configProvider.snapshot.cuesPageSize
 
             // Let the backend control ordering, shuffling, and any duplicates.
             // The app simply renders whatever list of cues it receives.

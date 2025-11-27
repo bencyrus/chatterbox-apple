@@ -5,8 +5,8 @@ struct RequestMagicLinkBody: Encodable {
 }
 
 struct LoginWithMagicTokenResponse: Decodable {
-    let access_token: String
-    let refresh_token: String
+    let accessToken: String
+    let refreshToken: String
 }
 
 

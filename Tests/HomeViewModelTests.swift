@@ -41,6 +41,20 @@ final class HomeViewModelTests: XCTestCase {
         }
     }
 
+    private final class FakeConfigProvider: ConfigProviding {
+        var snapshot: RuntimeConfig
+
+        var updates: AsyncStream<RuntimeConfig> {
+            AsyncStream { continuation in
+                continuation.yield(snapshot)
+            }
+        }
+
+        init(snapshot: RuntimeConfig) {
+            self.snapshot = snapshot
+        }
+    }
+
     func testLoadInitialCues_usesExistingActiveProfile() async throws {
         let account = AccountSummary(accountId: 1, email: "test@example.com", phoneNumber: nil)
         let envelope = AccountEnvelope(account: account, accountRole: "user", lastLoginAt: nil)
@@ -69,7 +83,12 @@ final class HomeViewModelTests: XCTestCase {
         cueRepo.cuesToReturn = [cue]
 
         let helper = ActiveProfileHelper(accountRepository: accountRepo)
-        let viewModel = HomeViewModel(activeProfileHelper: helper, cueRepository: cueRepo)
+        let configProvider = FakeConfigProvider(snapshot: RuntimeConfig(cuesPageSize: 5))
+        let viewModel = HomeViewModel(
+            activeProfileHelper: helper,
+            cueRepository: cueRepo,
+            configProvider: configProvider
+        )
 
         await viewModel.loadInitialCues()
 

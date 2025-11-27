@@ -1,0 +1,97 @@
+import Foundation
+
+@MainActor
+final class AppCoordinator {
+    let environment: Environment
+    let sessionController: SessionControllerProtocol
+    let configProvider: ConfigProviding
+    let networkLogStore: NetworkLogStore
+    let analyticsRecorder: AnalyticsRecording
+    let developerToolsState: DeveloperToolsState
+
+    private let deepLinkParser = DeepLinkParser()
+    private let apiClient: APIClient
+
+    init(
+        environment: Environment,
+        sessionController: SessionControllerProtocol,
+        configProvider: ConfigProviding,
+        networkLogStore: NetworkLogStore,
+        analyticsRecorder: AnalyticsRecording,
+        developerToolsState: DeveloperToolsState
+    ) {
+        self.environment = environment
+        self.sessionController = sessionController
+        self.configProvider = configProvider
+        self.networkLogStore = networkLogStore
+        self.analyticsRecorder = analyticsRecorder
+        self.developerToolsState = developerToolsState
+
+        self.apiClient = DefaultAPIClient(
+            environment: environment,
+            sessionController: sessionController,
+            configProvider: configProvider,
+            networkLogStore: networkLogStore
+        )
+    }
+
+    // MARK: - Deep links
+
+    func handle(url: URL) {
+        guard let intent = deepLinkParser.parse(url: url) else { return }
+
+        switch intent {
+        case .magicToken(let token):
+            let authRepo = PostgrestAuthRepository(client: apiClient)
+            let useCase = LoginWithMagicTokenUseCase(
+                repository: authRepo,
+                sessionController: sessionController,
+                analytics: analyticsRecorder
+            )
+            Task {
+                try? await useCase.execute(token: token)
+            }
+        }
+    }
+
+    // MARK: - ViewModel factories
+
+    func makeAuthViewModel() -> AuthViewModel {
+        let authRepo = PostgrestAuthRepository(client: apiClient)
+        let logoutUC = LogoutUseCase(sessionController: sessionController)
+        let requestMagic = RequestMagicLinkUseCase(repository: authRepo, analytics: analyticsRecorder)
+        let loginWithMagic = LoginWithMagicTokenUseCase(
+            repository: authRepo,
+            sessionController: sessionController,
+            analytics: analyticsRecorder
+        )
+        return AuthViewModel(
+            logout: logoutUC,
+            requestMagicLink: requestMagic,
+            loginWithMagicToken: loginWithMagic,
+            configProvider: configProvider
+        )
+    }
+
+    func makeHomeViewModel() -> HomeViewModel {
+        let accountRepo = PostgrestAccountRepository(client: apiClient)
+        let activeProfileHelper = ActiveProfileHelper(accountRepository: accountRepo)
+        let cueRepo = PostgrestCueRepository(client: apiClient)
+        return HomeViewModel(
+            activeProfileHelper: activeProfileHelper,
+            cueRepository: cueRepo,
+            configProvider: configProvider
+        )
+    }
+
+    func makeSettingsViewModel() -> SettingsViewModel {
+        let accountRepo = PostgrestAccountRepository(client: apiClient)
+        let logoutUC = LogoutUseCase(sessionController: sessionController)
+        return SettingsViewModel(
+            accountRepository: accountRepo,
+            logoutUseCase: logoutUC,
+            developerToolsState: developerToolsState
+        )
+    }
+}
+

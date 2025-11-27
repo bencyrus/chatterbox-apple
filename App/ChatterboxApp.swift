@@ -1,34 +1,64 @@
 import SwiftUI
-import Observation
 
 @main
 struct ChatterboxApp: App {
-    @State private var tokenManager = TokenManager()
-    @State private var networkLogStore = NetworkLogStore()
-    private let environment = AppEnvironment()
+    private let environment: Environment
+    private let sessionController = SessionController()
+    private let configProvider = RuntimeConfigProvider()
+
+    @State private var networkLogStore: NetworkLogStore
+    @State private var coordinator: AppCoordinator
+    @State private var localizationProvider = LocalizationProvider()
+    private let developerToolsState = DeveloperToolsState()
+    private let analyticsRecorder: AnalyticsRecording
+
+    init() {
+        // In a production app we would surface a nicer fatal error, but for
+        // now failing fast keeps configuration problems obvious during setup.
+        do {
+            environment = try EnvironmentLoader.load()
+        } catch {
+            fatalError("Failed to load Environment: \(error)")
+        }
+
+        // Analytics: enable OSLog sink only when allowed by config snapshot.
+        if configProvider.snapshot.isEnabled(.analyticsEnabled) {
+            analyticsRecorder = AnalyticsRecorder(sinks: [OSLogAnalyticsSink()])
+        } else {
+            analyticsRecorder = AnalyticsRecorder(sinks: [])
+        }
+
+        let logStore = NetworkLogStore()
+        _networkLogStore = State(initialValue: logStore)
+        _coordinator = State(
+            initialValue: AppCoordinator(
+                environment: environment,
+                sessionController: sessionController,
+                configProvider: configProvider,
+                networkLogStore: logStore,
+                analyticsRecorder: analyticsRecorder,
+                developerToolsState: developerToolsState
+            )
+        )
+    }
 
     var body: some Scene {
         WindowGroup {
-            CompositionRootView()
-                .environment(tokenManager)
-                .environment(networkLogStore)
-                .environment(environment)
-                .preferredColorScheme(.light)
-                .onOpenURL { url in
-                    // Restrict to HTTPS universal links in production and expected host
-                    guard url.scheme?.lowercased() == "https" else { return }
-                    guard let host = url.host?.lowercased(), environment.universalLinkAllowedHosts.contains(host) else { return }
-                    if url.path.lowercased() == environment.magicLinkPath.lowercased() {
-                        NotificationCenter.default.post(name: .didOpenMagicTokenURL, object: url)
-                    }
-                }
+            CompositionRootView(
+                coordinator: coordinator
+            )
+            .environment(networkLogStore)
+            .environment(developerToolsState)
+            .environment(\.locale, localizationProvider.locale)
+            .preferredColorScheme(.light)
+            .onOpenURL { url in
+                coordinator.handle(url: url)
+            }
         }
     }
 }
 
 extension Notification.Name {
-    static let didOpenMagicTokenURL = Notification.Name("didOpenMagicTokenURL")
     static let activeProfileDidChange = Notification.Name("activeProfileDidChange")
 }
-
 

@@ -32,6 +32,21 @@
 		82A0011A2EFF000000000002 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001152EFF000000000002 /* HomeViewModel.swift */; };
 		82A0011B2EFF000000000002 /* CueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001162EFF000000000002 /* CueDetailView.swift */; };
 		82D5A0012F0E000000000001 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D5A0002F0E000000000001 /* DesignSystem.swift */; };
+		82FFF0012FFF000000000001 /* FeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0042FFF000000000001 /* FeatureFlag.swift */; };
+		82FFF0022FFF000000000001 /* RuntimeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0052FFF000000000001 /* RuntimeConfig.swift */; };
+		82FFF0032FFF000000000001 /* RuntimeConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0062FFF000000000001 /* RuntimeConfigProvider.swift */; };
+		82FFF0072FFF000000000001 /* NetworkLogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0082FFF000000000001 /* NetworkLogStore.swift */; };
+		82FFF00E2FFF000000000001 /* RecordingsDirectoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0102FFF000000000001 /* RecordingsDirectoryProvider.swift */; };
+		82FFF00F2FFF000000000001 /* RecordingSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0112FFF000000000001 /* RecordingSessionController.swift */; };
+		82FFF00B2FFF000000000001 /* DeepLinkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF00C2FFF000000000001 /* DeepLinkParser.swift */; };
+		82FFF0142FFF000000000001 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0162FFF000000000001 /* Log.swift */; };
+		82FFF0152FFF000000000001 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0172FFF000000000001 /* Analytics.swift */; };
+		82FFF0222FFF000000000001 /* DeveloperToolsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0232FFF000000000001 /* DeveloperToolsState.swift */; };
+		82FFF01C2FFF000000000001 /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0182FFF000000000001 /* Spacing.swift */; };
+		82FFF01D2FFF000000000001 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0192FFF000000000001 /* Typography.swift */; };
+		82FFF01F2FFF000000000001 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF00A2FFF000000000001 /* Endpoints.swift */; };
+		82FFF0202FFF000000000001 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF01A2FFF000000000001 /* AppCoordinator.swift */; };
+		82FFF0212FFF000000000001 /* LocalizationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF01B2FFF000000000001 /* LocalizationProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +81,21 @@
 		82A001152EFF000000000002 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		82A001162EFF000000000002 /* CueDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueDetailView.swift; sourceTree = "<group>"; };
 		82D5A0002F0E000000000001 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		82FFF0042FFF000000000001 /* FeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlag.swift; sourceTree = "<group>"; };
+		82FFF0052FFF000000000001 /* RuntimeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeConfig.swift; sourceTree = "<group>"; };
+		82FFF0062FFF000000000001 /* RuntimeConfigProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeConfigProvider.swift; sourceTree = "<group>"; };
+		82FFF0082FFF000000000001 /* NetworkLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLogStore.swift; sourceTree = "<group>"; };
+		82FFF00A2FFF000000000001 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
+		82FFF00C2FFF000000000001 /* DeepLinkParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkParser.swift; sourceTree = "<group>"; };
+		82FFF0102FFF000000000001 /* RecordingsDirectoryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingsDirectoryProvider.swift; sourceTree = "<group>"; };
+		82FFF0112FFF000000000001 /* RecordingSessionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSessionController.swift; sourceTree = "<group>"; };
+		82FFF0162FFF000000000001 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		82FFF0172FFF000000000001 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		82FFF0232FFF000000000001 /* DeveloperToolsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperToolsState.swift; sourceTree = "<group>"; };
+		82FFF0182FFF000000000001 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
+		82FFF0192FFF000000000001 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		82FFF01A2FFF000000000001 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		82FFF01B2FFF000000000001 /* LocalizationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +147,7 @@
 			children = (
 				82250BDA2EA34BF20023B10D /* ChatterboxApp.swift */,
 				82250BDB2EA34BF20023B10D /* CompositionRoot.swift */,
+				82FFF01A2FFF000000000001 /* AppCoordinator.swift */,
 			);
 			path = App;
 			sourceTree = SOURCE_ROOT;
@@ -125,6 +156,9 @@
 			isa = PBXGroup;
 			children = (
 				82250BDD2EA34BF20023B10D /* Environment.swift */,
+				82FFF0042FFF000000000001 /* FeatureFlag.swift */,
+				82FFF0052FFF000000000001 /* RuntimeConfig.swift */,
+				82FFF0062FFF000000000001 /* RuntimeConfigProvider.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -133,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				82250BDF2EA34BF20023B10D /* Strings.swift */,
+				82FFF01B2FFF000000000001 /* LocalizationProvider.swift */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -141,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				82250BE12EA34BF20023B10D /* APIClient.swift */,
+				82FFF00A2FFF000000000001 /* Endpoints.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -160,9 +196,48 @@
 				82250BE02EA34BF20023B10D /* Localization */,
 				82250BE22EA34BF20023B10D /* Networking */,
 				82250BE42EA34BF20023B10D /* Security */,
+				82FFF00D2FFF000000000001 /* DeepLink */,
+				82FFF0092FFF000000000001 /* Observability */,
+				82FFF0122FFF000000000001 /* Storage */,
+				82FFF0132FFF000000000001 /* Audio */,
 			);
 			path = Core;
 			sourceTree = SOURCE_ROOT;
+		};
+		82FFF0092FFF000000000001 /* Observability */ = {
+			isa = PBXGroup;
+			children = (
+				82FFF0082FFF000000000001 /* NetworkLogStore.swift */,
+				82FFF0162FFF000000000001 /* Log.swift */,
+				82FFF0172FFF000000000001 /* Analytics.swift */,
+				82FFF0232FFF000000000001 /* DeveloperToolsState.swift */,
+			);
+			path = Observability;
+			sourceTree = "<group>";
+		};
+		82FFF0122FFF000000000001 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				82FFF0102FFF000000000001 /* RecordingsDirectoryProvider.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		82FFF0132FFF000000000001 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				82FFF0112FFF000000000001 /* RecordingSessionController.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		82FFF00D2FFF000000000001 /* DeepLink */ = {
+			isa = PBXGroup;
+			children = (
+				82FFF00C2FFF000000000001 /* DeepLinkParser.swift */,
+			);
+			path = DeepLink;
+			sourceTree = "<group>";
 		};
 		82250BE72EA34BF20023B10D /* Models */ = {
 			isa = PBXGroup;
@@ -287,10 +362,20 @@
 			isa = PBXGroup;
 			children = (
 				82D5A0002F0E000000000001 /* DesignSystem.swift */,
+				82FFF01E2FFF000000000001 /* Theme */,
 				82250BFE2EA34BF20023B10D /* Views */,
 			);
 			path = UI;
 			sourceTree = SOURCE_ROOT;
+		};
+		82FFF01E2FFF000000000001 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				82FFF0182FFF000000000001 /* Spacing.swift */,
+				82FFF0192FFF000000000001 /* Typography.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -388,6 +473,21 @@
 				82A0011A2EFF000000000002 /* HomeViewModel.swift in Sources */,
 				82A0011B2EFF000000000002 /* CueDetailView.swift in Sources */,
 				82D5A0012F0E000000000001 /* DesignSystem.swift in Sources */,
+				82FFF0012FFF000000000001 /* FeatureFlag.swift in Sources */,
+				82FFF0022FFF000000000001 /* RuntimeConfig.swift in Sources */,
+				82FFF0032FFF000000000001 /* RuntimeConfigProvider.swift in Sources */,
+				82FFF0072FFF000000000001 /* NetworkLogStore.swift in Sources */,
+				82FFF0142FFF000000000001 /* Log.swift in Sources */,
+				82FFF0152FFF000000000001 /* Analytics.swift in Sources */,
+				82FFF0222FFF000000000001 /* DeveloperToolsState.swift in Sources */,
+				82FFF00B2FFF000000000001 /* DeepLinkParser.swift in Sources */,
+				82FFF00E2FFF000000000001 /* RecordingsDirectoryProvider.swift in Sources */,
+				82FFF00F2FFF000000000001 /* RecordingSessionController.swift in Sources */,
+				82FFF01C2FFF000000000001 /* Spacing.swift in Sources */,
+				82FFF01D2FFF000000000001 /* Typography.swift in Sources */,
+				82FFF01F2FFF000000000001 /* Endpoints.swift in Sources */,
+				82FFF0202FFF000000000001 /* AppCoordinator.swift in Sources */,
+				82FFF0212FFF000000000001 /* LocalizationProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

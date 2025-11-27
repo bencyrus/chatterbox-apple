@@ -1,5 +1,4 @@
 import Foundation
-import Observation
 import Security
 
 struct AuthTokens: Codable, Equatable {
@@ -7,47 +6,43 @@ struct AuthTokens: Codable, Equatable {
     let refreshToken: String
 }
 
-protocol TokenProvider {
-    var accessToken: String? { get }
-    var refreshToken: String? { get }
+/// Public interface used by the networking layer and composition root.
+protocol SessionControllerProtocol: AnyObject {
+    var stateStream: AsyncStream<SessionState> { get }
+    var currentState: SessionState { get async }
+    var currentAccessToken: String? { get async }
+
+    func bootstrap() async
+    func loginSucceeded(with tokens: AuthTokens) async
+    func logout() async
 }
 
-protocol TokenSink: AnyObject {
-    func updateTokens(_ tokens: AuthTokens)
-    func clearTokens()
+enum SessionState: Equatable {
+    case signedOut
+    case authenticated
+    case refreshing
+    case error
 }
 
-@Observable
-final class TokenManager: TokenProvider, TokenSink {
+/// Keychain‑backed token store used internally by `SessionController`.
+private struct TokenStore {
     private let service = "com.chatterbox.ios.tokens"
     private let account = "default"
 
-    private(set) var cachedTokens: AuthTokens? {
-        didSet { self.hasValidAccessToken = cachedTokens?.accessToken.isEmpty == false }
+    func loadTokens() -> AuthTokens? {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecReturnData as String: true
+        ]
+        var item: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &item)
+        guard status == errSecSuccess, let data = item as? Data else { return nil }
+        return try? JSONDecoder().decode(AuthTokens.self, from: data)
     }
 
-    var hasValidAccessToken: Bool = false
-
-    init() {
-        self.cachedTokens = loadTokens()
-        self.hasValidAccessToken = cachedTokens?.accessToken.isEmpty == false
-    }
-
-    var accessToken: String? { cachedTokens?.accessToken }
-    var refreshToken: String? { cachedTokens?.refreshToken }
-
-    func updateTokens(_ tokens: AuthTokens) {
-        storeTokens(tokens)
-        cachedTokens = tokens
-    }
-
-    func clearTokens() {
-        deleteTokens()
-        cachedTokens = nil
-    }
-
-    // MARK: - Keychain
-    private func storeTokens(_ tokens: AuthTokens) {
+    func storeTokens(_ tokens: AuthTokens) {
         guard let data = try? JSONEncoder().encode(tokens) else { return }
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -61,20 +56,7 @@ final class TokenManager: TokenProvider, TokenSink {
         SecItemAdd(add as CFDictionary, nil)
     }
 
-    private func loadTokens() -> AuthTokens? {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: account,
-            kSecReturnData as String: true
-        ]
-        var item: CFTypeRef?
-        let status = SecItemCopyMatching(query as CFDictionary, &item)
-        guard status == errSecSuccess, let data = item as? Data else { return nil }
-        return try? JSONDecoder().decode(AuthTokens.self, from: data)
-    }
-
-    private func deleteTokens() {
+    func clearTokens() {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -84,4 +66,54 @@ final class TokenManager: TokenProvider, TokenSink {
     }
 }
 
+/// Central authority for session and token lifecycle.
+///
+/// This actor is intentionally lightweight for now – it loads tokens on
+/// startup and exposes basic login/logout behavior. Refresh flows will be
+/// layered in via networking middleware.
+actor SessionController: SessionControllerProtocol {
+    private let tokenStore = TokenStore()
+
+    private(set) var currentTokens: AuthTokens?
+    private(set) var currentState: SessionState = .signedOut
+
+    private let stateContinuation: AsyncStream<SessionState>.Continuation
+    let stateStream: AsyncStream<SessionState>
+
+    init() {
+        var continuation: AsyncStream<SessionState>.Continuation!
+        self.stateStream = AsyncStream { continuation = $0 }
+        self.stateContinuation = continuation
+    }
+
+    var currentAccessToken: String? {
+        currentTokens?.accessToken
+    }
+
+    func bootstrap() async {
+        if let tokens = tokenStore.loadTokens() {
+            currentTokens = tokens
+            setState(.authenticated)
+        } else {
+            setState(.signedOut)
+        }
+    }
+
+    func loginSucceeded(with tokens: AuthTokens) async {
+        tokenStore.storeTokens(tokens)
+        currentTokens = tokens
+        setState(.authenticated)
+    }
+
+    func logout() async {
+        tokenStore.clearTokens()
+        currentTokens = nil
+        setState(.signedOut)
+    }
+
+    private func setState(_ newState: SessionState) {
+        currentState = newState
+        stateContinuation.yield(newState)
+    }
+}
 

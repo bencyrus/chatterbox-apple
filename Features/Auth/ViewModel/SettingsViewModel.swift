@@ -5,9 +5,12 @@ import Observation
 @Observable
 final class SettingsViewModel {
     private let accountRepository: AccountRepository
+    private let logoutUseCase: LogoutUseCase
+    private let developerToolsState: DeveloperToolsState
 
     // MARK: - State
 
+    var email: String?
     var availableLanguages: [String] = []
     var selectedLanguageCode: String?
 
@@ -18,12 +21,16 @@ final class SettingsViewModel {
     var errorAlertMessage: String = ""
     var isShowingErrorAlert: Bool = false
 
-    var isDeveloperUser: Bool = false
-
     private var accountId: Int64?
 
-    init(accountRepository: AccountRepository) {
+    init(
+        accountRepository: AccountRepository,
+        logoutUseCase: LogoutUseCase,
+        developerToolsState: DeveloperToolsState
+    ) {
         self.accountRepository = accountRepository
+        self.logoutUseCase = logoutUseCase
+        self.developerToolsState = developerToolsState
     }
 
     // MARK: - Intents
@@ -36,14 +43,13 @@ final class SettingsViewModel {
             async let meTask = accountRepository.fetchMe()
             async let configTask = accountRepository.fetchAppConfig()
 
-            let (me, config) = try await (meTask, configTask)
+            let me = try await meTask
+            developerToolsState.isDeveloperUser = me.account.isDeveloper
 
-            accountId = me.account.account.accountId
-            if let email = me.account.account.email {
-                isDeveloperUser = email.lowercased() == "imatiwx@gmail.com"
-            } else {
-                isDeveloperUser = false
-            }
+            let config = try await configTask
+
+            accountId = me.account.accountId
+            email = me.account.email
 
             availableLanguages = config.availableLanguageCodes
 
@@ -51,7 +57,7 @@ final class SettingsViewModel {
                 selectedLanguageCode = active.languageCode
             } else {
                 try await accountRepository.setActiveProfile(
-                    accountId: me.account.account.accountId,
+                    accountId: me.account.accountId,
                     languageCode: config.defaultProfileLanguageCode
                 )
                 let refreshedMe = try await accountRepository.fetchMe()
@@ -64,6 +70,10 @@ final class SettingsViewModel {
         } catch {
             presentError(title: Strings.Errors.settingsLoadTitle, message: Strings.Errors.settingsLoadFailed)
         }
+    }
+
+    func logout() {
+        logoutUseCase.execute()
     }
 
     func updateLanguage(to newCode: String) async {

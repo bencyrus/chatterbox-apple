@@ -90,19 +90,14 @@ private struct ShuffleButton: View {
     let onTap: () -> Void
 
     var body: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "shuffle")
-            Text(Strings.Home.shuffle)
+        Button(action: onTap) {
+            HStack(spacing: 6) {
+                Image(systemName: "shuffle")
+                Text(Strings.Home.shuffle)
+            }
+            .font(.callout.bold())
         }
-        .font(.callout.bold())
-        .foregroundColor(.white)
-        .padding(.horizontal, 18)
-        .padding(.vertical, 12)
-        .background(Color.black, in: Capsule())
-        .contentShape(Capsule())
-        .onTapGesture {
-            onTap()
-        }
+        .buttonStyle(PrimaryButtonStyle())
         .accessibilityIdentifier("home.shuffle")
     }
 }
@@ -119,7 +114,7 @@ struct PageHeader<Actions: View>: View {
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             Text(title)
-                .font(.system(size: 34, weight: .bold))
+                .font(Typography.heading)
                 .foregroundColor(AppColors.textPrimary)
                 .frame(maxWidth: .infinity, alignment: .leading)
 

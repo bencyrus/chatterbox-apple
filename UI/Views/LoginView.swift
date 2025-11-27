@@ -10,8 +10,7 @@ struct LoginView: View {
     var body: some View {
         VStack(spacing: 24) {
             Text(Strings.Login.title)
-                .font(.title)
-                .bold()
+                .font(Typography.title)
                 .foregroundColor(AppColors.textPrimary)
 
             VStack(spacing: 12) {
@@ -28,14 +27,8 @@ struct LoginView: View {
                     Task { await authViewModel.requestMagicLink() }
                 } label: {
                     Text(Strings.Login.requestLink)
-                        .font(.body)
-                        .fontWeight(.medium)
-                        .foregroundColor(AppColors.textContrast)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(AppColors.textPrimary)
-                        .cornerRadius(8)
                 }
+                .buttonStyle(PrimaryButtonStyle())
                 .disabled(authViewModel.isRequesting || authViewModel.cooldownSecondsRemaining > 0)
                 .opacity(authViewModel.isRequesting || authViewModel.cooldownSecondsRemaining > 0 ? 0.5 : 1.0)
             }

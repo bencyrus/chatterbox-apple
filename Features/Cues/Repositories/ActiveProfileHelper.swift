@@ -16,7 +16,7 @@ struct ActiveProfileHelper {
         }
 
         let config = try await accountRepository.fetchAppConfig()
-        let accountId = me.account.account.accountId
+        let accountId = me.account.accountId
 
         try await accountRepository.setActiveProfile(
             accountId: accountId,

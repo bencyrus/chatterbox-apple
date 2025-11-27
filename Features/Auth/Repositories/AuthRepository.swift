@@ -10,34 +10,31 @@ public enum AuthError: Error, Equatable {
 }
 
 final class PostgrestAuthRepository: AuthRepository {
-    private let client: HTTPClient
-    private let env: AppEnvironment
+    private let client: APIClient
 
-    init(client: HTTPClient, environment: AppEnvironment) {
+    init(client: APIClient) {
         self.client = client
-        self.env = environment
     }
 
     func requestMagicLink(identifier: String) async throws {
+        let endpoint = AuthEndpoints.RequestMagicLink()
         let body = RequestMagicLinkBody(identifier: identifier)
-        _ = try await client.postJSON(path: env.requestMagicLinkPath, body: body)
+        _ = try await client.send(endpoint, body: body)
     }
 
     func loginWithMagicToken(token: String) async throws -> AuthTokens {
-        struct LoginWithMagicTokenBody: Encodable { let token: String }
+        let endpoint = AuthEndpoints.LoginWithMagicToken()
+        let body = AuthEndpoints.LoginWithMagicToken.Body(token: token)
         do {
-            let (data, _) = try await client.postJSON(path: env.loginWithMagicTokenPath, body: LoginWithMagicTokenBody(token: token))
-            let decoded = try JSONDecoder().decode(LoginWithMagicTokenResponse.self, from: data)
-            return AuthTokens(accessToken: decoded.access_token, refreshToken: decoded.refresh_token)
+            let response = try await client.send(endpoint, body: body)
+            return AuthTokens(accessToken: response.accessToken, refreshToken: response.refreshToken)
         } catch {
-            // Map known server hints to domain errors when available
-            if case NetworkError.requestFailedWithBody(_, let body) = error,
-               body.contains("\"hint\":\"invalid_magic_link\"") || body.contains("invalid_magic_link") {
+            if case NetworkError.requestFailedWithBody(_, let responseBody) = error,
+               responseBody.contains("\"hint\":\"invalid_magic_link\"") || responseBody.contains("invalid_magic_link") {
                 throw AuthError.invalidMagicLink
             }
             throw error
         }
     }
 }
-
 

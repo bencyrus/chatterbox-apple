@@ -1,83 +1,47 @@
 import SwiftUI
-import Observation
 
 struct CompositionRootView: View {
-    @Environment(TokenManager.self) private var tokenManager
-    @Environment(AppEnvironment.self) private var env
-    @Environment(NetworkLogStore.self) private var networkLogStore
+    let coordinator: AppCoordinator
+
+    @State private var isAuthenticated: Bool = false
 
     var body: some View {
         Group {
-            if tokenManager.hasValidAccessToken {
-                let (authVM, homeVM, settingsVM) = makeAuthenticatedViewModels()
+            if isAuthenticated {
+                let homeVM = coordinator.makeHomeViewModel()
+                let settingsVM = coordinator.makeSettingsViewModel()
+
                 RootTabView(
                     homeViewModel: homeVM,
                     settingsViewModel: settingsVM
                 )
-                    .onReceive(NotificationCenter.default.publisher(for: .didOpenMagicTokenURL)) { note in
-                        guard let url = note.object as? URL else { return }
-                        authVM.handleIncomingMagicToken(url: url)
-                    }
             } else {
-                let authViewModel = makeAuthViewModel()
+                let authViewModel = coordinator.makeAuthViewModel()
                 LoginView(viewModel: authViewModel)
-                    .onReceive(NotificationCenter.default.publisher(for: .didOpenMagicTokenURL)) { note in
-                        guard let url = note.object as? URL else { return }
-                        authViewModel.handleIncomingMagicToken(url: url)
-                    }
+            }
+        }
+        .task {
+            await coordinator.sessionController.bootstrap()
+            let initialState = await coordinator.sessionController.currentState
+            await MainActor.run {
+                self.isAuthenticated = (initialState == .authenticated)
+            }
+
+            // Once authenticated, eagerly load account metadata so that
+            // account flags (e.g. `developer`) are applied and developer
+            // tooling visibility is correct before the user navigates.
+            if initialState == .authenticated {
+                let settingsVM = coordinator.makeSettingsViewModel()
+                await settingsVM.load()
+            }
+
+            for await state in coordinator.sessionController.stateStream {
+                await MainActor.run {
+                    self.isAuthenticated = (state == .authenticated)
+                }
             }
         }
         .preferredColorScheme(.dark)
     }
-
-    private func makeAuthViewModel() -> AuthViewModel {
-        let client = APIClient(
-            baseURL: env.baseURL,
-            tokenProvider: tokenManager,
-            tokenSink: tokenManager,
-            networkLogStore: networkLogStore
-        )
-        let repo = PostgrestAuthRepository(client: client, environment: env)
-        let logoutUC = LogoutUseCase(tokenSink: tokenManager)
-        let requestMagic = RequestMagicLinkUseCase(repository: repo)
-        let loginWithMagic = LoginWithMagicTokenUseCase(repository: repo, tokenSink: tokenManager)
-        return AuthViewModel(
-            logout: logoutUC,
-            requestMagicLink: requestMagic,
-            loginWithMagicToken: loginWithMagic,
-            environment: env
-        )
-    }
-
-    private func makeAuthenticatedViewModels() -> (AuthViewModel, HomeViewModel, SettingsViewModel) {
-        let client = APIClient(
-            baseURL: env.baseURL,
-            tokenProvider: tokenManager,
-            tokenSink: tokenManager,
-            networkLogStore: networkLogStore
-        )
-        let authRepo = PostgrestAuthRepository(client: client, environment: env)
-        let logoutUC = LogoutUseCase(tokenSink: tokenManager)
-        let requestMagic = RequestMagicLinkUseCase(repository: authRepo)
-        let loginWithMagic = LoginWithMagicTokenUseCase(repository: authRepo, tokenSink: tokenManager)
-        let authVM = AuthViewModel(
-            logout: logoutUC,
-            requestMagicLink: requestMagic,
-            loginWithMagicToken: loginWithMagic,
-            environment: env
-        )
-
-        let accountRepo = PostgrestAccountRepository(client: client, environment: env)
-        let activeProfileHelper = ActiveProfileHelper(accountRepository: accountRepo)
-        let cueRepo = PostgrestCueRepository(client: client, environment: env)
-        let homeVM = HomeViewModel(
-            activeProfileHelper: activeProfileHelper,
-            cueRepository: cueRepo
-        )
-        let settingsVM = SettingsViewModel(accountRepository: accountRepo)
-
-        return (authVM, homeVM, settingsVM)
-    }
 }
-
 

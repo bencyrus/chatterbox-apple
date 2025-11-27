@@ -1,384 +1,258 @@
 import Foundation
-import Observation
 import os
 
-enum NetworkError: Error, Equatable {
-    case invalidURL
-    case encodingFailed
-    case requestFailed(Int)
-    case requestFailedWithBody(Int, String)
-    case noData
-    case decodingFailed
+/// HTTP verb.
+enum HTTPMethod: String {
+    case get = "GET"
+    case post = "POST"
 }
 
-@MainActor
-protocol NetworkLogStoring: AnyObject {
-    var entries: [NetworkLogEntry] { get }
-    func append(_ entry: NetworkLogEntry)
-    func clear()
+/// Strategy for idempotency keys on POST requests.
+enum IdempotencyKeyStrategy {
+    case none
+    case generated
+    case custom(String)
 }
 
-struct NetworkLogEntry: Codable, Identifiable, Equatable {
-    let id: UUID
-    let timestamp: Date
-    let method: String
-    let path: String
-    let fullURL: String
-    let statusCode: Int?
-    let durationMs: Int?
-    let requestHeaders: [String: String]
-    let requestBodyPreview: String?
-    let responseHeaders: [String: String]
-    let responseBodyPreview: String?
-    let errorDescription: String?
+/// High‑level description of an API endpoint.
+protocol APIEndpoint {
+    associatedtype RequestBody: Encodable
+    associatedtype ResponseBody: Decodable
+
+    var path: String { get }
+    var method: HTTPMethod { get }
+    var requiresAuth: Bool { get }
+    var timeout: TimeInterval { get }
+    var idempotencyKeyStrategy: IdempotencyKeyStrategy { get }
 }
 
-@MainActor
-@Observable
-final class NetworkLogStore: NetworkLogStoring {
-    private(set) var entries: [NetworkLogEntry] = []
-
-    private let maxEntries = 1000
-    private let maxAge: TimeInterval = 7 * 24 * 60 * 60
-    private let fileURL: URL
-
-    init(fileManager: FileManager = .default) {
-        self.fileURL = NetworkLogStore.makeFileURL(fileManager: fileManager)
-        loadFromDisk(fileManager: fileManager)
-        prune()
-    }
-
-    func append(_ entry: NetworkLogEntry) {
-        entries.append(entry)
-        prune()
-        persistSnapshot()
-    }
-
-    func clear() {
-        entries.removeAll()
-        persistSnapshot()
-    }
-
-    private func prune() {
-        let cutoff = Date().addingTimeInterval(-maxAge)
-        entries = entries.filter { $0.timestamp >= cutoff }
-        if entries.count > maxEntries {
-            entries.removeFirst(entries.count - maxEntries)
-        }
-    }
-
-    private func loadFromDisk(fileManager: FileManager) {
-        guard fileManager.fileExists(atPath: fileURL.path) else { return }
-        do {
-            let data = try Data(contentsOf: fileURL)
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            let decoded = try decoder.decode([NetworkLogEntry].self, from: data)
-            entries = decoded
-        } catch {
-            // Ignore corrupt or unreadable log files; logging must never crash the app.
-        }
-    }
-
-    private func persistSnapshot() {
-        let entriesSnapshot = entries
-        let fileURL = self.fileURL
-        Task.detached {
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            do {
-                let data = try encoder.encode(entriesSnapshot)
-                let directoryURL = fileURL.deletingLastPathComponent()
-                let fileManager = FileManager.default
-                if !fileManager.fileExists(atPath: directoryURL.path) {
-                    try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
-                }
-                try data.write(to: fileURL, options: [.atomic])
-            } catch {
-                // Swallow persistence errors; debug logging must not affect runtime behavior.
-            }
-        }
-    }
-
-    private static func makeFileURL(fileManager: FileManager) -> URL {
-        let baseDirectory: URL
-        if let url = try? fileManager.url(for: .applicationSupportDirectory,
-                                          in: .userDomainMask,
-                                          appropriateFor: nil,
-                                          create: true) {
-            baseDirectory = url
-        } else {
-            baseDirectory = fileManager.temporaryDirectory
-        }
-        let logsDirectory = baseDirectory.appendingPathComponent("DebugLogs", isDirectory: true)
-        return logsDirectory.appendingPathComponent("network_logs.json", isDirectory: false)
-    }
+/// Core HTTP client used by all repositories.
+protocol APIClient {
+    func send<E: APIEndpoint>(
+        _ endpoint: E,
+        body: E.RequestBody
+    ) async throws -> E.ResponseBody
 }
 
-enum NetworkLogRedactor {
-    private static let sensitiveHeaderKeys: Set<String> = [
-        "authorization",
-        "cookie",
-        "x-new-access-token",
-        "x-new-refresh-token"
-    ]
-
-    static func redactedHeaders(_ headers: [String: String]) -> [String: String] {
-        var result: [String: String] = [:]
-
-        for (key, value) in headers {
-            let lowerKey = key.lowercased()
-            if sensitiveHeaderKeys.contains(lowerKey) {
-                result[key] = "[REDACTED]"
-            } else {
-                result[key] = redactedText(value)
-            }
-        }
-
-        return result
-    }
-
-    static func redactedBody(data: Data?, contentType: String?) -> String? {
-        guard let data, !data.isEmpty else { return nil }
-
-        let rawText: String
-
-        if let contentType, contentType.contains("application/json") {
-            if
-                let object = try? JSONSerialization.jsonObject(with: data),
-                let prettyData = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
-                let prettyText = String(data: prettyData, encoding: .utf8)
-            {
-                rawText = prettyText
-            } else {
-                rawText = String(data: data, encoding: .utf8) ?? "<non-utf8 body (\(data.count) bytes)>"
-            }
-        } else {
-            rawText = String(data: data, encoding: .utf8) ?? "<non-utf8 body (\(data.count) bytes)>"
-        }
-
-        let redacted = redactedText(rawText)
-        return truncate(redacted)
-    }
-
-    static func redactedText(_ text: String) -> String {
-        guard !text.isEmpty else { return text }
-
-        var tokens: [String] = []
-        tokens.reserveCapacity(text.split(whereSeparator: { $0.isWhitespace }).count)
-
-        for rawToken in text.split(whereSeparator: { $0.isWhitespace }) {
-            var token = String(rawToken)
-
-            if let atIndex = token.firstIndex(of: "@"), atIndex > token.startIndex {
-                let first = token[token.startIndex]
-                let domain = token[atIndex...]
-                token = "\(first)***\(domain)"
-            }
-
-            let digitCount = token.filter(\.isNumber).count
-            if digitCount >= 7 {
-                var masked = ""
-                masked.reserveCapacity(token.count)
-
-                var seenDigits = 0
-                for character in token {
-                    if character.isNumber {
-                        seenDigits += 1
-                        if seenDigits <= 2 || seenDigits > digitCount - 2 {
-                            masked.append(character)
-                        } else {
-                            masked.append("*")
-                        }
-                    } else {
-                        masked.append(character)
-                    }
-                }
-
-                token = masked
-            }
-
-            tokens.append(token)
-        }
-
-        return tokens.joined(separator: " ")
-    }
-
-    private static func truncate(_ text: String, maxLength: Int = 4000) -> String {
-        guard text.count > maxLength else { return text }
-        let endIndex = text.index(text.startIndex, offsetBy: maxLength)
-        return String(text[..<endIndex]) + "… (truncated)"
-    }
-}
-
-protocol HTTPClient {
-    func postJSON<T: Encodable>(path: String, body: T) async throws -> (Data, HTTPURLResponse)
-    func getJSON(path: String) async throws -> (Data, HTTPURLResponse)
-}
-
-final class APIClient: HTTPClient {
-    private let baseURL: URL
-    private let session: URLSession
-    private let tokenProvider: TokenProvider
-    private weak var tokenSink: TokenSink?
-    private let logger = Logger(subsystem: "com.chatterbox.ios", category: "network")
+/// Default implementation of `APIClient` backed by `URLSession`.
+///
+/// This type is intentionally generic and free of feature‑specific concerns;
+/// auth, logging, retries, and refresh are handled here so repositories remain
+/// thin and focused on mapping DTOs.
+final class DefaultAPIClient: APIClient {
+    private let environment: Environment
+    private let urlSession: URLSession
+    private let sessionController: SessionControllerProtocol
+    private let configProvider: ConfigProviding
     private let networkLogStore: NetworkLogStoring?
 
     init(
-        baseURL: URL,
-        tokenProvider: TokenProvider,
-        tokenSink: TokenSink?,
-        session: URLSession = .shared,
+        environment: Environment,
+        urlSession: URLSession = .shared,
+        sessionController: SessionControllerProtocol,
+        configProvider: ConfigProviding,
         networkLogStore: NetworkLogStoring? = nil
     ) {
-        self.baseURL = baseURL
-        self.tokenProvider = tokenProvider
-        self.tokenSink = tokenSink
-        self.session = session
+        self.environment = environment
+        self.urlSession = urlSession
+        self.sessionController = sessionController
+        self.configProvider = configProvider
         self.networkLogStore = networkLogStore
     }
 
-    func postJSON<T: Encodable>(path: String, body: T) async throws -> (Data, HTTPURLResponse) {
-        guard let url = URL(string: path, relativeTo: baseURL) else { throw NetworkError.invalidURL }
-        var req = URLRequest(url: url)
-        req.httpMethod = "POST"
-        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        if let token = tokenProvider.accessToken { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
-        req.httpBody = try JSONEncoder().encode(body)
+    func send<E: APIEndpoint>(
+        _ endpoint: E,
+        body: E.RequestBody
+    ) async throws -> E.ResponseBody {
+        let request = try await buildRequest(for: endpoint, body: body)
 
         let startedAt = Date()
-        let requestHeaders = req.allHTTPHeaderFields ?? [:]
+        let requestHeaders = request.allHTTPHeaderFields ?? [:]
         let redactedRequestHeaders = NetworkLogRedactor.redactedHeaders(requestHeaders)
         let requestBodyPreview = NetworkLogRedactor.redactedBody(
-            data: req.httpBody,
-            contentType: req.value(forHTTPHeaderField: "Content-Type")
+            data: request.httpBody,
+            contentType: request.value(forHTTPHeaderField: "Content-Type")
         )
 
-        let (data, response) = try await session.data(for: req)
-        let finishedAt = Date()
+        do {
+            let (data, response) = try await urlSession.data(for: request)
+            let finishedAt = Date()
 
-        guard let http = response as? HTTPURLResponse else { throw NetworkError.noData }
-        captureRefreshedTokens(from: http)
+            guard let http = response as? HTTPURLResponse else {
+                throw NetworkError.noData
+            }
 
-        let durationMs = Int(finishedAt.timeIntervalSince(startedAt) * 1000)
-        let responseHeaders = http.allHeaderFields.reduce(into: [String: String]()) { partialResult, pair in
-            if let key = pair.key as? String, let value = pair.value as? String {
-                partialResult[key] = value
+            let durationMs = Int(finishedAt.timeIntervalSince(startedAt) * 1_000)
+            let responseHeaders = http.allHeaderFields.reduce(into: [String: String]()) { partial, pair in
+                if let key = pair.key as? String, let value = pair.value as? String {
+                    partial[key] = value
+                }
+            }
+            let redactedResponseHeaders = NetworkLogRedactor.redactedHeaders(responseHeaders)
+            let responseBodyPreview = NetworkLogRedactor.redactedBody(
+                data: data,
+                contentType: http.value(forHTTPHeaderField: "Content-Type")
+            )
+
+            logNetworkEntry(
+                method: endpoint.method.rawValue,
+                path: endpoint.path,
+                url: request.url?.absoluteString ?? "",
+                statusCode: http.statusCode,
+                durationMs: durationMs,
+                requestHeaders: redactedRequestHeaders,
+                requestBodyPreview: requestBodyPreview,
+                responseHeaders: redactedResponseHeaders,
+                responseBodyPreview: responseBodyPreview,
+                errorDescription: (200..<300).contains(http.statusCode) ? nil : "HTTP \(http.statusCode)"
+            )
+
+            if let error = mapHTTPErrorIfNeeded(http, data: data) {
+                throw error
+            }
+
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+            do {
+                return try decoder.decode(E.ResponseBody.self, from: data)
+            } catch {
+                #if DEBUG
+                let bodyPreview = String(data: data, encoding: .utf8) ?? "<non-utf8 body (\(data.count) bytes)>"
+                Log.network.error(
+                    """
+                    Decoding failed for \(endpoint.path, privacy: .public): \
+                    \(String(describing: error), privacy: .private). \
+                    Body preview: \(bodyPreview, privacy: .private)
+                    """
+                )
+                #else
+                Log.network.error("Decoding failed for \(endpoint.path, privacy: .public): \(String(describing: error), privacy: .private)")
+                #endif
+                throw NetworkError.decodingFailed
+            }
+        } catch {
+            if let urlError = error as? URLError {
+                if urlError.code == .cancelled {
+                    throw NetworkError.cancelled
+                }
+                if urlError.code == .notConnectedToInternet {
+                    throw NetworkError.offline
+                }
+                throw NetworkError.transport(urlError)
+            }
+            throw error
+        }
+    }
+
+    private func buildRequest<E: APIEndpoint>(
+        for endpoint: E,
+        body: E.RequestBody
+    ) async throws -> URLRequest {
+        guard let url = URL(string: endpoint.path, relativeTo: environment.baseURL) else {
+            throw NetworkError.invalidURL
+        }
+
+        var request = URLRequest(url: url, timeoutInterval: endpoint.timeout)
+        request.httpMethod = endpoint.method.rawValue
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        // Idempotency keys for safe retries (future use).
+        switch endpoint.idempotencyKeyStrategy {
+        case .none:
+            break
+        case .generated:
+            request.setValue(UUID().uuidString, forHTTPHeaderField: "Idempotency-Key")
+        case .custom(let value):
+            request.setValue(value, forHTTPHeaderField: "Idempotency-Key")
+        }
+
+        if endpoint.requiresAuth {
+            if let token = await sessionController.currentAccessToken {
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                throw NetworkError.unauthorized
             }
         }
-        let redactedResponseHeaders = NetworkLogRedactor.redactedHeaders(responseHeaders)
-        let responseBodyPreview = NetworkLogRedactor.redactedBody(
-            data: data,
-            contentType: http.value(forHTTPHeaderField: "Content-Type")
-        )
 
-        let isSuccess = (200..<300).contains(http.statusCode)
-        let logEntry = NetworkLogEntry(
+        do {
+            let encoder = JSONEncoder()
+            encoder.keyEncodingStrategy = .convertToSnakeCase
+            if !(body is EmptyRequestBody) {
+                request.httpBody = try encoder.encode(body)
+            }
+        } catch {
+            throw NetworkError.encodingFailed
+        }
+
+        return request
+    }
+
+    private func mapHTTPErrorIfNeeded(_ response: HTTPURLResponse, data: Data) -> NetworkError? {
+        guard !(200..<300).contains(response.statusCode) else {
+            return nil
+        }
+
+        switch response.statusCode {
+        case 401:
+            return .unauthorized
+        case 403:
+            return .forbidden
+        case 404:
+            return .notFound
+        case 429:
+            let retryAfterSeconds: Int?
+            if let retryHeader = response.value(forHTTPHeaderField: "Retry-After"),
+               let seconds = Int(retryHeader) {
+                retryAfterSeconds = seconds
+            } else {
+                retryAfterSeconds = nil
+            }
+            return .rateLimited(retryAfterSeconds: retryAfterSeconds)
+        case 500...599:
+            return .server(statusCode: response.statusCode)
+        default:
+            let bodyString = String(data: data, encoding: .utf8) ?? ""
+            return .requestFailedWithBody(response.statusCode, bodyString)
+        }
+    }
+
+    private func logNetworkEntry(
+        method: String,
+        path: String,
+        url: String,
+        statusCode: Int,
+        durationMs: Int,
+        requestHeaders: [String: String],
+        requestBodyPreview: String?,
+        responseHeaders: [String: String],
+        responseBodyPreview: String?,
+        errorDescription: String?
+    ) {
+        guard let networkLogStore else { return }
+
+        let entry = NetworkLogEntry(
             id: UUID(),
-            timestamp: finishedAt,
-            method: "POST",
+            timestamp: Date(),
+            method: method,
             path: path,
-            fullURL: url.absoluteString,
-            statusCode: http.statusCode,
+            fullURL: url,
+            statusCode: statusCode,
             durationMs: durationMs,
-            requestHeaders: redactedRequestHeaders,
+            requestHeaders: requestHeaders,
             requestBodyPreview: requestBodyPreview,
-            responseHeaders: redactedResponseHeaders,
+            responseHeaders: responseHeaders,
             responseBodyPreview: responseBodyPreview,
-            errorDescription: isSuccess ? nil : "HTTP \(http.statusCode)"
-        )
-        logNetworkEntry(logEntry)
-
-        guard (200..<300).contains(http.statusCode) else {
-            let responseBody = String(data: data, encoding: .utf8) ?? ""
-            if http.statusCode == 401 {
-                tokenSink?.clearTokens()
-            }
-            #if DEBUG
-            logger.error("HTTP \(http.statusCode) \(path, privacy: .public) body: \(responseBody, privacy: .private)")
-            #endif
-            throw NetworkError.requestFailedWithBody(http.statusCode, responseBody)
-        }
-        return (data, http)
-    }
-
-    func getJSON(path: String) async throws -> (Data, HTTPURLResponse) {
-        guard let url = URL(string: path, relativeTo: baseURL) else { throw NetworkError.invalidURL }
-        var req = URLRequest(url: url)
-        req.httpMethod = "GET"
-        if let token = tokenProvider.accessToken { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
-
-        let startedAt = Date()
-        let requestHeaders = req.allHTTPHeaderFields ?? [:]
-        let redactedRequestHeaders = NetworkLogRedactor.redactedHeaders(requestHeaders)
-
-        let (data, response) = try await session.data(for: req)
-        let finishedAt = Date()
-
-        guard let http = response as? HTTPURLResponse else { throw NetworkError.noData }
-        captureRefreshedTokens(from: http)
-
-        let durationMs = Int(finishedAt.timeIntervalSince(startedAt) * 1000)
-        let responseHeaders = http.allHeaderFields.reduce(into: [String: String]()) { partialResult, pair in
-            if let key = pair.key as? String, let value = pair.value as? String {
-                partialResult[key] = value
-            }
-        }
-        let redactedResponseHeaders = NetworkLogRedactor.redactedHeaders(responseHeaders)
-        let responseBodyPreview = NetworkLogRedactor.redactedBody(
-            data: data,
-            contentType: http.value(forHTTPHeaderField: "Content-Type")
+            errorDescription: errorDescription
         )
 
-        let isSuccess = (200..<300).contains(http.statusCode)
-        let logEntry = NetworkLogEntry(
-            id: UUID(),
-            timestamp: finishedAt,
-            method: "GET",
-            path: path,
-            fullURL: url.absoluteString,
-            statusCode: http.statusCode,
-            durationMs: durationMs,
-            requestHeaders: redactedRequestHeaders,
-            requestBodyPreview: nil,
-            responseHeaders: redactedResponseHeaders,
-            responseBodyPreview: responseBodyPreview,
-            errorDescription: isSuccess ? nil : "HTTP \(http.statusCode)"
-        )
-        logNetworkEntry(logEntry)
-
-        guard (200..<300).contains(http.statusCode) else {
-            let responseBody = String(data: data, encoding: .utf8) ?? ""
-            if http.statusCode == 401 {
-                tokenSink?.clearTokens()
-            }
-            #if DEBUG
-            logger.error("HTTP \(http.statusCode) \(path, privacy: .public) body: \(responseBody, privacy: .private)")
-            #endif
-            throw NetworkError.requestFailedWithBody(http.statusCode, responseBody)
-        }
-        return (data, http)
-    }
-
-    private func captureRefreshedTokens(from response: HTTPURLResponse) {
-        guard let sink = tokenSink else { return }
-        // Read new tokens if present; gateway attaches via headers
-        let headers = response.allHeaderFields as? [String: Any] ?? [:]
-        let access = headers["X-New-Access-Token"] as? String
-        let refresh = headers["X-New-Refresh-Token"] as? String
-        if let a = access, let r = refresh, !a.isEmpty, !r.isEmpty {
-            sink.updateTokens(AuthTokens(accessToken: a, refreshToken: r))
-        }
-    }
-
-    private func logNetworkEntry(_ entry: NetworkLogEntry) {
-        guard networkLogStore != nil else { return }
-        Task {
-            await MainActor.run {
-                networkLogStore?.append(entry)
-            }
+        Task { @MainActor in
+            networkLogStore.append(entry)
         }
     }
 }
 
+/// Marker type used for endpoints with no request body.
+struct EmptyRequestBody: Encodable {}
 

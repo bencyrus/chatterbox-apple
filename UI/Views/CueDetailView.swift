@@ -7,8 +7,7 @@ struct CueDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 Text(cue.content.title)
-                    .font(.title2)
-                    .fontWeight(.bold)
+                    .font(Typography.heading)
                     .foregroundColor(AppColors.textPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)
 

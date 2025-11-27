@@ -15,13 +15,18 @@ final class AuthViewModel {
     private let logoutUC: LogoutUseCase
     private let requestMagicLinkUC: RequestMagicLinkUseCase
     private let loginWithMagicTokenUC: LoginWithMagicTokenUseCase
-    private let environment: AppEnvironment
+    private let configProvider: ConfigProviding
 
-    init(logout: LogoutUseCase, requestMagicLink: RequestMagicLinkUseCase, loginWithMagicToken: LoginWithMagicTokenUseCase, environment: AppEnvironment) {
+    init(
+        logout: LogoutUseCase,
+        requestMagicLink: RequestMagicLinkUseCase,
+        loginWithMagicToken: LoginWithMagicTokenUseCase,
+        configProvider: ConfigProviding
+    ) {
         self.logoutUC = logout
         self.requestMagicLinkUC = requestMagicLink
         self.loginWithMagicTokenUC = loginWithMagicToken
-        self.environment = environment
+        self.configProvider = configProvider
     }
 
 
@@ -37,34 +42,10 @@ final class AuthViewModel {
         defer { isRequesting = false }
         do {
             try await requestMagicLinkUC.execute(identifier: identifier)
-            // Start cooldown from environment
-            startCooldown(seconds: environment.magicLinkCooldownSeconds)
+            // Start cooldown from runtime configuration
+            startCooldown(seconds: configProvider.snapshot.magicLinkCooldownSeconds)
         } catch {
             presentSignInError(message: Strings.Errors.requestFailed)
-        }
-    }
-
-    // Magic Link: handle incoming deeplink
-    func handleIncomingMagicToken(url: URL) {
-        guard let comps = URLComponents(url: url, resolvingAgainstBaseURL: false),
-              let tokenItem = comps.queryItems?.first(where: { $0.name == "token" }),
-              let token = tokenItem.value, !token.isEmpty else {
-            return
-        }
-        let loginUseCase = loginWithMagicTokenUC
-        let viewModel = self
-        Task {
-            do {
-                try await loginUseCase.execute(token: token)
-            } catch {
-                await MainActor.run {
-                    if case AuthError.invalidMagicLink = error {
-                        viewModel.presentSignInError(message: Strings.Errors.invalidMagicLink)
-                    } else {
-                        viewModel.presentSignInError(message: Strings.Errors.requestFailed)
-                    }
-                }
-            }
         }
     }
 

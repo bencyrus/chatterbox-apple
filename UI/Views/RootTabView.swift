@@ -6,6 +6,7 @@ import UIKit
 struct RootTabView: View {
     @State private var homeViewModel: HomeViewModel
     @State private var settingsViewModel: SettingsViewModel
+    @SwiftUI.Environment(DeveloperToolsState.self) private var developerToolsState
 
     init(
         homeViewModel: HomeViewModel,
@@ -61,16 +62,17 @@ struct RootTabView: View {
                 Text(Strings.Tabs.settings)
             }
 
-            // Developer / debug tab using hammer icon, matching bottom nav style
-            #if DEBUG
-            NavigationStack {
-                DebugNetworkLogView()
+            // Developer / debug tab using hammer icon, matching bottom nav style.
+            // Visible when the current user is marked as a developer by `/rpc/me`.
+            if developerToolsState.isDeveloperUser {
+                NavigationStack {
+                    DebugNetworkLogView()
+                }
+                .tabItem {
+                    Image(systemName: "hammer")
+                    Text("Debug")
+                }
             }
-            .tabItem {
-                Image(systemName: "hammer")
-                Text("Debug")
-            }
-            #endif
         }
         .tint(AppColors.textPrimary)
     }
@@ -109,7 +111,7 @@ struct DeveloperPanelView: View {
 }
 
 struct DebugNetworkLogView: View {
-    @Environment(NetworkLogStore.self) private var networkLogStore
+    @SwiftUI.Environment(NetworkLogStore.self) private var networkLogStore
 
     var body: some View {
         ZStack {
@@ -124,13 +126,8 @@ struct DebugNetworkLogView: View {
                             Image(systemName: "trash")
                             Text(Strings.Debug.clearLogs)
                         }
-                        .font(.callout.bold())
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 18)
-                        .padding(.vertical, 12)
-                        .background(Color.black, in: Capsule())
-                        .contentShape(Capsule())
                     }
+                    .buttonStyle(PrimaryButtonStyle())
                     .buttonStyle(.plain)
                     .accessibilityIdentifier("debug.clearLogs")
                 }
@@ -530,9 +527,6 @@ private func jsonBodyLink(_ title: String, body: String) -> some View {
             Text("View JSON body")
                 .font(.callout.bold())
         }
-        .foregroundColor(.white)
-        .padding(.horizontal, 18)
-        .padding(.vertical, 12)
-        .background(Color.black, in: Capsule())
     }
+    .buttonStyle(PrimaryButtonStyle())
 }
