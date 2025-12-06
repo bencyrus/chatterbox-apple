@@ -34,6 +34,10 @@ final class AuthUseCasesTests: XCTestCase {
             get async { lastTokens?.accessToken }
         }
 
+        var currentRefreshToken: String? {
+            get async { lastTokens?.refreshToken }
+        }
+
         func bootstrap() async {}
 
         func loginSucceeded(with tokens: AuthTokens) async {

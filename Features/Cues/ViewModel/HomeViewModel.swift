@@ -80,6 +80,13 @@ final class HomeViewModel {
             if let urlError = error as? URLError, urlError.code == .cancelled {
                 return
             }
+            // When the backend reports unauthorized, the API client will already
+            // have triggered a logout via SessionController. In that case we avoid
+            // showing a "could not load cards" error and let the app transition
+            // back to the sign-in flow instead.
+            if case NetworkError.unauthorized = error {
+                return
+            }
             // Only show the error if we don't currently have any cues to show.
             // This avoids flashing an error when a background refresh fails
             // but the user still has a valid set of cards on screen.

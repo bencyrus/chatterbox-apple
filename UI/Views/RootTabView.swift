@@ -222,6 +222,18 @@ private struct NetworkLogDetailView: View {
         }
         .background(AppColors.sand.ignoresSafeArea())
         .navigationTitle(Strings.Debug.networkLogDetailTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    copyAll()
+                } label: {
+                    Image(systemName: "doc.on.doc")
+                        .imageScale(.medium)
+                        .foregroundColor(AppColors.textPrimary)
+                }
+            }
+        }
     }
 
     private func section(title: String, @ViewBuilder content: () -> some View) -> some View {
@@ -238,16 +250,14 @@ private struct NetworkLogDetailView: View {
             Text(key)
                 .font(.caption)
                 .foregroundColor(.secondary)
-            ScrollView(.horizontal, showsIndicators: false) {
-                Text(value)
-                    .font(.system(.footnote, design: .monospaced))
-                    .textSelection(.enabled)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-            }
-            .padding(8)
-            .background(Color.white.opacity(0.5))
-            .cornerRadius(8)
+            Text(value)
+                .font(.system(.footnote, design: .monospaced))
+                .textSelection(.enabled)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .multilineTextAlignment(.leading)
+                .padding(8)
+                .background(Color.white.opacity(0.5))
+                .cornerRadius(8)
         }
     }
 
@@ -291,6 +301,45 @@ private struct NetworkLogDetailView: View {
         if let error = entry.errorDescription {
             parts.append("Error: \(error)")
         }
+        copyToPasteboard(parts.joined(separator: "\n\n"))
+    }
+
+    private func copyAll() {
+        var parts: [String] = []
+
+        // Request
+        parts.append("REQUEST")
+        parts.append("Method: \(entry.method)")
+        parts.append("URL: \(entry.fullURL)")
+        if !entry.requestHeaders.isEmpty {
+            parts.append("Headers:")
+            parts.append(pretty(headers: entry.requestHeaders))
+        }
+        if let body = entry.requestBodyPreview {
+            parts.append("Body:")
+            parts.append(body)
+        }
+
+        // Spacer
+        parts.append("")
+
+        // Response
+        parts.append("RESPONSE")
+        if let status = entry.statusCode {
+            parts.append("Status: \(status)")
+        }
+        if !entry.responseHeaders.isEmpty {
+            parts.append("Headers:")
+            parts.append(pretty(headers: entry.responseHeaders))
+        }
+        if let body = entry.responseBodyPreview {
+            parts.append("Body:")
+            parts.append(body)
+        }
+        if let error = entry.errorDescription {
+            parts.append("Error: \(error)")
+        }
+
         copyToPasteboard(parts.joined(separator: "\n\n"))
     }
 

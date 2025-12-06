@@ -107,7 +107,21 @@ final class DefaultAPIClient: APIClient {
                 errorDescription: (200..<300).contains(http.statusCode) ? nil : "HTTP \(http.statusCode)"
             )
 
+            // Update stored tokens when gateway returns refreshed ones.
+            if
+                let newAccessToken = http.value(forHTTPHeaderField: "X-New-Access-Token"),
+                let newRefreshToken = http.value(forHTTPHeaderField: "X-New-Refresh-Token"),
+                !newAccessToken.isEmpty,
+                !newRefreshToken.isEmpty
+            {
+                let tokens = AuthTokens(accessToken: newAccessToken, refreshToken: newRefreshToken)
+                await sessionController.loginSucceeded(with: tokens)
+            }
+
             if let error = mapHTTPErrorIfNeeded(http, data: data) {
+                if case NetworkError.unauthorized = error {
+                    await sessionController.logout()
+                }
                 throw error
             }
 
@@ -173,6 +187,10 @@ final class DefaultAPIClient: APIClient {
                 request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             } else {
                 throw NetworkError.unauthorized
+            }
+
+            if let refreshToken = await sessionController.currentRefreshToken {
+                request.setValue(refreshToken, forHTTPHeaderField: "X-Refresh-Token")
             }
         }
 

@@ -140,7 +140,7 @@ enum NetworkLogRedactor {
         for (key, value) in headers {
             let lowerKey = key.lowercased()
             if sensitiveHeaderKeys.contains(lowerKey) {
-                result[key] = "[REDACTED]"
+                result[key] = maskSensitiveHeader(value)
             } else {
                 result[key] = redactedText(value)
             }
@@ -170,6 +170,23 @@ enum NetworkLogRedactor {
 
         let redacted = redactedText(rawText)
         return truncate(redacted)
+    }
+
+    /// Partially mask sensitive header values while preserving enough for debugging.
+    /// Example: abcdefghijklmnopqrstuvwxyz -> abcdefgh****uvwxyz
+    private static func maskSensitiveHeader(_ value: String) -> String {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        let count = trimmed.count
+        guard count > 12 else {
+            return String(repeating: "*", count: count)
+        }
+
+        let prefixCount = 8
+        let suffixCount = 6
+
+        let prefix = trimmed.prefix(prefixCount)
+        let suffix = trimmed.suffix(suffixCount)
+        return "\(prefix)****\(suffix)"
     }
 
     static func redactedText(_ text: String) -> String {

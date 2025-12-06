@@ -11,6 +11,7 @@ protocol SessionControllerProtocol: AnyObject {
     var stateStream: AsyncStream<SessionState> { get }
     var currentState: SessionState { get async }
     var currentAccessToken: String? { get async }
+    var currentRefreshToken: String? { get async }
 
     func bootstrap() async
     func loginSucceeded(with tokens: AuthTokens) async
@@ -88,6 +89,10 @@ actor SessionController: SessionControllerProtocol {
 
     var currentAccessToken: String? {
         currentTokens?.accessToken
+    }
+
+    var currentRefreshToken: String? {
+        currentTokens?.refreshToken
     }
 
     func bootstrap() async {
