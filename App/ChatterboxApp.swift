@@ -5,12 +5,17 @@ struct ChatterboxApp: App {
     private let environment: Environment
     private let sessionController = SessionController()
     private let configProvider = RuntimeConfigProvider()
+    private let featureAccessContext = FeatureAccessContext()
+
+    private let analyticsRecorder: AnalyticsRecording
+    private let apiClient: APIClient
+    private let sessionManager: SessionManager
 
     @State private var networkLogStore: NetworkLogStore
     @State private var coordinator: AppCoordinator
     @State private var localizationProvider = LocalizationProvider()
-    private let featureAccessContext = FeatureAccessContext()
-    private let analyticsRecorder: AnalyticsRecording
+
+    @SwiftUI.Environment(\.scenePhase) private var scenePhase
 
     init() {
         // In a production app we would surface a nicer fatal error, but for
@@ -30,6 +35,25 @@ struct ChatterboxApp: App {
 
         let logStore = NetworkLogStore()
         _networkLogStore = State(initialValue: logStore)
+
+        let apiClient = DefaultAPIClient(
+            environment: environment,
+            sessionController: sessionController,
+            configProvider: configProvider,
+            networkLogStore: logStore
+        )
+        self.apiClient = apiClient
+
+        let accountRepo = PostgrestAccountRepository(client: apiClient)
+        let sessionManager = SessionManager(
+            sessionController: sessionController,
+            accountRepository: accountRepo,
+            configProvider: configProvider,
+            featureAccessContext: featureAccessContext
+        )
+        self.sessionManager = sessionManager
+
+        _networkLogStore = State(initialValue: logStore)
         _coordinator = State(
             initialValue: AppCoordinator(
                 environment: environment,
@@ -37,7 +61,9 @@ struct ChatterboxApp: App {
                 configProvider: configProvider,
                 networkLogStore: logStore,
                 analyticsRecorder: analyticsRecorder,
-                featureAccessContext: featureAccessContext
+                featureAccessContext: featureAccessContext,
+                apiClient: apiClient,
+                sessionManager: sessionManager
             )
         )
     }
@@ -53,6 +79,11 @@ struct ChatterboxApp: App {
             .preferredColorScheme(.light)
             .onOpenURL { url in
                 coordinator.handle(url: url)
+            }
+            .onChange(of: scenePhase) { _, newPhase in
+                if newPhase == .active {
+                    coordinator.handleSceneBecameActive()
+                }
             }
         }
     }

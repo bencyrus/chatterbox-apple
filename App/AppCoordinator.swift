@@ -8,6 +8,7 @@ final class AppCoordinator {
     let networkLogStore: NetworkLogStore
     let analyticsRecorder: AnalyticsRecording
     let featureAccessContext: FeatureAccessContext
+    let sessionManager: SessionManager
 
     private let deepLinkParser = DeepLinkParser()
     private let apiClient: APIClient
@@ -18,7 +19,9 @@ final class AppCoordinator {
         configProvider: ConfigProviding,
         networkLogStore: NetworkLogStore,
         analyticsRecorder: AnalyticsRecording,
-        featureAccessContext: FeatureAccessContext
+        featureAccessContext: FeatureAccessContext,
+        apiClient: APIClient,
+        sessionManager: SessionManager
     ) {
         self.environment = environment
         self.sessionController = sessionController
@@ -26,13 +29,16 @@ final class AppCoordinator {
         self.networkLogStore = networkLogStore
         self.analyticsRecorder = analyticsRecorder
         self.featureAccessContext = featureAccessContext
+        self.apiClient = apiClient
+        self.sessionManager = sessionManager
+    }
 
-        self.apiClient = DefaultAPIClient(
-            environment: environment,
-            sessionController: sessionController,
-            configProvider: configProvider,
-            networkLogStore: networkLogStore
-        )
+    // MARK: - Lifecycle
+
+    func handleSceneBecameActive() {
+        Task {
+            await sessionManager.handleAppBecameActive()
+        }
     }
 
     // MARK: - Deep links
@@ -75,7 +81,10 @@ final class AppCoordinator {
 
     func makeHomeViewModel() -> HomeViewModel {
         let accountRepo = PostgrestAccountRepository(client: apiClient)
-        let activeProfileHelper = ActiveProfileHelper(accountRepository: accountRepo)
+        let activeProfileHelper = ActiveProfileHelper(
+            accountRepository: accountRepo,
+            sessionManager: sessionManager
+        )
         let cueRepo = PostgrestCueRepository(client: apiClient)
         return HomeViewModel(
             activeProfileHelper: activeProfileHelper,
@@ -91,7 +100,8 @@ final class AppCoordinator {
             accountRepository: accountRepo,
             logoutUseCase: logoutUC,
             featureAccessContext: featureAccessContext,
-            configProvider: configProvider
+            configProvider: configProvider,
+            sessionManager: sessionManager
         )
     }
 }

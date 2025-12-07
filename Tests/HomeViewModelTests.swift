@@ -82,8 +82,16 @@ final class HomeViewModelTests: XCTestCase {
         )
         cueRepo.cuesToReturn = [cue]
 
-        let helper = ActiveProfileHelper(accountRepository: accountRepo)
+        let featureAccessContext = FeatureAccessContext()
         let configProvider = FakeConfigProvider(snapshot: RuntimeConfig(cuesPageSize: 5))
+        let sessionManager = SessionManager(
+            sessionController: SessionController(),
+            accountRepository: accountRepo,
+            configProvider: configProvider,
+            featureAccessContext: featureAccessContext
+        )
+
+        let helper = ActiveProfileHelper(accountRepository: accountRepo, sessionManager: sessionManager)
         let viewModel = HomeViewModel(
             activeProfileHelper: helper,
             cueRepository: cueRepo,

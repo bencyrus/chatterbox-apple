@@ -1,21 +1,43 @@
 import Foundation
 
 @MainActor
-struct ActiveProfileHelper {
+final class ActiveProfileHelper {
     private let accountRepository: AccountRepository
+    private let sessionManager: SessionManager
+    private var cachedActiveProfile: ActiveProfileSummary?
 
-    init(accountRepository: AccountRepository) {
+    init(accountRepository: AccountRepository, sessionManager: SessionManager) {
         self.accountRepository = accountRepository
+        self.sessionManager = sessionManager
+    }
+
+    func clearCache() {
+        cachedActiveProfile = nil
     }
 
     func ensureActiveProfile() async throws -> ActiveProfileSummary {
-        let me = try await accountRepository.fetchMe()
+        if let cached = cachedActiveProfile {
+            return cached
+        }
+
+        // Ensure we have a current session snapshot.
+        if sessionManager.snapshot == nil {
+            await sessionManager.handleAppBecameActive()
+        }
+
+        guard let snapshot = sessionManager.snapshot else {
+            throw AccountError.requestFailed
+        }
+
+        let me = snapshot.me
+        let config = snapshot.appConfig
 
         if let active = me.activeProfile {
+            cachedActiveProfile = active
             return active
         }
 
-        let config = try await accountRepository.fetchAppConfig()
+        // No active profile yet – create one using default language from app config.
         let accountId = me.account.accountId
 
         try await accountRepository.setActiveProfile(
@@ -23,8 +45,9 @@ struct ActiveProfileHelper {
             languageCode: config.defaultProfileLanguageCode
         )
 
-        let refreshedMe = try await accountRepository.fetchMe()
-        if let active = refreshedMe.activeProfile {
+        let refreshed = try await sessionManager.refreshAfterProfileChange()
+        if let active = refreshed.me.activeProfile {
+            cachedActiveProfile = active
             return active
         }
 

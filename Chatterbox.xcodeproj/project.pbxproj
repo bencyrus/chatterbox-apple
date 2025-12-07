@@ -31,14 +31,15 @@
 		82A001192EFF000000000002 /* ActiveProfileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001142EFF000000000002 /* ActiveProfileHelper.swift */; };
 		82A0011A2EFF000000000002 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001152EFF000000000002 /* HomeViewModel.swift */; };
 		82A0011B2EFF000000000002 /* CueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001162EFF000000000002 /* CueDetailView.swift */; };
+		82B37D7C2EE51873007CD37D /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D7B2EE51873007CD37D /* SessionManager.swift */; };
 		82D5A0012F0E000000000001 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D5A0002F0E000000000001 /* DesignSystem.swift */; };
 		82FFF0012FFF000000000001 /* FeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0042FFF000000000001 /* FeatureFlag.swift */; };
 		82FFF0022FFF000000000001 /* RuntimeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0052FFF000000000001 /* RuntimeConfig.swift */; };
 		82FFF0032FFF000000000001 /* RuntimeConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0062FFF000000000001 /* RuntimeConfigProvider.swift */; };
 		82FFF0072FFF000000000001 /* NetworkLogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0082FFF000000000001 /* NetworkLogStore.swift */; };
+		82FFF00B2FFF000000000001 /* DeepLinkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF00C2FFF000000000001 /* DeepLinkParser.swift */; };
 		82FFF00E2FFF000000000001 /* RecordingsDirectoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0102FFF000000000001 /* RecordingsDirectoryProvider.swift */; };
 		82FFF00F2FFF000000000001 /* RecordingSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0112FFF000000000001 /* RecordingSessionController.swift */; };
-		82FFF00B2FFF000000000001 /* DeepLinkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF00C2FFF000000000001 /* DeepLinkParser.swift */; };
 		82FFF0142FFF000000000001 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0162FFF000000000001 /* Log.swift */; };
 		82FFF0152FFF000000000001 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0172FFF000000000001 /* Analytics.swift */; };
 		82FFF01C2FFF000000000001 /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0182FFF000000000001 /* Spacing.swift */; };
@@ -70,15 +71,16 @@
 		82250BFB2EA34BF20023B10D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		82250BFC2EA34BF20023B10D /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		82250BFD2EA34BF20023B10D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		829F04342EA9C4B800E2A8F6 /* Chatterbox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chatterbox.entitlements; sourceTree = "<group>"; };
 		82A0010F2EFF000000000001 /* ProfileDTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDTOs.swift; sourceTree = "<group>"; };
 		82A001102EFF000000000001 /* AccountRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRepository.swift; sourceTree = "<group>"; };
 		82A001112EFF000000000001 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
-		829F04342EA9C4B800E2A8F6 /* Chatterbox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chatterbox.entitlements; sourceTree = "<group>"; };
 		82A001122EFF000000000002 /* CueDTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueDTOs.swift; sourceTree = "<group>"; };
 		82A001132EFF000000000002 /* CueRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueRepository.swift; sourceTree = "<group>"; };
 		82A001142EFF000000000002 /* ActiveProfileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveProfileHelper.swift; sourceTree = "<group>"; };
 		82A001152EFF000000000002 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		82A001162EFF000000000002 /* CueDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueDetailView.swift; sourceTree = "<group>"; };
+		82B37D7B2EE51873007CD37D /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		82D5A0002F0E000000000001 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		82FFF0042FFF000000000001 /* FeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlag.swift; sourceTree = "<group>"; };
 		82FFF0052FFF000000000001 /* RuntimeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeConfig.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 		82250BE42EA34BF20023B10D /* Security */ = {
 			isa = PBXGroup;
 			children = (
+				82B37D7B2EE51873007CD37D /* SessionManager.swift */,
 				82250BE32EA34BF20023B10D /* TokenManager.swift */,
 			);
 			path = Security;
@@ -201,40 +204,6 @@
 			);
 			path = Core;
 			sourceTree = SOURCE_ROOT;
-		};
-		82FFF0092FFF000000000001 /* Observability */ = {
-			isa = PBXGroup;
-			children = (
-				82FFF0082FFF000000000001 /* NetworkLogStore.swift */,
-				82FFF0162FFF000000000001 /* Log.swift */,
-				82FFF0172FFF000000000001 /* Analytics.swift */,
-			);
-			path = Observability;
-			sourceTree = "<group>";
-		};
-		82FFF0122FFF000000000001 /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				82FFF0102FFF000000000001 /* RecordingsDirectoryProvider.swift */,
-			);
-			path = Storage;
-			sourceTree = "<group>";
-		};
-		82FFF0132FFF000000000001 /* Audio */ = {
-			isa = PBXGroup;
-			children = (
-				82FFF0112FFF000000000001 /* RecordingSessionController.swift */,
-			);
-			path = Audio;
-			sourceTree = "<group>";
-		};
-		82FFF00D2FFF000000000001 /* DeepLink */ = {
-			isa = PBXGroup;
-			children = (
-				82FFF00C2FFF000000000001 /* DeepLinkParser.swift */,
-			);
-			path = DeepLink;
-			sourceTree = "<group>";
 		};
 		82250BE72EA34BF20023B10D /* Models */ = {
 			isa = PBXGroup;
@@ -320,6 +289,16 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		82250BFF2EA34BF20023B10D /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				82D5A0002F0E000000000001 /* DesignSystem.swift */,
+				82FFF01E2FFF000000000001 /* Theme */,
+				82250BFE2EA34BF20023B10D /* Views */,
+			);
+			path = UI;
+			sourceTree = SOURCE_ROOT;
+		};
 		82A0011C2EFF000000000002 /* Cues */ = {
 			isa = PBXGroup;
 			children = (
@@ -355,15 +334,39 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
-		82250BFF2EA34BF20023B10D /* UI */ = {
+		82FFF0092FFF000000000001 /* Observability */ = {
 			isa = PBXGroup;
 			children = (
-				82D5A0002F0E000000000001 /* DesignSystem.swift */,
-				82FFF01E2FFF000000000001 /* Theme */,
-				82250BFE2EA34BF20023B10D /* Views */,
+				82FFF0082FFF000000000001 /* NetworkLogStore.swift */,
+				82FFF0162FFF000000000001 /* Log.swift */,
+				82FFF0172FFF000000000001 /* Analytics.swift */,
 			);
-			path = UI;
-			sourceTree = SOURCE_ROOT;
+			path = Observability;
+			sourceTree = "<group>";
+		};
+		82FFF00D2FFF000000000001 /* DeepLink */ = {
+			isa = PBXGroup;
+			children = (
+				82FFF00C2FFF000000000001 /* DeepLinkParser.swift */,
+			);
+			path = DeepLink;
+			sourceTree = "<group>";
+		};
+		82FFF0122FFF000000000001 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				82FFF0102FFF000000000001 /* RecordingsDirectoryProvider.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		82FFF0132FFF000000000001 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				82FFF0112FFF000000000001 /* RecordingSessionController.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
 		};
 		82FFF01E2FFF000000000001 /* Theme */ = {
 			isa = PBXGroup;
@@ -469,6 +472,7 @@
 				82A001192EFF000000000002 /* ActiveProfileHelper.swift in Sources */,
 				82A0011A2EFF000000000002 /* HomeViewModel.swift in Sources */,
 				82A0011B2EFF000000000002 /* CueDetailView.swift in Sources */,
+				82B37D7C2EE51873007CD37D /* SessionManager.swift in Sources */,
 				82D5A0012F0E000000000001 /* DesignSystem.swift in Sources */,
 				82FFF0012FFF000000000001 /* FeatureFlag.swift in Sources */,
 				82FFF0022FFF000000000001 /* RuntimeConfig.swift in Sources */,

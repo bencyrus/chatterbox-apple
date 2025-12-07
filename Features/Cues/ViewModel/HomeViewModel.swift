@@ -31,6 +31,12 @@ final class HomeViewModel {
     // MARK: - Intents
 
     func loadInitialCues() async {
+        // Avoid re-fetching cues on every view appearance. If we already have
+        // a non-empty list, we keep showing it until the user explicitly
+        // refreshes (e.g., shuffle) or the active profile changes.
+        if !cues.isEmpty {
+            return
+        }
         await loadCues(useShuffle: false, showErrors: true)
     }
 
@@ -44,6 +50,8 @@ final class HomeViewModel {
         // Silent reload used when the active profile changes (e.g., language switch).
         // We don't want to flash an error popup in this case; we just update cards
         // or show the empty state if nothing is available.
+        activeProfileHelper.clearCache()
+        cues = []
         await loadCues(useShuffle: false, showErrors: false)
     }
 

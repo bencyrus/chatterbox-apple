@@ -8,6 +8,7 @@ final class SettingsViewModel {
     private let logoutUseCase: LogoutUseCase
     private let featureAccessContext: FeatureAccessContext
     private let configProvider: ConfigProviding
+    private let sessionManager: SessionManager
 
     // MARK: - State
 
@@ -28,12 +29,14 @@ final class SettingsViewModel {
         accountRepository: AccountRepository,
         logoutUseCase: LogoutUseCase,
         featureAccessContext: FeatureAccessContext,
-        configProvider: ConfigProviding
+        configProvider: ConfigProviding,
+        sessionManager: SessionManager
     ) {
         self.accountRepository = accountRepository
         self.logoutUseCase = logoutUseCase
         self.featureAccessContext = featureAccessContext
         self.configProvider = configProvider
+        self.sessionManager = sessionManager
     }
 
     // MARK: - Intents
@@ -43,34 +46,15 @@ final class SettingsViewModel {
         defer { isLoading = false }
 
         do {
-            async let meTask = accountRepository.fetchMe()
-            async let configTask = accountRepository.fetchAppConfig()
-
-            let me = try await meTask
-            // Update shared feature access context based on account flags and current config.
-            featureAccessContext.accountEntitlements = me.account.entitlements
-            featureAccessContext.runtimeConfig = configProvider.snapshot
-
-            let config = try await configTask
-
-            accountId = me.account.accountId
-            email = me.account.email
-
-            availableLanguages = config.availableLanguageCodes
-
-            if let active = me.activeProfile {
-                selectedLanguageCode = active.languageCode
+            if let snapshot = sessionManager.snapshot {
+                try await apply(me: snapshot.me, config: snapshot.appConfig)
             } else {
-                try await accountRepository.setActiveProfile(
-                    accountId: me.account.accountId,
-                    languageCode: config.defaultProfileLanguageCode
-                )
-                let refreshedMe = try await accountRepository.fetchMe()
-                if let active = refreshedMe.activeProfile {
-                    selectedLanguageCode = active.languageCode
-                } else {
-                    selectedLanguageCode = config.defaultProfileLanguageCode
+                await sessionManager.handleAppBecameActive()
+                guard let snapshot = sessionManager.snapshot else {
+                    presentError(title: Strings.Errors.settingsLoadTitle, message: Strings.Errors.settingsLoadFailed)
+                    return
                 }
+                try await apply(me: snapshot.me, config: snapshot.appConfig)
             }
         } catch {
             presentError(title: Strings.Errors.settingsLoadTitle, message: Strings.Errors.settingsLoadFailed)
@@ -98,6 +82,36 @@ final class SettingsViewModel {
             NotificationCenter.default.post(name: .activeProfileDidChange, object: nil)
         } catch {
             presentError(title: Strings.Errors.settingsSaveTitle, message: Strings.Errors.settingsSaveFailed)
+        }
+    }
+
+    // MARK: - Internal
+
+    private func apply(me: MeResponse, config: AppConfigResponse) async throws {
+        // Update shared feature access context based on account flags and current config.
+        featureAccessContext.accountEntitlements = me.account.entitlements
+        featureAccessContext.runtimeConfig = configProvider.snapshot
+
+        accountId = me.account.accountId
+        email = me.account.email
+
+        availableLanguages = config.availableLanguageCodes
+
+        if let active = me.activeProfile {
+            selectedLanguageCode = active.languageCode
+            return
+        }
+
+        try await accountRepository.setActiveProfile(
+            accountId: me.account.accountId,
+            languageCode: config.defaultProfileLanguageCode
+        )
+
+        let refreshed = try await sessionManager.refreshAfterProfileChange()
+        if let active = refreshed.me.activeProfile {
+            selectedLanguageCode = active.languageCode
+        } else {
+            selectedLanguageCode = config.defaultProfileLanguageCode
         }
     }
 
