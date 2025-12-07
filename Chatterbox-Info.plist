@@ -2,13 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>API_BASE_URL</key>
+	<string>https://api.chatterboxtalk.com</string>
 	<key>MAGIC_LINK_PATH</key>
 	<string>/auth/magic</string>
 	<key>UNIVERSAL_LINK_HOSTS</key>
-	<string>glovee.io</string>
-	<key>API_BASE_URL</key>
-	<string>https://api.glovee.io</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Chatterbox needs access to your microphone to record your pronunciation practice.</string>
+	<string>chatterboxtalk.com</string>
 </dict>
 </plist>

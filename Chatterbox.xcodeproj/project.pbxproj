@@ -511,7 +511,6 @@
 				82FFF0142FFF000000000001 /* Log.swift in Sources */,
 				82FFF0152FFF000000000001 /* Analytics.swift in Sources */,
 				82FFF00B2FFF000000000001 /* DeepLinkParser.swift in Sources */,
-				82FFF00E2FFF000000000001 /* RecordingsDirectoryProvider.swift in Sources */,
 				82FFF01C2FFF000000000001 /* Spacing.swift in Sources */,
 				82FFF01D2FFF000000000001 /* Typography.swift in Sources */,
 				82FFF01F2FFF000000000001 /* Endpoints.swift in Sources */,
@@ -674,6 +673,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Chatterbox-Info.plist";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Chatterbox needs access to your microphone to record your speaking practice.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -714,6 +714,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Chatterbox-Info.plist";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Chatterbox needs access to your microphone to record your speaking practice.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
