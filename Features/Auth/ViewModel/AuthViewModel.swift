@@ -14,18 +14,15 @@ final class AuthViewModel {
 
     private let logoutUC: LogoutUseCase
     private let requestMagicLinkUC: RequestMagicLinkUseCase
-    private let loginWithMagicTokenUC: LoginWithMagicTokenUseCase
     private let configProvider: ConfigProviding
 
     init(
         logout: LogoutUseCase,
         requestMagicLink: RequestMagicLinkUseCase,
-        loginWithMagicToken: LoginWithMagicTokenUseCase,
         configProvider: ConfigProviding
     ) {
         self.logoutUC = logout
         self.requestMagicLinkUC = requestMagicLink
-        self.loginWithMagicTokenUC = loginWithMagicToken
         self.configProvider = configProvider
     }
 

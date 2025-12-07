@@ -48,8 +48,6 @@
 		82FFF0032FFF000000000001 /* RuntimeConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0062FFF000000000001 /* RuntimeConfigProvider.swift */; };
 		82FFF0072FFF000000000001 /* NetworkLogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0082FFF000000000001 /* NetworkLogStore.swift */; };
 		82FFF00B2FFF000000000001 /* DeepLinkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF00C2FFF000000000001 /* DeepLinkParser.swift */; };
-		82FFF00E2FFF000000000001 /* RecordingsDirectoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0102FFF000000000001 /* RecordingsDirectoryProvider.swift */; };
-		82FFF00F2FFF000000000001 /* RecordingSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0112FFF000000000001 /* RecordingSessionController.swift */; };
 		82FFF0142FFF000000000001 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0162FFF000000000001 /* Log.swift */; };
 		82FFF0152FFF000000000001 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0172FFF000000000001 /* Analytics.swift */; };
 		82FFF01C2FFF000000000001 /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0182FFF000000000001 /* Spacing.swift */; };
@@ -108,8 +106,6 @@
 		82FFF0082FFF000000000001 /* NetworkLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLogStore.swift; sourceTree = "<group>"; };
 		82FFF00A2FFF000000000001 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
 		82FFF00C2FFF000000000001 /* DeepLinkParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkParser.swift; sourceTree = "<group>"; };
-		82FFF0102FFF000000000001 /* RecordingsDirectoryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingsDirectoryProvider.swift; sourceTree = "<group>"; };
-		82FFF0112FFF000000000001 /* RecordingSessionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSessionController.swift; sourceTree = "<group>"; };
 		82FFF0162FFF000000000001 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		82FFF0172FFF000000000001 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		82FFF0182FFF000000000001 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
@@ -383,7 +379,6 @@
 		82FFF0122FFF000000000001 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				82FFF0102FFF000000000001 /* RecordingsDirectoryProvider.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -393,7 +388,6 @@
 			children = (
 				82B37D8D2EE59BB3007CD37D /* AudioRecorderController.swift */,
 				82B37D832EE59039007CD37D /* AudioPlayerController.swift */,
-				82FFF0112FFF000000000001 /* RecordingSessionController.swift */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -518,7 +512,6 @@
 				82FFF0152FFF000000000001 /* Analytics.swift in Sources */,
 				82FFF00B2FFF000000000001 /* DeepLinkParser.swift in Sources */,
 				82FFF00E2FFF000000000001 /* RecordingsDirectoryProvider.swift in Sources */,
-				82FFF00F2FFF000000000001 /* RecordingSessionController.swift in Sources */,
 				82FFF01C2FFF000000000001 /* Spacing.swift in Sources */,
 				82FFF01D2FFF000000000001 /* Typography.swift in Sources */,
 				82FFF01F2FFF000000000001 /* Endpoints.swift in Sources */,

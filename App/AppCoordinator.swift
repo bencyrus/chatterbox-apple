@@ -66,15 +66,9 @@ final class AppCoordinator {
         let authRepo = PostgrestAuthRepository(client: apiClient)
         let logoutUC = LogoutUseCase(sessionController: sessionController)
         let requestMagic = RequestMagicLinkUseCase(repository: authRepo, analytics: analyticsRecorder)
-        let loginWithMagic = LoginWithMagicTokenUseCase(
-            repository: authRepo,
-            sessionController: sessionController,
-            analytics: analyticsRecorder
-        )
         return AuthViewModel(
             logout: logoutUC,
             requestMagicLink: requestMagic,
-            loginWithMagicToken: loginWithMagic,
             configProvider: configProvider
         )
     }

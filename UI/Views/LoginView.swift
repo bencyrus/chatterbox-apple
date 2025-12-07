@@ -50,7 +50,7 @@ struct LoginView: View {
         .padding()
         .background(AppColors.sand.ignoresSafeArea())
         .alert(Strings.Errors.signInErrorTitle, isPresented: $authViewModel.isShowingErrorAlert) {
-            Button("OK", role: .cancel) {}
+            Button(Strings.Common.ok, role: .cancel) {}
         } message: {
             Text(authViewModel.errorAlertMessage)
         }

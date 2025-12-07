@@ -45,7 +45,6 @@ struct CompositionRootView: View {
                 }
             }
         }
-        .preferredColorScheme(.dark)
     }
 }
 

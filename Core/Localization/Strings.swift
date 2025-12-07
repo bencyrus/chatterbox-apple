@@ -5,6 +5,7 @@ enum Strings {
         static let subjects = NSLocalizedString("tabs.subjects", comment: "Subjects tab")
         static let history = NSLocalizedString("tabs.history", comment: "History tab")
         static let settings = NSLocalizedString("tabs.settings", comment: "Settings tab")
+        static let debug = NSLocalizedString("tabs.debug", comment: "Debug tab")
     }
     enum Login {
         static let title = NSLocalizedString("login.title", comment: "Login title")
@@ -37,6 +38,9 @@ enum Strings {
         static let statusLabel = NSLocalizedString("debug.status_label", comment: "Status code label")
         static let errorLabel = NSLocalizedString("debug.error_label", comment: "Error description label")
         static let jsonViewerTitle = NSLocalizedString("debug.json_viewer_title", comment: "JSON viewer title")
+        static let requestBodyButton = NSLocalizedString("debug.request_body_button", comment: "Button label to view request JSON body")
+        static let responseBodyButton = NSLocalizedString("debug.response_body_button", comment: "Button label to view response JSON body")
+        static let rawBodyTitle = NSLocalizedString("debug.raw_body_title", comment: "Title for raw body fallback view")
     }
     enum Errors {
         static let missingIdentifier = NSLocalizedString("errors.missing_identifier", comment: "Missing identifier")
@@ -59,6 +63,8 @@ enum Strings {
     }
     enum Common {
         static let ok = NSLocalizedString("common.ok", comment: "OK button")
+        static let today = NSLocalizedString("common.today", comment: "Today label")
+        static let yesterday = NSLocalizedString("common.yesterday", comment: "Yesterday label")
     }
     enum CueDetail {
         static let title = NSLocalizedString("cue_detail.title", comment: "Cue detail navigation title")
@@ -84,6 +90,10 @@ enum Strings {
         static let successMessage = NSLocalizedString("recording.success_message", comment: "Recording added success message")
         static let permissionDenied = NSLocalizedString("recording.permission_denied", comment: "Microphone permission denied")
         static let uploadError = NSLocalizedString("recording.upload_error", comment: "Upload error message")
+        static let historySectionTitle = NSLocalizedString("recording.history_section_title", comment: "Title for recordings list in cue detail view")
+        static let newRecordingButton = NSLocalizedString("recording.new_recording_button", comment: "Button label for starting a new recording from history")
+        static let noRecordingFile = NSLocalizedString("recording.no_recording_file", comment: "Error message when no recording file is available")
+        static let uploadFailedWithDetail = NSLocalizedString("recording.upload_failed_with_detail", comment: "Upload failed with specific error detail")
     }
 }
 

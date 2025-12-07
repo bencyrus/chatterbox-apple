@@ -214,7 +214,7 @@ struct LanguagePickerSheet: View {
                 .padding(.bottom, Spacing.lg)
             }
             .background(AppColors.sand.ignoresSafeArea())
-            .navigationTitle("Select Language")
+            .navigationTitle(Strings.Settings.languagePickerTitle)
             .navigationBarTitleDisplayMode(.inline)
         }
     }

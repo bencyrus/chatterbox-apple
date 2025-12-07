@@ -190,7 +190,7 @@ struct CueDetailView: View {
                 recordAnotherTakeButton
             }
             
-            Text("Your Recordings")
+            Text(Strings.Recording.historySectionTitle)
                 .font(Typography.heading)
                 .foregroundColor(AppColors.textPrimary)
             
@@ -268,7 +268,7 @@ struct CueDetailView: View {
         }) {
             HStack(spacing: 6) {
                 Image(systemName: "mic.circle.fill")
-                Text("New Recording")
+                Text(Strings.Recording.newRecordingButton)
             }
             .font(.callout.bold())
             .foregroundColor(AppColors.textContrast)
@@ -327,9 +327,9 @@ struct CueDetailView: View {
         let compareDate = calendar.startOfDay(for: date)
         
         if compareDate == today {
-            return "Today"
+            return Strings.Common.today
         } else if compareDate == calendar.date(byAdding: .day, value: -1, to: today) {
-            return "Yesterday"
+            return Strings.Common.yesterday
         } else {
             let formatter = DateFormatter()
             formatter.dateFormat = "d MMM yyyy"
@@ -354,7 +354,7 @@ struct CueDetailView: View {
     
     func handleSaveRecording() async {
         guard let recorder = recorder, let fileURL = recorder.stopRecording() else {
-            recorder?.errorMessage = "No recording file available"
+            recorder?.errorMessage = Strings.Recording.noRecordingFile
             recorder?.state = .paused
             return
         }
@@ -388,7 +388,10 @@ struct CueDetailView: View {
             // Upload failed - show error and return to paused state
             // Keep the file so user can retry
             let errorDescription = (error as NSError).localizedDescription
-            recorder.errorMessage = "Upload failed: \(errorDescription)"
+            recorder.errorMessage = String(
+                format: Strings.Recording.uploadFailedWithDetail,
+                errorDescription
+            )
             recorder.state = .paused
         }
     }

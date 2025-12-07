@@ -87,7 +87,7 @@ struct RootTabView: View {
                 }
                 .tabItem {
                     Image(systemName: "hammer")
-                    Text("Debug")
+                    Text(Strings.Tabs.debug)
                 }
                 .tag("debug")
             }
@@ -211,7 +211,7 @@ private struct NetworkLogDetailView: View {
                         keyValue(Strings.Debug.headersLabel, pretty(headers: entry.requestHeaders))
                     }
                     if let body = entry.requestBodyPreview {
-                            jsonBodyLink("Request body", body: body)
+                            jsonBodyLink(Strings.Debug.requestBodyButton, body: body)
                         }
                     }
                 }
@@ -229,7 +229,7 @@ private struct NetworkLogDetailView: View {
                         keyValue(Strings.Debug.headersLabel, pretty(headers: entry.responseHeaders))
                     }
                     if let body = entry.responseBodyPreview {
-                            jsonBodyLink("Response body", body: body)
+                            jsonBodyLink(Strings.Debug.responseBodyButton, body: body)
                     }
                     if let error = entry.errorDescription {
                         keyValue(Strings.Debug.errorLabel, error)
@@ -428,7 +428,7 @@ private struct JSONExplorerView: View {
             } else {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Raw body")
+                        Text(Strings.Debug.rawBodyTitle)
                             .font(.headline)
                         Text(rawText)
                             .font(.system(.footnote, design: .monospaced))

@@ -5,11 +5,6 @@ protocol CueRepository {
     func shuffleCues(profileId: Int64, count: Int) async throws -> [Cue]
 }
 
-enum CueError: Error, Equatable {
-    case requestFailed
-    case invalidResponse
-}
-
 final class PostgrestCueRepository: CueRepository {
     private let client: APIClient
 

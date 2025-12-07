@@ -105,9 +105,9 @@ struct HistoryView: View {
         let compareDate = calendar.startOfDay(for: date)
         
         if compareDate == today {
-            return "Today"
+            return Strings.Common.today
         } else if compareDate == calendar.date(byAdding: .day, value: -1, to: today) {
-            return "Yesterday"
+            return Strings.Common.yesterday
         } else {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium

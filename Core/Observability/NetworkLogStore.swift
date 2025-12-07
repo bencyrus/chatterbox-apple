@@ -5,7 +5,6 @@ import os
 enum NetworkError: Error, Equatable {
     case invalidURL
     case encodingFailed
-    case requestFailed(Int)
     case requestFailedWithBody(Int, String)
     case noData
     case decodingFailed
@@ -15,7 +14,6 @@ enum NetworkError: Error, Equatable {
     case rateLimited(retryAfterSeconds: Int?)
     case server(statusCode: Int)
     case transport(URLError)
-    case unexpectedPayload
     case offline
     case cancelled
 }

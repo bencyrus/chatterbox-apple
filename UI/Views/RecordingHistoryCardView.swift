@@ -63,12 +63,12 @@ struct RecordingHistoryCardView: View {
         
         // Check if today
         if calendar.isDateInToday(date) {
-            return "Today"
+            return Strings.Common.today
         }
         
         // Check if yesterday
         if calendar.isDateInYesterday(date) {
-            return "Yesterday"
+            return Strings.Common.yesterday
         }
         
         // Otherwise show day month year (e.g., "7 Dec 2025")
