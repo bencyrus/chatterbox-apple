@@ -8,5 +8,7 @@
 	<string>glovee.io</string>
 	<key>API_BASE_URL</key>
 	<string>https://api.glovee.io</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Chatterbox needs access to your microphone to record your pronunciation practice.</string>
 </dict>
 </plist>

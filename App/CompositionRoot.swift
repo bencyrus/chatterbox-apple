@@ -9,11 +9,15 @@ struct CompositionRootView: View {
         Group {
             if isAuthenticated {
                 let homeVM = coordinator.makeHomeViewModel()
+                let historyVM = coordinator.makeHistoryViewModel()
                 let settingsVM = coordinator.makeSettingsViewModel()
+                let cueDetailVM = coordinator.makeCueDetailViewModel()
 
                 RootTabView(
                     homeViewModel: homeVM,
-                    settingsViewModel: settingsVM
+                    historyViewModel: historyVM,
+                    settingsViewModel: settingsVM,
+                    cueDetailViewModel: cueDetailVM
                 )
             } else {
                 let authViewModel = coordinator.makeAuthViewModel()

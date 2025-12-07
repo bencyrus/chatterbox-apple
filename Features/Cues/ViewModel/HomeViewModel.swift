@@ -100,8 +100,8 @@ final class HomeViewModel {
             // but the user still has a valid set of cards on screen.
             if showErrors && cues.isEmpty {
                 presentError(
-                    title: Strings.Errors.homeLoadTitle,
-                    message: Strings.Errors.homeLoadFailed
+                    title: Strings.Errors.subjectsLoadTitle,
+                    message: Strings.Errors.subjectsLoadFailed
                 )
             }
         }

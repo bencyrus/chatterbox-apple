@@ -104,5 +104,31 @@ final class AppCoordinator {
             sessionManager: sessionManager
         )
     }
+    
+    func makeHistoryViewModel() -> HistoryViewModel {
+        let recordingRepo = PostgrestRecordingRepository(client: apiClient)
+        let accountRepo = PostgrestAccountRepository(client: apiClient)
+        let activeProfileHelper = ActiveProfileHelper(
+            accountRepository: accountRepo,
+            sessionManager: sessionManager
+        )
+        return HistoryViewModel(
+            recordingRepository: recordingRepo,
+            activeProfileHelper: activeProfileHelper
+        )
+    }
+    
+    func makeCueDetailViewModel() -> CueDetailViewModel {
+        let recordingRepo = PostgrestRecordingRepository(client: apiClient)
+        let accountRepo = PostgrestAccountRepository(client: apiClient)
+        let activeProfileHelper = ActiveProfileHelper(
+            accountRepository: accountRepo,
+            sessionManager: sessionManager
+        )
+        return CueDetailViewModel(
+            recordingRepository: recordingRepo,
+            activeProfileHelper: activeProfileHelper
+        )
+    }
 }
 

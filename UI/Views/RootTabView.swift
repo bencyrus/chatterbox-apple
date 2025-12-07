@@ -5,15 +5,22 @@ import UIKit
 
 struct RootTabView: View {
     @State private var homeViewModel: HomeViewModel
+    @State private var historyViewModel: HistoryViewModel
     @State private var settingsViewModel: SettingsViewModel
+    @State private var cueDetailViewModel: CueDetailViewModel
+    @State private var selectedTab: String = "subjects"
     @SwiftUI.Environment(FeatureAccessContext.self) private var featureAccessContext
 
     init(
         homeViewModel: HomeViewModel,
-        settingsViewModel: SettingsViewModel
+        historyViewModel: HistoryViewModel,
+        settingsViewModel: SettingsViewModel,
+        cueDetailViewModel: CueDetailViewModel
     ) {
         _homeViewModel = State(initialValue: homeViewModel)
+        _historyViewModel = State(initialValue: historyViewModel)
         _settingsViewModel = State(initialValue: settingsViewModel)
+        _cueDetailViewModel = State(initialValue: cueDetailViewModel)
         
         // Configure navigation bar appearance
         let appearance = UINavigationBarAppearance()
@@ -44,23 +51,33 @@ struct RootTabView: View {
     }
 
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             NavigationStack {
-                HomeView(viewModel: homeViewModel)
+                HistoryView(viewModel: historyViewModel, cueDetailViewModel: cueDetailViewModel)
             }
             .tabItem {
-                Image(systemName: "house")
-                Text(Strings.Tabs.home)
+                Image(systemName: "waveform.circle")
+                Text(Strings.Tabs.history)
             }
+            .tag("history")
+
+            NavigationStack {
+                HomeView(viewModel: homeViewModel, cueDetailViewModel: cueDetailViewModel)
+            }
+            .tabItem {
+                Image(systemName: "rectangle.stack")
+                Text(Strings.Tabs.subjects)
+            }
+            .tag("subjects")
 
             NavigationStack {
                 SettingsView(viewModel: settingsViewModel)
-                    .navigationTitle(Strings.Settings.title)
             }
             .tabItem {
                 Image(systemName: "gearshape")
                 Text(Strings.Tabs.settings)
             }
+            .tag("settings")
 
             // Developer / debug tab using hammer icon, matching bottom nav style.
             // Visible when the current user + app config satisfy the developer tools gate.
@@ -72,6 +89,7 @@ struct RootTabView: View {
                     Image(systemName: "hammer")
                     Text("Debug")
                 }
+                .tag("debug")
             }
         }
         .tint(AppColors.textPrimary)
@@ -94,9 +112,13 @@ struct DebugNetworkLogView: View {
                             Image(systemName: "trash")
                             Text(Strings.Debug.clearLogs)
                         }
+                        .font(.callout.bold())
+                        .foregroundColor(AppColors.textContrast)
+                        .padding(.vertical, Spacing.md)
+                        .padding(.horizontal, Spacing.xl)
+                        .background(AppColors.textPrimary)
+                        .cornerRadius(24)
                     }
-                    .buttonStyle(PrimaryButtonStyle())
-                    .buttonStyle(.plain)
                     .accessibilityIdentifier("debug.clearLogs")
                 }
 

@@ -32,6 +32,16 @@
 		82A0011A2EFF000000000002 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001152EFF000000000002 /* HomeViewModel.swift */; };
 		82A0011B2EFF000000000002 /* CueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A001162EFF000000000002 /* CueDetailView.swift */; };
 		82B37D7C2EE51873007CD37D /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D7B2EE51873007CD37D /* SessionManager.swift */; };
+		82B37D7E2EE58FE0007CD37D /* RecordingDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D7D2EE58FE0007CD37D /* RecordingDTOs.swift */; };
+		82B37D802EE58FF6007CD37D /* RecordingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D7F2EE58FF6007CD37D /* RecordingRepository.swift */; };
+		82B37D822EE59023007CD37D /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D812EE59023007CD37D /* HistoryViewModel.swift */; };
+		82B37D842EE59039007CD37D /* AudioPlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D832EE59039007CD37D /* AudioPlayerController.swift */; };
+		82B37D882EE5904E007CD37D /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D862EE5904E007CD37D /* HistoryView.swift */; };
+		82B37D892EE5904E007CD37D /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D852EE5904E007CD37D /* AudioPlayerView.swift */; };
+		82B37D8A2EE5904E007CD37D /* RecordingHistoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D872EE5904E007CD37D /* RecordingHistoryCardView.swift */; };
+		82B37D8C2EE59B2F007CD37D /* CueDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D8B2EE59B2F007CD37D /* CueDetailViewModel.swift */; };
+		82B37D8E2EE59BB3007CD37D /* AudioRecorderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D8D2EE59BB3007CD37D /* AudioRecorderController.swift */; };
+		82B37D902EE59BC7007CD37D /* RecordingControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D8F2EE59BC7007CD37D /* RecordingControlView.swift */; };
 		82D5A0012F0E000000000001 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D5A0002F0E000000000001 /* DesignSystem.swift */; };
 		82FFF0012FFF000000000001 /* FeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0042FFF000000000001 /* FeatureFlag.swift */; };
 		82FFF0022FFF000000000001 /* RuntimeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0052FFF000000000001 /* RuntimeConfig.swift */; };
@@ -81,6 +91,16 @@
 		82A001152EFF000000000002 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		82A001162EFF000000000002 /* CueDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueDetailView.swift; sourceTree = "<group>"; };
 		82B37D7B2EE51873007CD37D /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		82B37D7D2EE58FE0007CD37D /* RecordingDTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingDTOs.swift; sourceTree = "<group>"; };
+		82B37D7F2EE58FF6007CD37D /* RecordingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRepository.swift; sourceTree = "<group>"; };
+		82B37D812EE59023007CD37D /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
+		82B37D832EE59039007CD37D /* AudioPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerController.swift; sourceTree = "<group>"; };
+		82B37D852EE5904E007CD37D /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
+		82B37D862EE5904E007CD37D /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		82B37D872EE5904E007CD37D /* RecordingHistoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingHistoryCardView.swift; sourceTree = "<group>"; };
+		82B37D8B2EE59B2F007CD37D /* CueDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueDetailViewModel.swift; sourceTree = "<group>"; };
+		82B37D8D2EE59BB3007CD37D /* AudioRecorderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderController.swift; sourceTree = "<group>"; };
+		82B37D8F2EE59BC7007CD37D /* RecordingControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingControlView.swift; sourceTree = "<group>"; };
 		82D5A0002F0E000000000001 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		82FFF0042FFF000000000001 /* FeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlag.swift; sourceTree = "<group>"; };
 		82FFF0052FFF000000000001 /* RuntimeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeConfig.swift; sourceTree = "<group>"; };
@@ -280,6 +300,10 @@
 		82250BFE2EA34BF20023B10D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				82B37D8F2EE59BC7007CD37D /* RecordingControlView.swift */,
+				82B37D852EE5904E007CD37D /* AudioPlayerView.swift */,
+				82B37D862EE5904E007CD37D /* HistoryView.swift */,
+				82B37D872EE5904E007CD37D /* RecordingHistoryCardView.swift */,
 				82250BFA2EA34BF20023B10D /* HomeView.swift */,
 				82250BFB2EA34BF20023B10D /* LoginView.swift */,
 				82250BFC2EA34BF20023B10D /* RootTabView.swift */,
@@ -312,6 +336,7 @@
 		82A0011D2EFF000000000002 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				82B37D7D2EE58FE0007CD37D /* RecordingDTOs.swift */,
 				82A001122EFF000000000002 /* CueDTOs.swift */,
 			);
 			path = Models;
@@ -320,6 +345,7 @@
 		82A0011E2EFF000000000002 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				82B37D7F2EE58FF6007CD37D /* RecordingRepository.swift */,
 				82A001132EFF000000000002 /* CueRepository.swift */,
 				82A001142EFF000000000002 /* ActiveProfileHelper.swift */,
 			);
@@ -329,6 +355,8 @@
 		82A0011F2EFF000000000002 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				82B37D8B2EE59B2F007CD37D /* CueDetailViewModel.swift */,
+				82B37D812EE59023007CD37D /* HistoryViewModel.swift */,
 				82A001152EFF000000000002 /* HomeViewModel.swift */,
 			);
 			path = ViewModel;
@@ -363,6 +391,8 @@
 		82FFF0132FFF000000000001 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				82B37D8D2EE59BB3007CD37D /* AudioRecorderController.swift */,
+				82B37D832EE59039007CD37D /* AudioPlayerController.swift */,
 				82FFF0112FFF000000000001 /* RecordingSessionController.swift */,
 			);
 			path = Audio;
@@ -453,6 +483,7 @@
 				82250C2A2EA34BF20023B10D /* RootTabView.swift in Sources */,
 				82250C2B2EA34BF20023B10D /* CompositionRoot.swift in Sources */,
 				82250C2C2EA34BF20023B10D /* AuthRepository.swift in Sources */,
+				82B37D8C2EE59B2F007CD37D /* CueDetailViewModel.swift in Sources */,
 				82250C2D2EA34BF20023B10D /* AuthViewModel.swift in Sources */,
 				82250C2E2EA34BF20023B10D /* Environment.swift in Sources */,
 				82250C2F2EA34BF20023B10D /* HomeView.swift in Sources */,
@@ -463,8 +494,10 @@
 				82250C382EA34BF20023B10D /* ChatterboxApp.swift in Sources */,
 				82250C392EA34BF20023B10D /* Strings.swift in Sources */,
 				82250C3A2EA34BF20023B10D /* TokenManager.swift in Sources */,
+				82B37D8E2EE59BB3007CD37D /* AudioRecorderController.swift in Sources */,
 				82250C3B2EA34BF20023B10D /* AuthDTOs.swift in Sources */,
 				82A001002EFF000000000001 /* ProfileDTOs.swift in Sources */,
+				82B37D822EE59023007CD37D /* HistoryViewModel.swift in Sources */,
 				82A001012EFF000000000001 /* AccountRepository.swift in Sources */,
 				82A001022EFF000000000001 /* SettingsViewModel.swift in Sources */,
 				82A001172EFF000000000002 /* CueDTOs.swift in Sources */,
@@ -475,9 +508,12 @@
 				82B37D7C2EE51873007CD37D /* SessionManager.swift in Sources */,
 				82D5A0012F0E000000000001 /* DesignSystem.swift in Sources */,
 				82FFF0012FFF000000000001 /* FeatureFlag.swift in Sources */,
+				82B37D802EE58FF6007CD37D /* RecordingRepository.swift in Sources */,
 				82FFF0022FFF000000000001 /* RuntimeConfig.swift in Sources */,
 				82FFF0032FFF000000000001 /* RuntimeConfigProvider.swift in Sources */,
+				82B37D842EE59039007CD37D /* AudioPlayerController.swift in Sources */,
 				82FFF0072FFF000000000001 /* NetworkLogStore.swift in Sources */,
+				82B37D7E2EE58FE0007CD37D /* RecordingDTOs.swift in Sources */,
 				82FFF0142FFF000000000001 /* Log.swift in Sources */,
 				82FFF0152FFF000000000001 /* Analytics.swift in Sources */,
 				82FFF00B2FFF000000000001 /* DeepLinkParser.swift in Sources */,
@@ -486,7 +522,11 @@
 				82FFF01C2FFF000000000001 /* Spacing.swift in Sources */,
 				82FFF01D2FFF000000000001 /* Typography.swift in Sources */,
 				82FFF01F2FFF000000000001 /* Endpoints.swift in Sources */,
+				82B37D882EE5904E007CD37D /* HistoryView.swift in Sources */,
+				82B37D892EE5904E007CD37D /* AudioPlayerView.swift in Sources */,
+				82B37D8A2EE5904E007CD37D /* RecordingHistoryCardView.swift in Sources */,
 				82FFF0202FFF000000000001 /* AppCoordinator.swift in Sources */,
+				82B37D902EE59BC7007CD37D /* RecordingControlView.swift in Sources */,
 				82FFF0212FFF000000000001 /* LocalizationProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -2,14 +2,16 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var viewModel: HomeViewModel
+    let cueDetailViewModel: CueDetailViewModel
 
-    init(viewModel: HomeViewModel) {
+    init(viewModel: HomeViewModel, cueDetailViewModel: CueDetailViewModel) {
         _viewModel = State(initialValue: viewModel)
+        self.cueDetailViewModel = cueDetailViewModel
     }
 
     var body: some View {
         VStack(spacing: 16) {
-            PageHeader(Strings.Home.title) {
+            PageHeader(Strings.Subjects.title) {
                 ShuffleButton {
                     Task {
                         await viewModel.shuffleCues()
@@ -23,7 +25,7 @@ struct HomeView: View {
                         .progressViewStyle(.circular)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.cues.isEmpty {
-                    Text(Strings.Home.emptyState)
+                    Text(Strings.Subjects.emptyState)
                         .foregroundColor(AppColors.textPrimary)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .multilineTextAlignment(.center)
@@ -33,7 +35,7 @@ struct HomeView: View {
                         LazyVStack(spacing: 12) {
                             ForEach(Array(viewModel.cues.enumerated()), id: \.offset) { _, cue in
                                 NavigationLink {
-                                    CueDetailView(cue: cue)
+                                    CueDetailView(cue: cue, viewModel: cueDetailViewModel)
                                 } label: {
                                     CueCardView(cue: cue)
                                 }
@@ -82,7 +84,7 @@ private struct CueCardView: View {
             .padding()
             .background(AppColors.darkBeige)
             .cornerRadius(12)
-            .accessibilityIdentifier("home.cue.\(cue.content.cueContentId).title")
+            .accessibilityIdentifier("subjects.cue.\(cue.content.cueContentId).title")
     }
 }
 
@@ -93,33 +95,15 @@ private struct ShuffleButton: View {
         Button(action: onTap) {
             HStack(spacing: 6) {
                 Image(systemName: "shuffle")
-                Text(Strings.Home.shuffle)
+                Text(Strings.Subjects.shuffle)
             }
             .font(.callout.bold())
+            .foregroundColor(AppColors.textContrast)
+            .padding(.vertical, Spacing.md)
+            .padding(.horizontal, Spacing.xl)
+            .background(AppColors.textPrimary)
+            .cornerRadius(24)
         }
-        .buttonStyle(PrimaryButtonStyle())
-        .accessibilityIdentifier("home.shuffle")
-    }
-}
-
-struct PageHeader<Actions: View>: View {
-    let title: String
-    @ViewBuilder let actions: () -> Actions
-
-    init(_ title: String, @ViewBuilder actions: @escaping () -> Actions = { EmptyView() }) {
-        self.title = title
-        self.actions = actions
-    }
-
-    var body: some View {
-        HStack(alignment: .center, spacing: 12) {
-            Text(title)
-                .font(Typography.heading)
-                .foregroundColor(AppColors.textPrimary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            actions()
-        }
-        .padding(.horizontal)
+        .accessibilityIdentifier("subjects.shuffle")
     }
 }

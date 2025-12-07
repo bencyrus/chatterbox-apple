@@ -11,6 +11,9 @@ enum AppColors {
     /// Blue secondary accent color.
     static let blue = Color(hex: 0xbec8e3)
 
+    /// Darker blue accent for buttons / stronger accents.
+    static let darkBlue = Color(hex: 0x8f9bb8)
+
     /// Beige - used for detail cards and error indicators.
     static let beige = Color(hex: 0xf7e4d6)
 
@@ -69,6 +72,31 @@ struct DestructiveButtonStyle: ButtonStyle {
             )
             .opacity(configuration.isPressed ? 0.7 : 1.0)
             .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
+    }
+}
+
+// MARK: - Common Components
+
+struct PageHeader<Actions: View>: View {
+    let title: String
+    @ViewBuilder let actions: () -> Actions
+
+    init(_ title: String, @ViewBuilder actions: @escaping () -> Actions = { EmptyView() }) {
+        self.title = title
+        self.actions = actions
+    }
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Text(title)
+                .font(Typography.heading)
+                .foregroundColor(AppColors.textPrimary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            actions()
+        }
+        .frame(minHeight: 48)
+        .padding(.horizontal)
     }
 }
 

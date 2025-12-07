@@ -112,4 +112,72 @@ enum CueEndpoints {
     }
 }
 
+// MARK: - Recordings
+
+enum RecordingEndpoints {
+    struct GetProfileRecordingHistory: APIEndpoint {
+        struct Body: Encodable {
+            let profileId: Int64
+        }
+
+        typealias RequestBody = Body
+        typealias ResponseBody = RecordingHistoryResponse
+
+        let path: String = "/rpc/get_profile_recording_history"
+        let method: HTTPMethod = .post
+        let requiresAuth: Bool = true
+        let timeout: TimeInterval = 30
+        let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
+    }
+
+    struct GetCueForProfile: APIEndpoint {
+        struct Body: Encodable {
+            let profileId: Int64
+            let cueId: Int64
+        }
+
+        typealias RequestBody = Body
+        typealias ResponseBody = CueWithRecordingsResponse
+
+        let path: String = "/rpc/get_cue_for_profile"
+        let method: HTTPMethod = .post
+        let requiresAuth: Bool = true
+        let timeout: TimeInterval = 30
+        let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
+    }
+    
+    struct CreateRecordingUploadIntent: APIEndpoint {
+        struct Body: Encodable {
+            let profileId: Int64
+            let cueId: Int64
+            let mimeType: String
+        }
+        
+        typealias RequestBody = Body
+        typealias ResponseBody = CreateRecordingUploadIntentResponse
+        
+        let path: String = "/rpc/create_recording_upload_intent"
+        let method: HTTPMethod = .post
+        let requiresAuth: Bool = true
+        let timeout: TimeInterval = 30
+        let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
+    }
+    
+    struct CompleteRecordingUpload: APIEndpoint {
+        struct Body: Encodable {
+            let uploadIntentId: Int64
+            let metadata: [String: String]?
+        }
+        
+        typealias RequestBody = Body
+        typealias ResponseBody = CompleteRecordingUploadResponse
+        
+        let path: String = "/rpc/complete_recording_upload"
+        let method: HTTPMethod = .post
+        let requiresAuth: Bool = true
+        let timeout: TimeInterval = 30
+        let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
+    }
+}
+
 

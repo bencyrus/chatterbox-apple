@@ -2,7 +2,8 @@ import Foundation
 
 enum Strings {
     enum Tabs {
-        static let home = NSLocalizedString("tabs.home", comment: "Home tab")
+        static let subjects = NSLocalizedString("tabs.subjects", comment: "Subjects tab")
+        static let history = NSLocalizedString("tabs.history", comment: "History tab")
         static let settings = NSLocalizedString("tabs.settings", comment: "Settings tab")
     }
     enum Login {
@@ -13,10 +14,10 @@ enum Strings {
         static let linkSentAt = NSLocalizedString("login.link_sent_at", comment: "Link sent at time label")
         static let cooldownMessage = NSLocalizedString("login.cooldown_message", comment: "Cooldown countdown label")
     }
-    enum Home {
-        static let title = NSLocalizedString("home.title", comment: "Home title")
-        static let emptyState = NSLocalizedString("home.empty_state", comment: "Message shown when there are no cues yet")
-        static let shuffle = NSLocalizedString("home.shuffle", comment: "Shuffle cues button")
+    enum Subjects {
+        static let title = NSLocalizedString("subjects.title", comment: "Subjects title")
+        static let emptyState = NSLocalizedString("subjects.empty_state", comment: "Message shown when there are no cues yet")
+        static let shuffle = NSLocalizedString("subjects.shuffle", comment: "Shuffle cues button")
     }
     enum Settings {
         static let title = NSLocalizedString("settings.title", comment: "Settings title")
@@ -47,8 +48,8 @@ enum Strings {
         static let settingsSaveTitle = NSLocalizedString("errors.settings_save_title", comment: "Settings save error title")
         static let settingsSaveFailed = NSLocalizedString("errors.settings_save_failed", comment: "Settings save failed")
         static let settingsAccountMissing = NSLocalizedString("errors.settings_account_missing", comment: "Settings account missing")
-        static let homeLoadTitle = NSLocalizedString("errors.home_load_title", comment: "Home cues load error title")
-        static let homeLoadFailed = NSLocalizedString("errors.home_load_failed", comment: "Home cues load failed")
+        static let subjectsLoadTitle = NSLocalizedString("errors.subjects_load_title", comment: "Subjects cues load error title")
+        static let subjectsLoadFailed = NSLocalizedString("errors.subjects_load_failed", comment: "Subjects cues load failed")
         static let okButton = NSLocalizedString("errors.ok_button", comment: "OK button for error alerts")
     }
     enum A11y {
@@ -61,6 +62,28 @@ enum Strings {
     }
     enum CueDetail {
         static let title = NSLocalizedString("cue_detail.title", comment: "Cue detail navigation title")
+    }
+    enum History {
+        static let title = NSLocalizedString("history.title", comment: "Recording History tab title")
+        static let emptyState = NSLocalizedString("history.empty_state", comment: "No recordings yet message")
+    }
+    enum AudioPlayer {
+        static let loading = NSLocalizedString("audio_player.loading", comment: "Loading audio")
+        static let error = NSLocalizedString("audio_player.error", comment: "Playback error")
+    }
+    enum Recording {
+        static let sectionTitle = NSLocalizedString("recording.section_title", comment: "Recording section title")
+        static let startButton = NSLocalizedString("recording.start_button", comment: "Start recording button")
+        static let pauseButton = NSLocalizedString("recording.pause_button", comment: "Pause recording button")
+        static let resumeButton = NSLocalizedString("recording.resume_button", comment: "Resume recording button")
+        static let saveButton = NSLocalizedString("recording.save_button", comment: "Save recording button")
+        static let deleteButton = NSLocalizedString("recording.delete_button", comment: "Delete recording button")
+        static let deleteConfirmTitle = NSLocalizedString("recording.delete_confirm_title", comment: "Delete confirmation title")
+        static let deleteConfirmYes = NSLocalizedString("recording.delete_confirm_yes", comment: "Delete confirmation yes")
+        static let deleteConfirmNo = NSLocalizedString("recording.delete_confirm_no", comment: "Delete confirmation no")
+        static let successMessage = NSLocalizedString("recording.success_message", comment: "Recording added success message")
+        static let permissionDenied = NSLocalizedString("recording.permission_denied", comment: "Microphone permission denied")
+        static let uploadError = NSLocalizedString("recording.upload_error", comment: "Upload error message")
     }
 }
 

@@ -21,21 +21,21 @@ final class ChatterboxUITests: XCTestCase {
         requestButton.tap()
     }
 
-    func testHomeAndCueNavigation() {
+    func testSubjectsAndCueNavigation() {
         let app = XCUIApplication()
         app.launch()
 
         // Assumes an authenticated session for this test configuration.
-        let homeTab = app.tabBars.buttons[Strings.Tabs.home]
-        XCTAssertTrue(homeTab.waitForExistence(timeout: 5))
-        homeTab.tap()
+        let subjectsTab = app.tabBars.buttons[Strings.Tabs.subjects]
+        XCTAssertTrue(subjectsTab.waitForExistence(timeout: 5))
+        subjectsTab.tap()
 
-        let shuffle = app.buttons["home.shuffle"]
+        let shuffle = app.buttons["subjects.shuffle"]
         if shuffle.exists {
             shuffle.tap()
         }
 
-        let firstCue = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", "home.cue.")).firstMatch
+        let firstCue = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", "subjects.cue.")).firstMatch
         if firstCue.waitForExistence(timeout: 5) {
             firstCue.tap()
             XCTAssertTrue(app.navigationBars[Strings.CueDetail.title].waitForExistence(timeout: 5))

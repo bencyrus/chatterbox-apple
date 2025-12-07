@@ -3,42 +3,91 @@ import SwiftUI
 struct SettingsView: View {
     @State private var viewModel: SettingsViewModel
     @State private var selectedLanguageCode: String = ""
+    @State private var showLanguagePicker = false
 
     init(viewModel: SettingsViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
 
     var body: some View {
-        VStack(spacing: 24) {
-            if let email = viewModel.email {
-                Text(email)
-                    .font(.subheadline)
-                    .foregroundColor(AppColors.textPrimary.opacity(0.7))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-
-            Picker(Strings.Settings.languagePickerTitle, selection: $selectedLanguageCode) {
-                ForEach(viewModel.availableLanguages, id: \.self) { code in
-                    Text(languageDisplayName(for: code))
-                        .tag(code)
+        VStack(spacing: Spacing.md) {
+            PageHeader(Strings.Settings.title)
+            
+            ScrollView {
+                VStack(spacing: Spacing.lg) {
+                    // Language Selection Dropdown
+                    VStack(alignment: .leading, spacing: Spacing.md) {
+                        Text(Strings.Settings.languagePickerTitle)
+                            .font(Typography.body.weight(.semibold))
+                            .foregroundColor(AppColors.textPrimary)
+                            .padding(.horizontal, Spacing.md)
+                        
+                        Button {
+                            showLanguagePicker = true
+                        } label: {
+                            HStack(spacing: Spacing.md) {
+                                // Flag
+                                Text(flagEmoji(for: selectedLanguageCode))
+                                    .font(.system(size: 28))
+                                
+                                // Language name
+                                Text(languageDisplayName(for: selectedLanguageCode))
+                                    .font(Typography.body)
+                                    .foregroundColor(AppColors.textPrimary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                // Chevron down
+                                Image(systemName: "chevron.down")
+                                    .foregroundColor(AppColors.textPrimary.opacity(0.5))
+                                    .font(.system(size: 14, weight: .semibold))
+                            }
+                            .padding(.horizontal, Spacing.md)
+                            .padding(.vertical, Spacing.md)
+                            .background(AppColors.darkBeige)
+                            .cornerRadius(12)
+                        }
+                        .padding(.horizontal, Spacing.md)
+                    }
+                    .padding(.top, Spacing.sm)
+                    
+                    Spacer(minLength: Spacing.xl)
+                    
+                    // Logout Button
+                    Button {
+                        viewModel.logout()
+                    } label: {
+                        HStack(spacing: Spacing.sm) {
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                            Text(Strings.Settings.logout)
+                        }
+                        .font(Typography.body.weight(.medium))
+                        .foregroundColor(.red)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, Spacing.md)
+                        .background(AppColors.darkBeige)
+                        .cornerRadius(12)
+                    }
+                    .padding(.horizontal, Spacing.md)
+                    .accessibilityLabel(Text(Strings.A11y.logout))
                 }
+                .padding(.bottom, Spacing.lg)
             }
-            .pickerStyle(.menu)
-            .tint(AppColors.textPrimary)
-            .accessibilityIdentifier("settings.languagePicker")
-
-            Spacer()
-            Button {
-                viewModel.logout()
-            } label: {
-                Text(Strings.Settings.logout)
-            }
-            .buttonStyle(DestructiveButtonStyle())
-            .accessibilityLabel(Text(Strings.A11y.logout))
-            Spacer()
         }
-        .padding()
         .background(AppColors.sand.ignoresSafeArea())
+        .sheet(isPresented: $showLanguagePicker) {
+            LanguagePickerSheet(
+                availableLanguages: viewModel.availableLanguages,
+                selectedLanguage: $selectedLanguageCode,
+                onSelect: { code in
+                    showLanguagePicker = false
+                    Task {
+                        await viewModel.updateLanguage(to: code)
+                    }
+                }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+        }
         .task {
             await viewModel.load()
             // Ensure the picker selection always maps to a valid tag.
@@ -51,11 +100,9 @@ struct SettingsView: View {
                 selectedLanguageCode = ""
             }
         }
-        .onChange(of: selectedLanguageCode) { _, newValue in
-            // Ignore transient values that don't correspond to a real option.
-            guard viewModel.availableLanguages.contains(newValue) else { return }
-            Task {
-                await viewModel.updateLanguage(to: newValue)
+        .onChange(of: viewModel.selectedLanguageCode) { _, newValue in
+            if let newValue = newValue, viewModel.availableLanguages.contains(newValue) {
+                selectedLanguageCode = newValue
             }
         }
         .alert(viewModel.errorAlertTitle, isPresented: $viewModel.isShowingErrorAlert) {
@@ -66,8 +113,151 @@ struct SettingsView: View {
     }
 
     private func languageDisplayName(for code: String) -> String {
-        let locale = Locale.current
-        let name = locale.localizedString(forLanguageCode: code) ?? code.uppercased()
-        return "\(name) (\(code.uppercased()))"
+        let languageNames: [String: String] = [
+            "en": "English",
+            "es": "Español",
+            "fr": "Français",
+            "de": "Deutsch",
+            "it": "Italiano",
+            "pt": "Português",
+            "ru": "Русский",
+            "zh": "中文",
+            "ja": "日本語",
+            "ko": "한국어",
+            "ar": "العربية",
+            "hi": "हिन्दी",
+            "tr": "Türkçe",
+            "nl": "Nederlands",
+            "pl": "Polski"
+        ]
+        return languageNames[code] ?? code.uppercased()
+    }
+    
+    private func flagEmoji(for languageCode: String) -> String {
+        let countryMapping: [String: String] = [
+            "en": "🇬🇧",
+            "es": "🇪🇸",
+            "fr": "🇫🇷",
+            "de": "🇩🇪",
+            "it": "🇮🇹",
+            "pt": "🇵🇹",
+            "ru": "🇷🇺",
+            "zh": "🇨🇳",
+            "ja": "🇯🇵",
+            "ko": "🇰🇷",
+            "ar": "🇸🇦",
+            "hi": "🇮🇳",
+            "tr": "🇹🇷",
+            "nl": "🇳🇱",
+            "pl": "🇵🇱"
+        ]
+        return countryMapping[languageCode] ?? "🌐"
+    }
+}
+
+// MARK: - Language Picker Sheet
+
+struct LanguagePickerSheet: View {
+    let availableLanguages: [String]
+    @Binding var selectedLanguage: String
+    let onSelect: (String) -> Void
+    
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: Spacing.sm) {
+                    ForEach(availableLanguages, id: \.self) { code in
+                        Button {
+                            selectedLanguage = code
+                            onSelect(code)
+                        } label: {
+                            HStack(spacing: Spacing.md) {
+                                // Flag
+                                Text(flagEmoji(for: code))
+                                    .font(.system(size: 28))
+                                
+                                // Language name
+                                Text(languageDisplayName(for: code))
+                                    .font(Typography.body)
+                                    .foregroundColor(AppColors.textPrimary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                // Checkmark if selected
+                                if selectedLanguage == code {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(AppColors.darkBlue)
+                                        .font(.system(size: 20))
+                                }
+                            }
+                            .padding(.horizontal, Spacing.md)
+                            .padding(.vertical, Spacing.md)
+                            .background(
+                                selectedLanguage == code
+                                    ? AppColors.darkBeige.opacity(0.8)
+                                    : AppColors.darkBeige
+                            )
+                            .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(
+                                        selectedLanguage == code
+                                            ? AppColors.darkBlue.opacity(0.5)
+                                            : Color.clear,
+                                        lineWidth: 2
+                                    )
+                            )
+                        }
+                    }
+                }
+                .padding(.horizontal, Spacing.md)
+                .padding(.top, Spacing.md)
+                .padding(.bottom, Spacing.lg)
+            }
+            .background(AppColors.sand.ignoresSafeArea())
+            .navigationTitle("Select Language")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+    
+    private func languageDisplayName(for code: String) -> String {
+        let languageNames: [String: String] = [
+            "en": "English",
+            "es": "Español",
+            "fr": "Français",
+            "de": "Deutsch",
+            "it": "Italiano",
+            "pt": "Português",
+            "ru": "Русский",
+            "zh": "中文",
+            "ja": "日本語",
+            "ko": "한국어",
+            "ar": "العربية",
+            "hi": "हिन्दी",
+            "tr": "Türkçe",
+            "nl": "Nederlands",
+            "pl": "Polski"
+        ]
+        return languageNames[code] ?? code.uppercased()
+    }
+    
+    private func flagEmoji(for languageCode: String) -> String {
+        let countryMapping: [String: String] = [
+            "en": "🇬🇧",
+            "es": "🇪🇸",
+            "fr": "🇫🇷",
+            "de": "🇩🇪",
+            "it": "🇮🇹",
+            "pt": "🇵🇹",
+            "ru": "🇷🇺",
+            "zh": "🇨🇳",
+            "ja": "🇯🇵",
+            "ko": "🇰🇷",
+            "ar": "🇸🇦",
+            "hi": "🇮🇳",
+            "tr": "🇹🇷",
+            "nl": "🇳🇱",
+            "pl": "🇵🇱"
+        ]
+        return countryMapping[languageCode] ?? "🌐"
     }
 }

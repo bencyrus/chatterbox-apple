@@ -78,7 +78,16 @@ final class SettingsViewModel {
 
         do {
             try await accountRepository.setActiveProfile(accountId: currentAccountId, languageCode: newCode)
-            selectedLanguageCode = newCode
+            
+            // Refresh session to get updated profile data
+            let refreshed = try await sessionManager.refreshAfterProfileChange()
+            if let active = refreshed.me.activeProfile {
+                selectedLanguageCode = active.languageCode
+            } else {
+                selectedLanguageCode = newCode
+            }
+            
+            // Notify other views to reload
             NotificationCenter.default.post(name: .activeProfileDidChange, object: nil)
         } catch {
             presentError(title: Strings.Errors.settingsSaveTitle, message: Strings.Errors.settingsSaveFailed)
