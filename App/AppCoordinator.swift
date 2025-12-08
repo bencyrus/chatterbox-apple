@@ -48,7 +48,7 @@ final class AppCoordinator {
 
         switch intent {
         case .magicToken(let token):
-            let authRepo = PostgrestAuthRepository(client: apiClient)
+            let authRepo = PostgrestAuthRepository(client: apiClient, environment: environment)
             let useCase = LoginWithMagicTokenUseCase(
                 repository: authRepo,
                 sessionController: sessionController,
@@ -63,9 +63,13 @@ final class AppCoordinator {
     // MARK: - ViewModel factories
 
     func makeAuthViewModel() -> AuthViewModel {
-        let authRepo = PostgrestAuthRepository(client: apiClient)
+        let authRepo = PostgrestAuthRepository(client: apiClient, environment: environment)
         let logoutUC = LogoutUseCase(sessionController: sessionController)
-        let requestMagic = RequestMagicLinkUseCase(repository: authRepo, analytics: analyticsRecorder)
+        let requestMagic = RequestMagicLinkUseCase(
+            repository: authRepo,
+            sessionController: sessionController,
+            analytics: analyticsRecorder
+        )
         return AuthViewModel(
             logout: logoutUC,
             requestMagicLink: requestMagic,

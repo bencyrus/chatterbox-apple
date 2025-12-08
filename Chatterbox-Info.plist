@@ -8,5 +8,7 @@
 	<string>/auth/magic</string>
 	<key>UNIVERSAL_LINK_HOSTS</key>
 	<string>chatterboxtalk.com</string>
+	<key>REVIEWER_EMAIL</key>
+	<string>reviewer@chatterboxtalk.com</string>
 </dict>
 </plist>

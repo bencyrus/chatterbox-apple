@@ -14,17 +14,32 @@ struct LogoutUseCase {
 
 struct RequestMagicLinkUseCase {
     let repository: AuthRepository
+    let sessionController: SessionControllerProtocol
     let analytics: AnalyticsRecording?
 
-    func execute(identifier: String) async throws {
-        try await repository.requestMagicLink(identifier: identifier)
-        let event = AnalyticsEvent(
-            name: "auth.magic_link_requested",
-            properties: [:],
-            context: [:],
-            timestamp: Date()
-        )
-        analytics?.record(event)
+    func execute(identifier: String) async throws -> Bool {
+        if let tokens = try await repository.requestMagicLink(identifier: identifier) {
+            // Reviewer login: tokens returned immediately
+            await sessionController.loginSucceeded(with: tokens)
+            let event = AnalyticsEvent(
+                name: "auth.reviewer_login_success",
+                properties: [:],
+                context: [:],
+                timestamp: Date()
+            )
+            analytics?.record(event)
+            return true
+        } else {
+            // Normal magic link flow: email sent
+            let event = AnalyticsEvent(
+                name: "auth.magic_link_requested",
+                properties: [:],
+                context: [:],
+                timestamp: Date()
+            )
+            analytics?.record(event)
+            return false
+        }
     }
 }
 

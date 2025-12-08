@@ -32,6 +32,17 @@ enum AuthEndpoints {
         let timeout: TimeInterval = 30
         let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
     }
+
+    struct ReviewerLogin: APIEndpoint {
+        typealias RequestBody = RequestMagicLinkBody
+        typealias ResponseBody = LoginWithMagicTokenResponse
+
+        let path: String = "/rpc/reviewer_login"
+        let method: HTTPMethod = .post
+        let requiresAuth: Bool = false
+        let timeout: TimeInterval = 30
+        let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
+    }
 }
 
 // MARK: - Account / Profile

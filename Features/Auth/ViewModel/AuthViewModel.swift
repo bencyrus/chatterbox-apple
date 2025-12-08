@@ -38,9 +38,12 @@ final class AuthViewModel {
         isRequesting = true
         defer { isRequesting = false }
         do {
-            try await requestMagicLinkUC.execute(identifier: identifier)
-            // Start cooldown from runtime configuration
-            startCooldown(seconds: configProvider.snapshot.magicLinkCooldownSeconds)
+            let isImmediateLogin = try await requestMagicLinkUC.execute(identifier: identifier)
+            if !isImmediateLogin {
+                // Normal flow: start cooldown only for non-reviewer accounts
+                startCooldown(seconds: configProvider.snapshot.magicLinkCooldownSeconds)
+            }
+            // If isImmediateLogin is true, session is already updated and user will be logged in
         } catch {
             presentSignInError(message: Strings.Errors.requestFailed)
         }

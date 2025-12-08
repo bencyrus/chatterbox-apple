@@ -27,7 +27,7 @@ enum SessionState: Equatable {
 
 /// Keychain‑backed token store used internally by `SessionController`.
 private struct TokenStore {
-    private let service = "com.chatterbox.ios.tokens"
+    private let service = "com.chatterboxtalk.tokens"
     private let account = "default"
 
     func loadTokens() -> AuthTokens? {

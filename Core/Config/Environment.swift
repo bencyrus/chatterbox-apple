@@ -19,6 +19,7 @@ struct Environment {
     let bundleIdentifier: String
     let appVersion: String
     let buildNumber: String
+    let reviewerEmail: String?
 }
 
 /// Loads the current `Environment` from `Info.plist` and compile‑time flags.
@@ -43,16 +44,18 @@ enum EnvironmentLoader {
             throw Error.missingOrInvalidBaseURL
         }
 
-        let bundleIdentifier = bundle.bundleIdentifier ?? "com.chatterbox.ios"
+        let bundleIdentifier = bundle.bundleIdentifier ?? "com.chatterboxtalk"
         let appVersion = bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0"
         let buildNumber = bundle.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
+        let reviewerEmail = bundle.object(forInfoDictionaryKey: "REVIEWER_EMAIL") as? String
 
         return Environment(
             kind: kind,
             baseURL: baseURL,
             bundleIdentifier: bundleIdentifier,
             appVersion: appVersion,
-            buildNumber: buildNumber
+            buildNumber: buildNumber,
+            reviewerEmail: reviewerEmail
         )
     }
 }
