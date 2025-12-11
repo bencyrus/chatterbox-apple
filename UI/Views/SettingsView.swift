@@ -175,6 +175,7 @@ struct SettingsView: View {
 struct DeleteAccountConfirmationView: View {
     @State private var viewModel: SettingsViewModel
     @SwiftUI.Environment(\.dismiss) private var dismiss
+    @State private var isShowingFinalConfirmation: Bool = false
 
     init(viewModel: SettingsViewModel) {
         _viewModel = State(initialValue: viewModel)
@@ -196,27 +197,111 @@ struct DeleteAccountConfirmationView: View {
 
                         VStack(spacing: Spacing.md) {
                             Button {
-                                Task {
-                                    await viewModel.requestAccountDeletion()
-                                }
+                                // Ask for a final confirmation before sending the request.
+                                isShowingFinalConfirmation = true
                             } label: {
-                                Text(Strings.Settings.deleteAccountConfirm)
+                                if viewModel.isDeletingAccount {
+                                    HStack(spacing: Spacing.sm) {
+                                        ProgressView()
+                                            .tint(.white)
+                                        Text(Strings.Settings.deleteAccountConfirm)
+                                    }
+                                } else {
+                                    Text(Strings.Settings.deleteAccountConfirm)
+                                }
                             }
-                            .buttonStyle(DestructiveButtonStyle())
+                            .font(Typography.body.weight(.medium))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, Spacing.md)
+                            .background(
+                                Color(red: 0.7, green: 0.1, blue: 0.1) // muted red
+                            )
+                            .cornerRadius(12)
+                            .opacity(viewModel.isDeletingAccount ? 0.7 : 1.0)
                             .disabled(viewModel.isDeletingAccount)
 
                             Button {
                                 dismiss()
                             } label: {
                                 Text(Strings.Common.cancel)
+                                    .font(Typography.body.weight(.medium))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, Spacing.md)
                             }
-                            .buttonStyle(PrimaryButtonStyle())
+                            .foregroundColor(AppColors.textPrimary)
+                            .background(Color(.systemGray3))
+                            .cornerRadius(12)
                         }
                         .padding(.top, Spacing.lg)
                     }
                     .padding(.horizontal, Spacing.md)
                     .padding(.bottom, Spacing.lg)
                 }
+            }
+            
+            if isShowingFinalConfirmation {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: Spacing.md) {
+                    Text(Strings.Settings.deleteAccountTitle)
+                        .font(Typography.body.weight(.semibold))
+                        .foregroundColor(AppColors.textPrimary)
+                        .multilineTextAlignment(.center)
+                    
+                    Text(Strings.Settings.deleteAccountMessage)
+                        .font(Typography.body)
+                        .foregroundColor(AppColors.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .padding(.top, Spacing.sm)
+                    
+                    HStack(spacing: Spacing.md) {
+                        Button {
+                            isShowingFinalConfirmation = false
+                        } label: {
+                            Text(Strings.Common.cancel)
+                                .font(Typography.body.weight(.medium))
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, Spacing.sm)
+                        }
+                        .foregroundColor(AppColors.textPrimary)
+                        .background(Color(.systemGray3))
+                        .cornerRadius(12)
+                        
+                        Button {
+                            Task {
+                                isShowingFinalConfirmation = false
+                                await viewModel.requestAccountDeletion()
+                            }
+                        } label: {
+                            if viewModel.isDeletingAccount {
+                                HStack(spacing: Spacing.sm) {
+                                    ProgressView()
+                                        .tint(.white)
+                                    Text(Strings.Settings.deleteAccountConfirm)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, Spacing.sm)
+                            } else {
+                                Text(Strings.Settings.deleteAccountConfirm)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, Spacing.sm)
+                            }
+                        }
+                        .foregroundColor(.white)
+                        .background(
+                            Color(red: 0.7, green: 0.1, blue: 0.1) // muted red
+                        )
+                        .cornerRadius(12)
+                        .disabled(viewModel.isDeletingAccount)
+                    }
+                }
+                .padding(Spacing.lg)
+                .background(AppColors.sand)
+                .cornerRadius(16)
+                .shadow(radius: 10)
+                .padding(.horizontal, Spacing.lg)
             }
         }
     }
