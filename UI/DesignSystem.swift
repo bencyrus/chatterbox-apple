@@ -58,6 +58,21 @@ struct PrimaryButtonStyle: ButtonStyle {
     }
 }
 
+/// Rounded primary button for prominent CTAs (e.g. sign-in).
+struct PillButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(Typography.body.weight(.medium))
+            .foregroundColor(AppColors.textContrast)
+            .padding(.vertical, Spacing.md)
+            .padding(.horizontal, Spacing.xl)
+            .background(AppColors.textPrimary)
+            .clipShape(Capsule())
+            .opacity(configuration.isPressed ? 0.7 : 1.0)
+            .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
+    }
+}
+
 struct DestructiveButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

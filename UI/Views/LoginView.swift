@@ -9,17 +9,27 @@ struct LoginView: View {
 
     var body: some View {
         VStack(spacing: 24) {
+            Image("Logo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 128, height: 128)
+                .cornerRadius(20)
+                .shadow(color: .black.opacity(0.15), radius: 6, x: 0, y: 2)
+                .accessibilityHidden(true)
+
             Text(Strings.Login.title)
                 .font(Typography.title)
                 .foregroundColor(AppColors.textPrimary)
 
-            VStack(spacing: 12) {
+            VStack(spacing: 24) {
                 TextField(Strings.Login.identifierPlaceholder, text: $authViewModel.identifier)
                     .autocorrectionDisabled(true)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
                     .textFieldStyle(.plain)
                     .padding()
-                    .background(AppColors.beige)
-                    .cornerRadius(8)
+                    .background(AppColors.darkBeige)
+                    .cornerRadius(12)
                     .foregroundColor(AppColors.textPrimary)
                     .accessibilityLabel(Text(Strings.A11y.identifierField))
 
@@ -28,10 +38,11 @@ struct LoginView: View {
                 } label: {
                     Text(Strings.Login.requestLink)
                 }
-                .buttonStyle(PrimaryButtonStyle())
+                .buttonStyle(PillButtonStyle())
                 .disabled(authViewModel.isRequesting || authViewModel.cooldownSecondsRemaining > 0)
                 .opacity(authViewModel.isRequesting || authViewModel.cooldownSecondsRemaining > 0 ? 0.5 : 1.0)
             }
+            .padding(.bottom, Spacing.sm)
 
             if authViewModel.cooldownSecondsRemaining > 0 {
                 Text(String(format: Strings.Login.cooldownMessage, authViewModel.cooldownSecondsRemaining))
@@ -48,7 +59,7 @@ struct LoginView: View {
             Spacer()
         }
         .padding()
-        .background(AppColors.sand.ignoresSafeArea())
+        .background(AppColors.beige.opacity(0.4).ignoresSafeArea())
         .alert(Strings.Errors.signInErrorTitle, isPresented: $authViewModel.isShowingErrorAlert) {
             if let url = authViewModel.errorAlertLinkURL {
                 Button(Strings.Login.openSupportPage) {

@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "chatterbox-logo-color-bg.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}

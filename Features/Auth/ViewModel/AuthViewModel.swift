@@ -12,6 +12,9 @@ final class AuthViewModel {
     var errorAlertLinkURL: URL? = nil
     var cooldownSecondsRemaining: Int = 0
     private var cooldownTask: Task<Void, Never>? = nil
+    private var cooldownExpiryDate: Date? = nil
+
+    private static let cooldownExpiryDefaultsKey = "AuthViewModel.magicLinkCooldownExpiry"
 
     private let logoutUC: LogoutUseCase
     private let requestMagicLinkUC: RequestMagicLinkUseCase
@@ -25,6 +28,8 @@ final class AuthViewModel {
         self.logoutUC = logout
         self.requestMagicLinkUC = requestMagicLink
         self.configProvider = configProvider
+
+        restoreCooldownIfNeeded()
     }
 
 
@@ -84,22 +89,59 @@ final class AuthViewModel {
 
     private func startCooldown(seconds: Int) {
         cooldownTask?.cancel()
-        cooldownSecondsRemaining = max(0, seconds)
+
+        guard seconds > 0 else {
+            cooldownSecondsRemaining = 0
+            cooldownExpiryDate = nil
+            UserDefaults.standard.removeObject(forKey: Self.cooldownExpiryDefaultsKey)
+            return
+        }
+
+        let expiry = Date().addingTimeInterval(TimeInterval(seconds))
+        cooldownExpiryDate = expiry
+        UserDefaults.standard.set(expiry.timeIntervalSince1970, forKey: Self.cooldownExpiryDefaultsKey)
+
+        // Set initial value immediately so UI updates without waiting 1s.
+        cooldownSecondsRemaining = max(0, Int(ceil(expiry.timeIntervalSinceNow)))
+
         let task = Task {
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
                 if Task.isCancelled { break }
+                let remaining = max(0, Int(ceil(expiry.timeIntervalSinceNow)))
+
                 await MainActor.run {
-                    if self.cooldownSecondsRemaining > 0 {
-                        self.cooldownSecondsRemaining -= 1
-                    }
+                    self.cooldownSecondsRemaining = remaining
                 }
-                if await MainActor.run(body: { self.cooldownSecondsRemaining }) == 0 {
+
+                if remaining == 0 {
+                    await MainActor.run {
+                        self.cooldownExpiryDate = nil
+                        UserDefaults.standard.removeObject(forKey: Self.cooldownExpiryDefaultsKey)
+                    }
                     break
                 }
             }
         }
         cooldownTask = task
+    }
+
+    /// Restores an in‑progress cooldown based on the last stored expiry time.
+    private func restoreCooldownIfNeeded() {
+        guard let timestamp = UserDefaults.standard.object(forKey: Self.cooldownExpiryDefaultsKey) as? TimeInterval else {
+            return
+        }
+
+        let expiry = Date(timeIntervalSince1970: timestamp)
+        let remaining = Int(ceil(expiry.timeIntervalSinceNow))
+
+        if remaining > 0 {
+            startCooldown(seconds: remaining)
+        } else {
+            cooldownSecondsRemaining = 0
+            cooldownExpiryDate = nil
+            UserDefaults.standard.removeObject(forKey: Self.cooldownExpiryDefaultsKey)
+        }
     }
 
     deinit {

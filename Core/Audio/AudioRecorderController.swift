@@ -26,6 +26,8 @@ final class AudioRecorderController: NSObject, AVAudioRecorderDelegate {
     @ObservationIgnored private var audioRecorder: AVAudioRecorder?
     @ObservationIgnored private var timer: Timer?
     @ObservationIgnored private var recordingURL: URL?
+    @ObservationIgnored private var isAudioSessionConfigured = false
+    @ObservationIgnored private var isAudioSessionActive = false
     
     override init() {
         super.init()
@@ -56,11 +58,22 @@ final class AudioRecorderController: NSObject, AVAudioRecorderDelegate {
             errorMessage = "Microphone permission not granted"
             throw AudioRecordingError.permissionDenied
         }
-        
-        // Configure audio session
         let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.playAndRecord, mode: .default)
-        try audioSession.setActive(true)
+        // Configure the shared audio session once while this controller is in use
+        // and keep it active across start/stop to avoid repeated hardware setup
+        // delays when the user taps Record multiple times.
+        if !isAudioSessionConfigured {
+            try audioSession.setCategory(
+                .playAndRecord,
+                mode: .measurement,
+                options: [.defaultToSpeaker]
+            )
+            isAudioSessionConfigured = true
+        }
+        if !isAudioSessionActive {
+            try audioSession.setActive(true)
+            isAudioSessionActive = true
+        }
         
         // Generate unique filename
         let fileName = "recording-\(UUID().uuidString).m4a"
@@ -119,9 +132,6 @@ final class AudioRecorderController: NSObject, AVAudioRecorderDelegate {
             return nil
         }
         
-        // Deactivate audio session
-        try? AVAudioSession.sharedInstance().setActive(false)
-        
         return url
     }
     
@@ -142,8 +152,16 @@ final class AudioRecorderController: NSObject, AVAudioRecorderDelegate {
         currentTime = 0
         errorMessage = nil
         
-        // Deactivate audio session
+        // Note: we intentionally keep the shared audio session active here so
+        // that subsequent recordings on the same screen start immediately.
+    }
+
+    /// Deactivates the shared audio session when the recording UI is exited.
+    func deactivateAudioSessionIfNeeded() {
+        guard isAudioSessionActive else { return }
+        
         try? AVAudioSession.sharedInstance().setActive(false)
+        isAudioSessionActive = false
     }
     
     private func startTimer() {

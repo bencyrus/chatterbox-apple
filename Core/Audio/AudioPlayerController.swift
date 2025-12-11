@@ -67,7 +67,9 @@ final class AudioPlayerController {
     
     func play() {
         guard let player = player else { return }
-        
+
+        configureAudioSessionForPlayback()
+
         // If we're at the end, seek to beginning
         if currentTime >= duration && duration > 0 {
             seek(to: 0)
@@ -163,6 +165,27 @@ final class AudioPlayerController {
         currentTime = 0
         duration = 0
         state = .idle
+    }
+
+    // MARK: - Audio Session
+
+    /// Ensures playback uses the main (bottom) speaker by default.
+    private func configureAudioSessionForPlayback() {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            // Keep `.playAndRecord` so this works alongside recording,
+            // but default output to the speaker instead of the earpiece.
+            try audioSession.setCategory(
+                .playAndRecord,
+                mode: .measurement,
+                options: [.defaultToSpeaker]
+            )
+            try audioSession.setActive(true)
+        } catch {
+            // If the session can't be configured, surface an error state
+            // so the UI can show a friendly message.
+            state = .error("Unable to configure audio for playback")
+        }
     }
 }
 
