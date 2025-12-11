@@ -4,6 +4,7 @@ protocol AccountRepository {
     func fetchMe() async throws -> MeResponse
     func fetchAppConfig() async throws -> AppConfigResponse
     func setActiveProfile(accountId: Int64, languageCode: String) async throws
+    func requestAccountDeletion(accountId: Int64) async throws
 }
 
 enum AccountError: Error, Equatable {
@@ -34,6 +35,12 @@ final class PostgrestAccountRepository: AccountRepository {
             accountId: accountId,
             languageCode: languageCode
         )
+        _ = try await client.send(endpoint, body: body)
+    }
+
+    func requestAccountDeletion(accountId: Int64) async throws {
+        let endpoint = AccountEndpoints.RequestAccountDeletion()
+        let body = AccountEndpoints.RequestAccountDeletion.Body(accountId: accountId)
         _ = try await client.send(endpoint, body: body)
     }
 }

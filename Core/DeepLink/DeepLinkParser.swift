@@ -22,13 +22,32 @@ struct DeepLinkParser {
     }
 
     func parse(url: URL) -> DeepLinkIntent? {
+        guard let scheme = url.scheme?.lowercased() else {
+            return nil
+        }
+
+        // Support both HTTPS universal links and the custom "chatterbox" URL scheme
+        // so that fallback buttons in web content can open the app directly.
+        switch scheme {
+        case "https":
         guard
-            url.scheme?.lowercased() == "https",
             let cfg = config,
             let host = url.host?.lowercased(),
             cfg.allowedHosts.contains(host),
             url.path.lowercased() == cfg.magicPath.lowercased()
         else {
+                return nil
+            }
+
+        case "chatterbox":
+            // For the custom scheme we only enforce the magic path, since the
+            // host component is not relevant. Example:
+            //   chatterbox://auth/magic?token=...
+            guard let cfg = config, url.path.lowercased() == cfg.magicPath.lowercased() else {
+                return nil
+            }
+
+        default:
             return nil
         }
 

@@ -31,6 +31,7 @@ Last verified: 2025-11-27
   - `/rpc/app_config`
   - `/rpc/get_or_create_account_profile`
   - `/rpc/set_active_profile`
+  - `/rpc/request_account_deletion`
 
 ### 1.2 Modules
 
@@ -157,12 +158,18 @@ Last verified: 2025-11-27
   - Language & profile section.
   - Analytics & diagnostics section (opt‑ins).
   - Developer tools section (dev users only when flags allow).
-  - Danger zone (logout).
+  - Danger zone:
+    - Delete account (in-app, with confirmation).
+    - Logout.
 
 - Rules:
   - All labels and microcopy localized via `Strings` and `.stringsdict`.
   - Buttons and toggles driven by backend flags (e.g., whether analytics opt‑out is allowed).
   - Use design system tokens and components only; no bespoke styling.
+  - Account deletion UX:
+    - Expose a clearly labeled “Delete account” action in Settings.
+    - Show a confirmation dialog explaining that deletion is permanent and may take time.
+    - On confirm, call `/rpc/request_account_deletion` via `AccountRepository.requestAccountDeletion()`, then log out on success.
 
 ---
 

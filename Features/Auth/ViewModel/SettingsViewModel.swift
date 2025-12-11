@@ -18,10 +18,13 @@ final class SettingsViewModel {
 
     var isLoading: Bool = false
     var isSaving: Bool = false
+    var isDeletingAccount: Bool = false
 
     var errorAlertTitle: String = ""
     var errorAlertMessage: String = ""
     var isShowingErrorAlert: Bool = false
+
+    var isShowingDeleteConfirmation: Bool = false
 
     private var accountId: Int64?
 
@@ -63,6 +66,27 @@ final class SettingsViewModel {
 
     func logout() {
         logoutUseCase.execute()
+    }
+
+    func requestAccountDeletion() async {
+        guard let currentAccountId = accountId else {
+            presentError(title: Strings.Errors.deleteAccountTitle, message: Strings.Errors.settingsAccountMissing)
+            return
+        }
+
+        isDeletingAccount = true
+        defer { isDeletingAccount = false }
+
+        do {
+            try await accountRepository.requestAccountDeletion(accountId: currentAccountId)
+            // Once deletion is requested successfully, immediately log out.
+            logoutUseCase.execute()
+        } catch {
+            presentError(
+                title: Strings.Errors.deleteAccountTitle,
+                message: Strings.Errors.deleteAccountFailed
+            )
+        }
     }
 
     func updateLanguage(to newCode: String) async {

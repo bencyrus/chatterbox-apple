@@ -9,6 +9,7 @@ final class AuthViewModel {
     var isShowingErrorAlert: Bool = false
     var errorAlertTitle: String = ""
     var errorAlertMessage: String = ""
+    var errorAlertLinkURL: URL? = nil
     var cooldownSecondsRemaining: Int = 0
     private var cooldownTask: Task<Void, Never>? = nil
 
@@ -45,7 +46,17 @@ final class AuthViewModel {
             }
             // If isImmediateLogin is true, session is already updated and user will be logged in
         } catch {
-            presentSignInError(message: Strings.Errors.requestFailed)
+            if let authError = error as? AuthError {
+                switch authError {
+                case .invalidMagicLink:
+                    presentSignInError(message: Strings.Errors.requestFailed)
+                case .accountDeleted(let message):
+                    // Surface the server-provided message so support URL can be configured via secrets.
+                    presentSignInError(message: message)
+                }
+            } else {
+                presentSignInError(message: Strings.Errors.requestFailed)
+            }
         }
     }
 
@@ -54,7 +65,21 @@ final class AuthViewModel {
         self.errorMessage = message
         self.errorAlertTitle = Strings.Errors.signInErrorTitle
         self.errorAlertMessage = message
+        self.errorAlertLinkURL = Self.extractFirstURL(from: message)
         self.isShowingErrorAlert = true
+    }
+
+    private static func extractFirstURL(from text: String) -> URL? {
+        guard let range = text.range(of: "https://") else {
+            return nil
+        }
+        let substringFromURL = text[range.lowerBound...]
+        // Split on whitespace or newline to get the URL token.
+        let components = substringFromURL.split(whereSeparator: { $0.isWhitespace || $0.isNewline })
+        guard let first = components.first else {
+            return nil
+        }
+        return URL(string: String(first))
     }
 
     private func startCooldown(seconds: Int) {

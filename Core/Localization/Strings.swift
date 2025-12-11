@@ -14,6 +14,7 @@ enum Strings {
         static let linkSentHint = NSLocalizedString("login.link_sent_hint", comment: "Hint about checking email/SMS")
         static let linkSentAt = NSLocalizedString("login.link_sent_at", comment: "Link sent at time label")
         static let cooldownMessage = NSLocalizedString("login.cooldown_message", comment: "Cooldown countdown label")
+        static let openSupportPage = NSLocalizedString("login.open_support_page", comment: "Button to open account restore/support page")
     }
     enum Subjects {
         static let title = NSLocalizedString("subjects.title", comment: "Subjects title")
@@ -24,6 +25,10 @@ enum Strings {
         static let title = NSLocalizedString("settings.title", comment: "Settings title")
         static let logout = NSLocalizedString("settings.logout", comment: "Logout button")
         static let languagePickerTitle = NSLocalizedString("settings.language_picker_title", comment: "Language picker title")
+        static let deleteAccount = NSLocalizedString("settings.delete_account", comment: "Delete account button")
+        static let deleteAccountTitle = NSLocalizedString("settings.delete_account_title", comment: "Delete account confirmation title")
+        static let deleteAccountMessage = NSLocalizedString("settings.delete_account_message", comment: "Delete account confirmation message")
+        static let deleteAccountConfirm = NSLocalizedString("settings.delete_account_confirm", comment: "Delete account confirmation button")
     }
     enum Debug {
         static let networkLogTitle = NSLocalizedString("debug.network_log_title", comment: "Network debug console title")
@@ -55,14 +60,18 @@ enum Strings {
         static let subjectsLoadTitle = NSLocalizedString("errors.subjects_load_title", comment: "Subjects cues load error title")
         static let subjectsLoadFailed = NSLocalizedString("errors.subjects_load_failed", comment: "Subjects cues load failed")
         static let okButton = NSLocalizedString("errors.ok_button", comment: "OK button for error alerts")
+        static let deleteAccountTitle = NSLocalizedString("errors.delete_account_title", comment: "Delete account error title")
+        static let deleteAccountFailed = NSLocalizedString("errors.delete_account_failed", comment: "Delete account error message")
     }
     enum A11y {
         static let identifierField = NSLocalizedString("a11y.identifier_field", comment: "Identifier field")
         static let errorLabel = NSLocalizedString("a11y.error", comment: "Error label")
         static let logout = NSLocalizedString("a11y.logout", comment: "Logout button")
+        static let deleteAccount = NSLocalizedString("a11y.delete_account", comment: "Delete account button")
     }
     enum Common {
         static let ok = NSLocalizedString("common.ok", comment: "OK button")
+        static let cancel = NSLocalizedString("common.cancel", comment: "Cancel button")
         static let today = NSLocalizedString("common.today", comment: "Today label")
         static let yesterday = NSLocalizedString("common.yesterday", comment: "Yesterday label")
     }

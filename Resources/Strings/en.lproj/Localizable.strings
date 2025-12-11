@@ -9,6 +9,7 @@
 "login.link_sent_hint" = "We'll send a magic link via email or SMS.";
 "login.link_sent_at" = "Link sent.";
 "login.cooldown_message" = "You can request another in %ds";
+"login.open_support_page" = "Open help page";
 
 "subjects.title" = "Subjects";
 "subjects.empty_state" = "No topics yet. Once you start learning, your topics will appear here.";
@@ -23,6 +24,10 @@
 "settings.title" = "Settings";
 "settings.logout" = "Log out";
 "settings.language_picker_title" = "Profile language";
+"settings.delete_account" = "Delete account";
+"settings.delete_account_title" = "Delete your account?";
+"settings.delete_account_message" = "This will permanently delete your Chatterbox account and associated learning data. This action can’t be undone.";
+"settings.delete_account_confirm" = "Delete account";
 
 "errors.missing_identifier" = "Enter your email or phone";
 "errors.request_failed" = "Could not send link. Try again.";
@@ -36,12 +41,16 @@
 "errors.subjects_load_title" = "Couldn't load topics";
 "errors.subjects_load_failed" = "We couldn't load your topics. Try again.";
 "errors.ok_button" = "OK";
+"errors.delete_account_title" = "Couldn't delete account";
+"errors.delete_account_failed" = "We couldn't start deleting your account. Try again.";
 
 "a11y.identifier_field" = "Identifier";
 "a11y.error" = "Error";
 "a11y.logout" = "Log out";
+"a11y.delete_account" = "Delete account";
 
 "common.ok" = "OK";
+"common.cancel" = "Cancel";
 "common.today" = "Today";
 "common.yesterday" = "Yesterday";
 

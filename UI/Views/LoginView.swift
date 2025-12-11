@@ -50,6 +50,13 @@ struct LoginView: View {
         .padding()
         .background(AppColors.sand.ignoresSafeArea())
         .alert(Strings.Errors.signInErrorTitle, isPresented: $authViewModel.isShowingErrorAlert) {
+            if let url = authViewModel.errorAlertLinkURL {
+                Button(Strings.Login.openSupportPage) {
+                    #if canImport(UIKit)
+                    UIApplication.shared.open(url)
+                    #endif
+                }
+            }
             Button(Strings.Common.ok, role: .cancel) {}
         } message: {
             Text(authViewModel.errorAlertMessage)

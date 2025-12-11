@@ -69,6 +69,21 @@ struct SettingsView: View {
                     }
                     .padding(.horizontal, Spacing.md)
                     .accessibilityLabel(Text(Strings.A11y.logout))
+
+                    // Delete Account Link (navigates to confirmation page)
+                    NavigationLink {
+                        DeleteAccountConfirmationView(viewModel: viewModel)
+                    } label: {
+                            Text(Strings.Settings.deleteAccount)
+                            .font(Typography.body)
+                        .foregroundColor(.red)
+                            .underline()
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.top, Spacing.xl * 2)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, Spacing.md)
+                    .accessibilityLabel(Text(Strings.A11y.deleteAccount))
                 }
                 .padding(.bottom, Spacing.lg)
             }
@@ -152,6 +167,58 @@ struct SettingsView: View {
             "pl": "🇵🇱"
         ]
         return countryMapping[languageCode] ?? "🌐"
+    }
+}
+
+// MARK: - Delete Account Confirmation
+
+struct DeleteAccountConfirmationView: View {
+    @State private var viewModel: SettingsViewModel
+    @SwiftUI.Environment(\.dismiss) private var dismiss
+
+    init(viewModel: SettingsViewModel) {
+        _viewModel = State(initialValue: viewModel)
+    }
+
+    var body: some View {
+        ZStack {
+            AppColors.sand.ignoresSafeArea()
+
+            VStack(spacing: Spacing.lg) {
+                PageHeader(Strings.Settings.deleteAccountTitle)
+
+                ScrollView {
+                    VStack(alignment: .leading, spacing: Spacing.lg) {
+                        Text(Strings.Settings.deleteAccountMessage)
+                            .font(Typography.body)
+                            .foregroundColor(AppColors.textPrimary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        VStack(spacing: Spacing.md) {
+                            Button {
+                                Task {
+                                    await viewModel.requestAccountDeletion()
+                                }
+                            } label: {
+                                Text(Strings.Settings.deleteAccountConfirm)
+                            }
+                            .buttonStyle(DestructiveButtonStyle())
+                            .disabled(viewModel.isDeletingAccount)
+
+                            Button {
+                                dismiss()
+                            } label: {
+                                Text(Strings.Common.cancel)
+                            }
+                            .buttonStyle(PrimaryButtonStyle())
+                        }
+                        .padding(.top, Spacing.lg)
+                    }
+                    .padding(.horizontal, Spacing.md)
+                    .padding(.bottom, Spacing.lg)
+                }
+            }
+        }
     }
 }
 

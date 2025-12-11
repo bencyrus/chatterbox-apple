@@ -59,6 +59,21 @@ enum AccountEndpoints {
         let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
     }
 
+    struct RequestAccountDeletion: APIEndpoint {
+        struct Body: Encodable {
+            let accountId: Int64
+        }
+
+        typealias RequestBody = Body
+        typealias ResponseBody = NoResponseBody
+
+        let path: String = "/rpc/request_account_deletion"
+        let method: HTTPMethod = .post
+        let requiresAuth: Bool = true
+        let timeout: TimeInterval = 30
+        let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
+    }
+
     struct AppConfig: APIEndpoint {
         typealias RequestBody = EmptyRequestBody
         typealias ResponseBody = AppConfigResponse
