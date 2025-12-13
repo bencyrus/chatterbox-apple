@@ -4,62 +4,48 @@ struct AudioPlayerView: View {
     let url: URL
     let title: String?
     
-    @State private var controller = AudioPlayerController()
+    @State private var player = AudioPlayer()
     
     var body: some View {
         VStack(spacing: Spacing.md) {
-            // Title if provided
-            if let title = title {
+            if let title {
                 Text(title)
                     .font(Typography.caption)
                     .foregroundColor(AppColors.textPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             
-            // Player controls
             VStack(spacing: Spacing.sm) {
-                // Time slider
                 timeSlider
                 
-                // Time labels
                 HStack {
-                    Text(formatTime(controller.currentTime))
+                    Text(formatTime(player.currentTime))
                         .font(Typography.caption)
                         .foregroundColor(AppColors.textPrimary.opacity(0.7))
                     
                     Spacer()
                     
-                    Text(formatTime(controller.duration))
+                    Text(formatTime(player.duration))
                         .font(Typography.caption)
                         .foregroundColor(AppColors.textPrimary.opacity(0.7))
                 }
                 
-                // Playback controls
                 HStack(spacing: Spacing.lg) {
-                    // Skip backward 10s
-                    Button {
-                        controller.skip(by: -10)
-                    } label: {
+                    Button { player.skip(seconds: -10) } label: {
                         Image(systemName: "gobackward.10")
                             .font(.title2)
                             .foregroundColor(AppColors.textPrimary)
                     }
                     .disabled(!canInteract)
                     
-                    // Play/Pause button
-                    Button {
-                        controller.togglePlayPause()
-                    } label: {
+                    Button { player.togglePlayback() } label: {
                         Image(systemName: playButtonIcon)
                             .font(.system(size: 44))
                             .foregroundColor(AppColors.textPrimary)
                     }
                     .disabled(!canInteract)
                     
-                    // Skip forward 10s
-                    Button {
-                        controller.skip(by: 10)
-                    } label: {
+                    Button { player.skip(seconds: 10) } label: {
                         Image(systemName: "goforward.10")
                             .font(.title2)
                             .foregroundColor(AppColors.textPrimary)
@@ -68,8 +54,7 @@ struct AudioPlayerView: View {
                 }
             }
             
-            // State indicator
-            if case .loading = controller.state {
+            if case .loading = player.state {
                 HStack(spacing: Spacing.sm) {
                     ProgressView()
                         .progressViewStyle(.circular)
@@ -78,7 +63,7 @@ struct AudioPlayerView: View {
                         .font(Typography.caption)
                         .foregroundColor(AppColors.textPrimary.opacity(0.7))
                 }
-            } else if case .error(let message) = controller.state {
+            } else if case .failed(let message) = player.state {
                 Text("\(Strings.AudioPlayer.error): \(message)")
                     .font(Typography.caption)
                     .foregroundColor(.red)
@@ -89,24 +74,21 @@ struct AudioPlayerView: View {
         .background(AppColors.beige)
         .cornerRadius(12)
         .task {
-            controller.load(url: url)
+            player.load(url: url)
         }
     }
     
     private var timeSlider: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                // Track background
                 Capsule()
                     .fill(AppColors.textPrimary.opacity(0.2))
                     .frame(height: 4)
                 
-                // Progress
                 Capsule()
                     .fill(AppColors.textPrimary)
                     .frame(width: progressWidth(in: geometry.size.width), height: 4)
                 
-                // Thumb
                 Circle()
                     .fill(AppColors.textPrimary)
                     .frame(width: 16, height: 16)
@@ -116,7 +98,7 @@ struct AudioPlayerView: View {
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
                         let percent = max(0, min(1, value.location.x / geometry.size.width))
-                        controller.seek(to: percent * controller.duration)
+                        player.seek(to: percent * player.duration)
                     }
             )
         }
@@ -124,34 +106,27 @@ struct AudioPlayerView: View {
     }
     
     private func progressWidth(in totalWidth: CGFloat) -> CGFloat {
-        guard controller.duration > 0 else { return 0 }
-        let progress = controller.currentTime / controller.duration
-        return totalWidth * progress
+        guard player.duration > 0 else { return 0 }
+        return totalWidth * (player.currentTime / player.duration)
     }
     
     private func thumbOffset(in totalWidth: CGFloat) -> CGFloat {
-        guard controller.duration > 0 else { return 0 }
-        let progress = controller.currentTime / controller.duration
-        return (totalWidth * progress) - 8 // -8 to center the thumb
+        guard player.duration > 0 else { return 0 }
+        return (totalWidth * (player.currentTime / player.duration)) - 8
     }
     
     private var playButtonIcon: String {
-        switch controller.state {
-        case .playing:
-            return "pause.circle.fill"
-        case .loading:
-            return "pause.circle"
-        default:
-            return "play.circle.fill"
+        switch player.state {
+        case .playing: "pause.circle.fill"
+        case .loading: "pause.circle"
+        default: "play.circle.fill"
         }
     }
     
     private var canInteract: Bool {
-        switch controller.state {
-        case .ready, .playing, .paused:
-            return true
-        default:
-            return false
+        switch player.state {
+        case .ready, .playing, .paused: true
+        default: false
         }
     }
     
@@ -162,5 +137,3 @@ struct AudioPlayerView: View {
         return String(format: "%d:%02d", minutes, seconds)
     }
 }
-
-

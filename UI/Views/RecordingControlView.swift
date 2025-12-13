@@ -1,15 +1,11 @@
 import SwiftUI
 
 struct RecordingControlView: View {
-    @Bindable var recorder: AudioRecorderController
+    @Bindable var recorder: AudioRecorder
     let onSave: () async -> Void
     let onDelete: () async -> Void
     
     @State private var showDeleteConfirmation = false
-    
-    private var redColor: Color {
-        Color(hex: 0xd98f8f)
-    }
     
     var body: some View {
         VStack(spacing: Spacing.lg) {
@@ -28,14 +24,11 @@ struct RecordingControlView: View {
                 
             case .paused:
                 pausedStateView
-                
-            case .stopped:
-                stoppedStateView
             }
             
             // Error message if any
-            if let error = recorder.errorMessage {
-                Text(error)
+            if let error = recorder.error {
+                Text(error.localizedDescription)
                     .font(Typography.caption)
                     .foregroundColor(.red)
                     .multilineTextAlignment(.center)
@@ -45,7 +38,6 @@ struct RecordingControlView: View {
         .alert(Strings.Recording.deleteConfirmTitle, isPresented: $showDeleteConfirmation) {
             Button(Strings.Recording.deleteConfirmNo, role: .cancel) {}
             Button(Strings.Recording.deleteConfirmYes, role: .destructive) {
-                recorder.state = .stopped
                 Task {
                     await onDelete()
                 }
@@ -59,25 +51,21 @@ struct RecordingControlView: View {
         VStack(spacing: Spacing.md) {
             Button(action: startRecording) {
                 ZStack {
-                    // Gray stroke border with 2px gap
                     Circle()
                         .stroke(Color.gray.opacity(0.3), lineWidth: 2)
                         .frame(width: 88, height: 88)
                     
-                    // Bold red circle
                     Circle()
                         .fill(Color(hex: 0xE74C3C))
                         .frame(width: 80, height: 80)
                     
-                    // Microphone icon
                     Image(systemName: "mic.fill")
                         .font(.system(size: 30, weight: .medium))
                         .foregroundColor(.white)
                 }
             }
-            .disabled(recorder.permissionState == .denied)
+            .disabled(!recorder.hasPermission)
             
-            // Hint text
             Text("Tap to record")
                 .font(Typography.caption)
                 .foregroundColor(AppColors.textPrimary.opacity(0.6))
@@ -85,16 +73,12 @@ struct RecordingControlView: View {
     }
     
     private var recordingStateView: some View {
-        Button(action: {
-            recorder.pauseRecording()
-        }) {
+        Button(action: { recorder.pause() }) {
             ZStack {
-                // Gray stroke border
                 RoundedRectangle(cornerRadius: 30)
                     .stroke(Color.gray.opacity(0.3), lineWidth: 3)
                     .frame(width: 144, height: 64)
                 
-                // Pause icon
                 Image(systemName: "pause.fill")
                     .font(.system(size: 28, weight: .semibold))
                     .foregroundColor(Color(hex: 0xE74C3C))
@@ -104,10 +88,8 @@ struct RecordingControlView: View {
     
     private var pausedStateView: some View {
         HStack(spacing: 0) {
-            // Delete button (left side)
-            Button(action: {
-                showDeleteConfirmation = true
-            }) {
+            // Delete button
+            Button(action: { showDeleteConfirmation = true }) {
                 VStack(spacing: 2) {
                     Image(systemName: "trash.fill")
                         .font(.system(size: 18))
@@ -124,22 +106,17 @@ struct RecordingControlView: View {
             
             Spacer()
             
-            // Resume button (center)
-            Button(action: {
-                recorder.resumeRecording()
-            }) {
+            // Resume button
+            Button(action: { recorder.resume() }) {
                 ZStack {
-                    // Red stroke border
                     RoundedRectangle(cornerRadius: 30)
                         .stroke(Color(hex: 0xE74C3C), lineWidth: 3)
                         .frame(width: 144, height: 64)
                     
-                    // Light pink/beige background
                     RoundedRectangle(cornerRadius: 28)
                         .fill(Color(hex: 0xE5C4B8))
                         .frame(width: 138, height: 58)
                     
-                    // Resume text
                     Text(Strings.Recording.resumeButton.uppercased())
                         .font(Typography.body.weight(.bold))
                         .foregroundColor(Color(hex: 0xC0392B))
@@ -148,12 +125,9 @@ struct RecordingControlView: View {
             
             Spacer()
             
-            // Save button (right side)
+            // Save button
             Button(action: {
-                recorder.state = .stopped
-                Task {
-                    await onSave()
-                }
+                Task { await onSave() }
             }) {
                 VStack(spacing: 2) {
                     Image(systemName: "archivebox.fill")
@@ -169,12 +143,6 @@ struct RecordingControlView: View {
                 )
             }
         }
-    }
-    
-    private var stoppedStateView: some View {
-        ProgressView()
-            .progressViewStyle(CircularProgressViewStyle())
-            .scaleEffect(1.5)
     }
     
     // MARK: - Helpers
@@ -193,10 +161,9 @@ struct RecordingControlView: View {
     
     private func startRecording() {
         do {
-            try recorder.startRecording()
+            _ = try recorder.startRecording()
         } catch {
-            recorder.errorMessage = error.localizedDescription
+            // Error is stored in recorder.error
         }
     }
 }
-

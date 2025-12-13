@@ -10,18 +10,20 @@ struct CueDetailView: View {
     @Bindable var viewModel: CueDetailViewModel
     
     // Recording state
-    @State private var recorder: AudioRecorderController?
+    @State private var recorder: AudioRecorder?
+    @State private var recordingURL: URL?
     @State private var showRecordingSuccessMessage = false
     @State private var showNavigationConfirmation = false
     @State private var pendingNavigationAction: (() -> Void)?
     @State private var isRecordingMode = false
+    @State private var isSaving = false
     @SwiftUI.Environment(\.dismiss) private var dismiss
     
     // Init for existing cue without recordings (from subjects tab)
     init(cue: Cue, viewModel: CueDetailViewModel) {
         self.content = cue.content
         self.cueId = cue.cueId
-        self.initiallyShowRecordingSection = true // Show recording button from subjects
+        self.initiallyShowRecordingSection = true
         self.viewModel = viewModel
     }
     
@@ -29,12 +31,16 @@ struct CueDetailView: View {
     init(cue: RecordingCue, viewModel: CueDetailViewModel) {
         self.content = cue.content
         self.cueId = cue.cueId
-        self.initiallyShowRecordingSection = false // Hide recording button from history
+        self.initiallyShowRecordingSection = false
         self.viewModel = viewModel
     }
     
     private var showRecordingSection: Bool {
         initiallyShowRecordingSection || isRecordingMode
+    }
+    
+    private var isRecordingActive: Bool {
+        recorder?.state == .paused || recorder?.state == .recording
     }
 
     var body: some View {
@@ -42,12 +48,10 @@ struct CueDetailView: View {
             VStack(alignment: .leading, spacing: Spacing.md) {
                 cueContentCard
                 
-                // Recording section (only show when opened from subjects tab)
                 if showRecordingSection {
                     recordingSection
                         .padding(.top, Spacing.lg)
                     
-                    // Success message (appears right below recording controls)
                     if showRecordingSuccessMessage {
                         HStack(spacing: Spacing.sm) {
                             Image(systemName: "checkmark.circle.fill")
@@ -64,7 +68,6 @@ struct CueDetailView: View {
                     }
                 }
             
-                // Recordings section (only show when NOT in recording mode)
                 if !showRecordingSection {
                     recordingsHistorySection
                 }
@@ -74,13 +77,11 @@ struct CueDetailView: View {
         .background(AppColors.sand.ignoresSafeArea())
         .navigationTitle(Strings.CueDetail.title)
         .navigationBarTitleDisplayMode(.large)
-        .navigationBarBackButtonHidden(showRecordingSection && (recorder?.state == .paused || recorder?.state == .recording))
+        .navigationBarBackButtonHidden(showRecordingSection && isRecordingActive)
         .toolbar {
-            if showRecordingSection && (recorder?.state == .paused || recorder?.state == .recording) {
+            if showRecordingSection && isRecordingActive {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        showNavigationConfirmation = true
-                    }) {
+                    Button(action: { showNavigationConfirmation = true }) {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 20, weight: .medium))
                             .foregroundColor(AppColors.textPrimary)
@@ -91,7 +92,8 @@ struct CueDetailView: View {
         .alert(Strings.Recording.deleteConfirmTitle, isPresented: $showNavigationConfirmation) {
             Button(Strings.Recording.deleteConfirmNo, role: .cancel) {}
             Button(Strings.Recording.deleteConfirmYes, role: .destructive) {
-                recorder?.deleteRecording()
+                recorder?.cancel()
+                recordingURL = nil
                 if let action = pendingNavigationAction {
                     action()
                 } else {
@@ -100,13 +102,12 @@ struct CueDetailView: View {
             }
         }
         .task {
-            // Load recordings only when viewing from History (not from Subjects)
             if !initiallyShowRecordingSection {
                 await viewModel.loadRecordingsForCue(cueId: cueId)
             }
             
             if initiallyShowRecordingSection {
-                recorder = AudioRecorderController()
+                recorder = AudioRecorder()
                 _ = await recorder?.requestPermission()
             }
         }
@@ -126,12 +127,10 @@ struct CueDetailView: View {
                     let trimmed = line.trimmingCharacters(in: .whitespaces)
 
                     if trimmed.hasPrefix("### ") {
-                        // Heading level 3
                         Text(String(trimmed.dropFirst(4)))
                             .font(.headline)
                             .foregroundColor(AppColors.textPrimary)
                     } else if trimmed.hasPrefix("* ") || trimmed.hasPrefix("- ") {
-                        // Bullet item
                         HStack(alignment: .top, spacing: 6) {
                             Text("•")
                                 .font(.body)
@@ -140,10 +139,8 @@ struct CueDetailView: View {
                         }
                         .foregroundColor(AppColors.textPrimary)
                     } else if trimmed.isEmpty {
-                        // Preserve spacing between paragraphs
                         Spacer().frame(height: 4)
                     } else {
-                        // Regular paragraph
                         Text(trimmed)
                             .font(.body)
                             .foregroundColor(AppColors.textPrimary)
@@ -159,13 +156,18 @@ struct CueDetailView: View {
     
     private var recordingSection: some View {
         VStack(alignment: .center, spacing: Spacing.lg) {
-            if let recorder = recorder {
+            if isSaving {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .scaleEffect(1.5)
+                    .frame(maxWidth: .infinity)
+            } else if let recorder {
                 RecordingControlView(
                     recorder: recorder,
                     onSave: handleSaveRecording,
                     onDelete: handleDeleteRecording
                 )
-            } else if recorder == nil && !viewModel.isUploading {
+            } else if !viewModel.isUploading {
                 ProgressView()
                     .frame(maxWidth: .infinity)
             }
@@ -202,9 +204,7 @@ struct CueDetailView: View {
     
     private func recordingGroupView(group: RecordingGroup) -> some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            // Date header with badges
             HStack(spacing: Spacing.sm) {
-                // Date badge
                 HStack(spacing: 4) {
                     Image(systemName: "calendar")
                         .font(.caption2)
@@ -217,7 +217,6 @@ struct CueDetailView: View {
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(6)
                 
-                // Count badge
                 Text("\(group.recordings.count)")
                     .font(.caption.weight(.bold))
                     .foregroundColor(AppColors.textPrimary)
@@ -230,7 +229,6 @@ struct CueDetailView: View {
             }
             .padding(.bottom, Spacing.xs)
             
-            // Recordings for this date
             ForEach(group.recordings, id: \.fileId) { recording in
                 recordingCardView(recording: recording)
             }
@@ -239,17 +237,12 @@ struct CueDetailView: View {
     
     private func recordingCardView(recording: CueRecording) -> some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            // Time stamp
             Text(formatRecordingTime(recording.createdAt))
                 .font(Typography.caption)
                 .foregroundColor(AppColors.textPrimary.opacity(0.7))
             
-            // Audio player
             if let url = getAudioURL(for: recording.fileId) {
-                AudioPlayerView(
-                    url: url,
-                    title: ""
-                )
+                AudioPlayerView(url: url, title: "")
             }
         }
         .padding(.horizontal)
@@ -262,7 +255,7 @@ struct CueDetailView: View {
         Button(action: {
             isRecordingMode = true
             Task {
-                recorder = AudioRecorderController()
+                recorder = AudioRecorder()
                 _ = await recorder?.requestPermission()
             }
         }) {
@@ -291,7 +284,6 @@ struct CueDetailView: View {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         
-        // Group recordings by date
         let grouped = Dictionary(grouping: viewModel.recordings) { recording -> Date in
             guard let date = formatter.date(from: recording.createdAt) else {
                 return Date()
@@ -299,7 +291,6 @@ struct CueDetailView: View {
             return calendar.startOfDay(for: date)
         }
         
-        // Sort by date descending (newest first)
         return grouped.map { date, recordings in
             RecordingGroup(
                 date: date,
@@ -353,14 +344,15 @@ struct CueDetailView: View {
     // MARK: - Recording Actions
     
     func handleSaveRecording() async {
-        guard let recorder = recorder, let fileURL = recorder.stopRecording() else {
-            recorder?.errorMessage = Strings.Recording.noRecordingFile
-            recorder?.state = .paused
+        guard let recorder else { return }
+        
+        let duration = recorder.currentTime
+        guard let fileURL = recorder.stop() else {
             return
         }
         
-        // Capture duration before upload
-        let duration = recorder.currentTime
+        isSaving = true
+        defer { isSaving = false }
         
         do {
             try await viewModel.uploadRecording(
@@ -370,14 +362,17 @@ struct CueDetailView: View {
                 duration: duration
             )
             
-            // Success! Delete the file and show success message
-            recorder.deleteRecording()
+            // Clean up file
+            try? FileManager.default.removeItem(at: fileURL)
+            
+            // Reset recorder to fresh state for next recording
+            self.recorder = AudioRecorder()
+            _ = await self.recorder?.requestPermission()
             
             withAnimation {
                 showRecordingSuccessMessage = true
             }
             
-            // Hide success message after 5 seconds
             Task {
                 try? await Task.sleep(for: .seconds(5))
                 withAnimation {
@@ -385,20 +380,14 @@ struct CueDetailView: View {
                 }
             }
         } catch {
-            // Upload failed - show error and return to paused state
-            // Keep the file so user can retry
-            let errorDescription = (error as NSError).localizedDescription
-            recorder.errorMessage = String(
-                format: Strings.Recording.uploadFailedWithDetail,
-                errorDescription
-            )
-            recorder.state = .paused
+            // Keep file for retry, restore recorder state
+            self.recorder = AudioRecorder()
+            _ = await self.recorder?.requestPermission()
         }
     }
     
     func handleDeleteRecording() async {
-        // Small delay to ensure loading state is visible
-        try? await Task.sleep(for: .milliseconds(500))
-        recorder?.deleteRecording()
+        try? await Task.sleep(for: .milliseconds(300))
+        recorder?.cancel()
     }
 }

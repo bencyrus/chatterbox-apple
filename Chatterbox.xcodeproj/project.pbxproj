@@ -35,12 +35,13 @@
 		82B37D7E2EE58FE0007CD37D /* RecordingDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D7D2EE58FE0007CD37D /* RecordingDTOs.swift */; };
 		82B37D802EE58FF6007CD37D /* RecordingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D7F2EE58FF6007CD37D /* RecordingRepository.swift */; };
 		82B37D822EE59023007CD37D /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D812EE59023007CD37D /* HistoryViewModel.swift */; };
-		82B37D842EE59039007CD37D /* AudioPlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D832EE59039007CD37D /* AudioPlayerController.swift */; };
+		82AUDIO012FFF000000000001 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AUDIO022FFF000000000001 /* AudioRecorder.swift */; };
+		82AUDIO032FFF000000000001 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AUDIO042FFF000000000001 /* AudioPlayer.swift */; };
+		82AUDIO052FFF000000000001 /* AudioPlaybackCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AUDIO062FFF000000000001 /* AudioPlaybackCoordinator.swift */; };
 		82B37D882EE5904E007CD37D /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D862EE5904E007CD37D /* HistoryView.swift */; };
 		82B37D892EE5904E007CD37D /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D852EE5904E007CD37D /* AudioPlayerView.swift */; };
 		82B37D8A2EE5904E007CD37D /* RecordingHistoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D872EE5904E007CD37D /* RecordingHistoryCardView.swift */; };
 		82B37D8C2EE59B2F007CD37D /* CueDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D8B2EE59B2F007CD37D /* CueDetailViewModel.swift */; };
-		82B37D8E2EE59BB3007CD37D /* AudioRecorderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D8D2EE59BB3007CD37D /* AudioRecorderController.swift */; };
 		82B37D902EE59BC7007CD37D /* RecordingControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D8F2EE59BC7007CD37D /* RecordingControlView.swift */; };
 		82D5A0012F0E000000000001 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D5A0002F0E000000000001 /* DesignSystem.swift */; };
 		82FFF0012FFF000000000001 /* FeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0042FFF000000000001 /* FeatureFlag.swift */; };
@@ -92,12 +93,13 @@
 		82B37D7D2EE58FE0007CD37D /* RecordingDTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingDTOs.swift; sourceTree = "<group>"; };
 		82B37D7F2EE58FF6007CD37D /* RecordingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRepository.swift; sourceTree = "<group>"; };
 		82B37D812EE59023007CD37D /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
-		82B37D832EE59039007CD37D /* AudioPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerController.swift; sourceTree = "<group>"; };
+		82AUDIO022FFF000000000001 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		82AUDIO042FFF000000000001 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		82AUDIO062FFF000000000001 /* AudioPlaybackCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaybackCoordinator.swift; sourceTree = "<group>"; };
 		82B37D852EE5904E007CD37D /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		82B37D862EE5904E007CD37D /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		82B37D872EE5904E007CD37D /* RecordingHistoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingHistoryCardView.swift; sourceTree = "<group>"; };
 		82B37D8B2EE59B2F007CD37D /* CueDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueDetailViewModel.swift; sourceTree = "<group>"; };
-		82B37D8D2EE59BB3007CD37D /* AudioRecorderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderController.swift; sourceTree = "<group>"; };
 		82B37D8F2EE59BC7007CD37D /* RecordingControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingControlView.swift; sourceTree = "<group>"; };
 		82D5A0002F0E000000000001 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		82FFF0042FFF000000000001 /* FeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlag.swift; sourceTree = "<group>"; };
@@ -386,8 +388,9 @@
 		82FFF0132FFF000000000001 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				82B37D8D2EE59BB3007CD37D /* AudioRecorderController.swift */,
-				82B37D832EE59039007CD37D /* AudioPlayerController.swift */,
+				82AUDIO022FFF000000000001 /* AudioRecorder.swift */,
+				82AUDIO042FFF000000000001 /* AudioPlayer.swift */,
+				82AUDIO062FFF000000000001 /* AudioPlaybackCoordinator.swift */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -488,7 +491,9 @@
 				82250C382EA34BF20023B10D /* ChatterboxApp.swift in Sources */,
 				82250C392EA34BF20023B10D /* Strings.swift in Sources */,
 				82250C3A2EA34BF20023B10D /* TokenManager.swift in Sources */,
-				82B37D8E2EE59BB3007CD37D /* AudioRecorderController.swift in Sources */,
+				82AUDIO012FFF000000000001 /* AudioRecorder.swift in Sources */,
+				82AUDIO032FFF000000000001 /* AudioPlayer.swift in Sources */,
+				82AUDIO052FFF000000000001 /* AudioPlaybackCoordinator.swift in Sources */,
 				82250C3B2EA34BF20023B10D /* AuthDTOs.swift in Sources */,
 				82A001002EFF000000000001 /* ProfileDTOs.swift in Sources */,
 				82B37D822EE59023007CD37D /* HistoryViewModel.swift in Sources */,
@@ -505,7 +510,6 @@
 				82B37D802EE58FF6007CD37D /* RecordingRepository.swift in Sources */,
 				82FFF0022FFF000000000001 /* RuntimeConfig.swift in Sources */,
 				82FFF0032FFF000000000001 /* RuntimeConfigProvider.swift in Sources */,
-				82B37D842EE59039007CD37D /* AudioPlayerController.swift in Sources */,
 				82FFF0072FFF000000000001 /* NetworkLogStore.swift in Sources */,
 				82B37D7E2EE58FE0007CD37D /* RecordingDTOs.swift in Sources */,
 				82FFF0142FFF000000000001 /* Log.swift in Sources */,
