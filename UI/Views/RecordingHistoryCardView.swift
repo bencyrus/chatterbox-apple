@@ -16,39 +16,26 @@ struct RecordingHistoryCardView: View {
             // Recording metadata
             HStack(spacing: Spacing.md) {
                 // Date badge
-                HStack(spacing: 4) {
-                    Image(systemName: "calendar")
-                        .font(.caption2)
-                    Text(formattedDate)
-                        .font(Typography.caption)
-                }
-                .foregroundColor(AppColors.textPrimary.opacity(0.8))
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(AppColors.textPrimary.opacity(0.1))
-                .cornerRadius(6)
+                Badge(
+                    text: formattedDate,
+                    icon: "calendar",
+                    backgroundColor: AppColors.divider,
+                    foregroundColor: AppColors.textQuaternary
+                )
                 
                 Spacer()
                 
                 // Duration badge
-                HStack(spacing: 4) {
-                    Image(systemName: "clock")
-                        .font(.caption2)
-                    Text(formattedDuration)
-                        .font(Typography.caption)
-                        .monospacedDigit()
-                }
-                .foregroundColor(AppColors.textPrimary.opacity(0.8))
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(AppColors.textPrimary.opacity(0.1))
-                .cornerRadius(6)
+                Badge(
+                    text: formattedDuration,
+                    icon: "clock",
+                    backgroundColor: AppColors.divider,
+                    foregroundColor: AppColors.textQuaternary
+                )
             }
         }
-        .padding(Spacing.md)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppColors.darkBeige)
-        .cornerRadius(12)
+        .cardStyle()
     }
     
     private var formattedDate: String {

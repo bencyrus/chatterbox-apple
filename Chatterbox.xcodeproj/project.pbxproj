@@ -56,6 +56,13 @@
 		82FFF01F2FFF000000000001 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF00A2FFF000000000001 /* Endpoints.swift */; };
 		82FFF0202FFF000000000001 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF01A2FFF000000000001 /* AppCoordinator.swift */; };
 		82FFF0212FFF000000000001 /* LocalizationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF01B2FFF000000000001 /* LocalizationProvider.swift */; };
+		82COMP012FFF000000000001 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP022FFF000000000001 /* Card.swift */; };
+		82COMP032FFF000000000001 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP042FFF000000000001 /* Badge.swift */; };
+		82COMP052FFF000000000001 /* EmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP062FFF000000000001 /* EmptyState.swift */; };
+		82COMP072FFF000000000001 /* FormTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP082FFF000000000001 /* FormTextField.swift */; };
+		82CACHE012FFF000000000001 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE022FFF000000000001 /* CacheManager.swift */; };
+		82CACHE032FFF000000000001 /* CachedCueRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE042FFF000000000001 /* CachedCueRepository.swift */; };
+		82CACHE052FFF000000000001 /* CachedRecordingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE062FFF000000000001 /* CachedRecordingRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,6 +121,13 @@
 		82FFF0192FFF000000000001 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		82FFF01A2FFF000000000001 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		82FFF01B2FFF000000000001 /* LocalizationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationProvider.swift; sourceTree = "<group>"; };
+		82COMP022FFF000000000001 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		82COMP042FFF000000000001 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
+		82COMP062FFF000000000001 /* EmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyState.swift; sourceTree = "<group>"; };
+		82COMP082FFF000000000001 /* FormTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextField.swift; sourceTree = "<group>"; };
+		82CACHE022FFF000000000001 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
+		82CACHE042FFF000000000001 /* CachedCueRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedCueRepository.swift; sourceTree = "<group>"; };
+		82CACHE062FFF000000000001 /* CachedRecordingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedRecordingRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -316,6 +330,7 @@
 			children = (
 				82D5A0002F0E000000000001 /* DesignSystem.swift */,
 				82FFF01E2FFF000000000001 /* Theme */,
+				82COMP092FFF000000000001 /* Components */,
 				82250BFE2EA34BF20023B10D /* Views */,
 			);
 			path = UI;
@@ -381,6 +396,9 @@
 		82FFF0122FFF000000000001 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				82CACHE022FFF000000000001 /* CacheManager.swift */,
+				82CACHE042FFF000000000001 /* CachedCueRepository.swift */,
+				82CACHE062FFF000000000001 /* CachedRecordingRepository.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -402,6 +420,17 @@
 				82FFF0192FFF000000000001 /* Typography.swift */,
 			);
 			path = Theme;
+			sourceTree = "<group>";
+		};
+		82COMP092FFF000000000001 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				82COMP022FFF000000000001 /* Card.swift */,
+				82COMP042FFF000000000001 /* Badge.swift */,
+				82COMP062FFF000000000001 /* EmptyState.swift */,
+				82COMP082FFF000000000001 /* FormTextField.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -524,6 +553,13 @@
 				82FFF0202FFF000000000001 /* AppCoordinator.swift in Sources */,
 				82B37D902EE59BC7007CD37D /* RecordingControlView.swift in Sources */,
 				82FFF0212FFF000000000001 /* LocalizationProvider.swift in Sources */,
+				82COMP012FFF000000000001 /* Card.swift in Sources */,
+				82COMP032FFF000000000001 /* Badge.swift in Sources */,
+				82COMP052FFF000000000001 /* EmptyState.swift in Sources */,
+				82COMP072FFF000000000001 /* FormTextField.swift in Sources */,
+				82CACHE012FFF000000000001 /* CacheManager.swift in Sources */,
+				82CACHE032FFF000000000001 /* CachedCueRepository.swift in Sources */,
+				82CACHE052FFF000000000001 /* CachedRecordingRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

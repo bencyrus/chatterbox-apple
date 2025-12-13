@@ -19,11 +19,10 @@ struct HistoryView: View {
                         .progressViewStyle(.circular)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.groupedRecordings.isEmpty {
-                    Text(Strings.History.emptyState)
-                        .foregroundColor(AppColors.textPrimary)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .multilineTextAlignment(.center)
-                        .padding()
+                    EmptyState(
+                        icon: "waveform.circle",
+                        title: Strings.History.emptyState
+                    )
                 } else {
                     ScrollView {
                         LazyVStack(spacing: Spacing.lg, pinnedViews: []) {
@@ -32,26 +31,16 @@ struct HistoryView: View {
                                     // Date header with badges
                                     HStack(spacing: Spacing.sm) {
                                         // Date badge
-                                        HStack(spacing: 4) {
-                                            Image(systemName: "calendar")
-                                                .font(.caption2)
-                                            Text(formatGroupDate(group.date))
-                                                .font(.caption.weight(.medium))
-                                        }
-                                        .foregroundColor(AppColors.textPrimary)
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 6)
-                                        .background(Color.gray.opacity(0.2))
-                                        .cornerRadius(6)
+                                        Badge(
+                                            text: formatGroupDate(group.date),
+                                            icon: "calendar"
+                                        )
                                         
                                         // Count badge
-                                        Text("\(group.recordings.count)")
-                                            .font(.caption.weight(.bold))
-                                            .foregroundColor(AppColors.textPrimary)
-                                            .padding(.horizontal, 10)
-                                            .padding(.vertical, 6)
-                                            .background(AppColors.green)
-                                            .cornerRadius(6)
+                                        Badge(
+                                            text: "\(group.recordings.count)",
+                                            backgroundColor: AppColors.green
+                                        )
                                         
                                         Spacer()
                                     }

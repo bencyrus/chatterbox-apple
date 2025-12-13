@@ -1,6 +1,6 @@
 import Foundation
 
-struct Cue: Decodable, Equatable {
+struct Cue: Codable, Equatable {
     let cueId: Int64
     let stage: String
     let createdAt: String
@@ -32,7 +32,7 @@ struct Cue: Decodable, Equatable {
     }
 }
 
-struct CueContent: Decodable, Equatable {
+struct CueContent: Codable, Equatable {
     let cueContentId: Int64
     let cueId: Int64
     let title: String

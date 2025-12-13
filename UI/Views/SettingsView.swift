@@ -38,7 +38,7 @@ struct SettingsView: View {
                                 
                                 // Chevron down
                                 Image(systemName: "chevron.down")
-                                    .foregroundColor(AppColors.textPrimary.opacity(0.5))
+                                    .foregroundColor(AppColors.textSecondary)
                                     .font(.system(size: 14, weight: .semibold))
                             }
                             .padding(.horizontal, Spacing.md)
@@ -214,9 +214,7 @@ struct DeleteAccountConfirmationView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, Spacing.md)
-                            .background(
-                                Color(red: 0.7, green: 0.1, blue: 0.1) // muted red
-                            )
+                            .background(AppColors.errorBackground)
                             .cornerRadius(12)
                             .opacity(viewModel.isDeletingAccount ? 0.7 : 1.0)
                             .disabled(viewModel.isDeletingAccount)
@@ -230,7 +228,7 @@ struct DeleteAccountConfirmationView: View {
                                     .padding(.vertical, Spacing.md)
                             }
                             .foregroundColor(AppColors.textPrimary)
-                            .background(Color(.systemGray3))
+                            .background(AppColors.systemGray)
                             .cornerRadius(12)
                         }
                         .padding(.top, Spacing.lg)
@@ -241,7 +239,7 @@ struct DeleteAccountConfirmationView: View {
             }
             
             if isShowingFinalConfirmation {
-                Color.black.opacity(0.4)
+                AppColors.overlayBackground
                     .ignoresSafeArea()
                 
                 VStack(spacing: Spacing.md) {
@@ -266,7 +264,7 @@ struct DeleteAccountConfirmationView: View {
                                 .padding(.vertical, Spacing.sm)
                         }
                         .foregroundColor(AppColors.textPrimary)
-                        .background(Color(.systemGray3))
+                        .background(AppColors.systemGray)
                         .cornerRadius(12)
                         
                         Button {
@@ -290,9 +288,7 @@ struct DeleteAccountConfirmationView: View {
                             }
                         }
                         .foregroundColor(.white)
-                        .background(
-                            Color(red: 0.7, green: 0.1, blue: 0.1) // muted red
-                        )
+                        .background(AppColors.errorBackground)
                         .cornerRadius(12)
                         .disabled(viewModel.isDeletingAccount)
                     }
@@ -346,7 +342,7 @@ struct LanguagePickerSheet: View {
                             .background(
                                 selectedLanguage == code
                                     ? AppColors.darkBeige.opacity(0.8)
-                                    : AppColors.darkBeige
+                                    : AppColors.cardBackground
                             )
                             .cornerRadius(12)
                             .overlay(

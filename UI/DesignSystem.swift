@@ -2,6 +2,8 @@ import SwiftUI
 
 /// App-wide color palette.
 enum AppColors {
+    // MARK: - Brand Colors
+    
     /// Green accent color - used for success indicators.
     static let green = Color(hex: 0xb3cbc0)
 
@@ -22,12 +24,73 @@ enum AppColors {
 
     /// Sand - primary app background.
     static let sand = Color(hex: 0xeeeee6)
-
+    
+    // MARK: - Recording UI Colors
+    
+    /// Recording red - primary recording indicator.
+    static let recordingRed = Color(hex: 0xE74C3C)
+    
+    /// Recording red light - delete actions.
+    static let recordingRedLight = Color(hex: 0xd98f8f)
+    
+    /// Recording red dark - text on light recording backgrounds.
+    static let recordingRedDark = Color(hex: 0xC0392B)
+    
+    /// Recording background - pause state background.
+    static let recordingBackground = Color(hex: 0xE5C4B8)
+    
+    // MARK: - System Colors
+    
+    /// System gray for neutral UI elements.
+    static let systemGray = Color(.systemGray3)
+    
+    // MARK: - Error Colors
+    
+    /// Error background - destructive actions.
+    static let errorBackground = Color(red: 0.7, green: 0.1, blue: 0.1)
+    
+    // MARK: - Text Colors
+    
     /// Primary text color.
     static let textPrimary = Color.black
+    
+    /// Secondary text color (60% opacity).
+    static let textSecondary = Color.black.opacity(0.6)
+    
+    /// Tertiary text color (70% opacity).
+    static let textTertiary = Color.black.opacity(0.7)
+    
+    /// Quaternary text color (80% opacity).
+    static let textQuaternary = Color.black.opacity(0.8)
 
     /// Contrast text for dark backgrounds.
     static let textContrast = Color.white
+    
+    // MARK: - Semantic Colors
+    
+    /// Card background (alias for darkBeige).
+    static let cardBackground = darkBeige
+    
+    /// Surface light (alias for beige).
+    static let surfaceLight = beige
+    
+    /// Input field background.
+    static let inputBackground = darkBeige
+    
+    /// Border color for neutral elements.
+    static let borderNeutral = Color.gray.opacity(0.3)
+    
+    /// Badge background - neutral.
+    static let badgeBackground = Color.gray.opacity(0.2)
+    
+    /// Divider or separator color.
+    static let divider = Color.black.opacity(0.1)
+    
+    /// Overlay background for modals.
+    static let overlayBackground = Color.black.opacity(0.4)
+    
+    /// Shadow color.
+    static let shadow = Color.black.opacity(0.15)
 }
 
 extension Color {
@@ -104,7 +167,7 @@ struct PageHeader<Actions: View>: View {
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             Text(title)
-                .font(Typography.heading)
+                .font(Typography.headingLarge)
                 .foregroundColor(AppColors.textPrimary)
                 .frame(maxWidth: .infinity, alignment: .leading)
 

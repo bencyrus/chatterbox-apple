@@ -14,24 +14,22 @@ struct LoginView: View {
                 .scaledToFit()
                 .frame(width: 128, height: 128)
                 .cornerRadius(20)
-                .shadow(color: .black.opacity(0.15), radius: 6, x: 0, y: 2)
+                .shadow(color: AppColors.shadow, radius: 6, x: 0, y: 2)
                 .accessibilityHidden(true)
 
             Text(Strings.Login.title)
-                .font(Typography.title)
+                .font(Typography.displayMedium)
                 .foregroundColor(AppColors.textPrimary)
 
             VStack(spacing: 24) {
-                TextField(Strings.Login.identifierPlaceholder, text: $authViewModel.identifier)
-                    .autocorrectionDisabled(true)
-                    .textInputAutocapitalization(.never)
-                    .keyboardType(.emailAddress)
-                    .textFieldStyle(.plain)
-                    .padding()
-                    .background(AppColors.darkBeige)
-                    .cornerRadius(12)
-                    .foregroundColor(AppColors.textPrimary)
-                    .accessibilityLabel(Text(Strings.A11y.identifierField))
+                FormTextField(
+                    label: Strings.Login.identifierPlaceholder,
+                    text: $authViewModel.identifier,
+                    keyboardType: .emailAddress,
+                    autocapitalization: .never,
+                    autocorrection: false,
+                    accessibilityLabel: Strings.A11y.identifierField
+                )
 
                 Button {
                     Task { await authViewModel.requestMagicLink() }
@@ -47,12 +45,12 @@ struct LoginView: View {
             if authViewModel.cooldownSecondsRemaining > 0 {
                 Text(String(format: Strings.Login.cooldownMessage, authViewModel.cooldownSecondsRemaining))
                     .font(.footnote)
-                    .foregroundColor(AppColors.textPrimary.opacity(0.6))
+                    .foregroundColor(AppColors.textSecondary)
                     .multilineTextAlignment(.center)
             } else {
                 Text(Strings.Login.linkSentHint)
                     .font(.footnote)
-                    .foregroundColor(AppColors.textPrimary.opacity(0.6))
+                    .foregroundColor(AppColors.textSecondary)
                     .multilineTextAlignment(.center)
             }
 

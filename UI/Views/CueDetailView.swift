@@ -118,7 +118,7 @@ struct CueDetailView: View {
     private var cueContentCard: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             Text(content.title)
-                .font(Typography.heading)
+                .font(Typography.headingLarge)
                 .foregroundColor(AppColors.textPrimary)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -149,9 +149,7 @@ struct CueDetailView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding()
-        .background(AppColors.darkBeige)
-        .cornerRadius(12)
+        .cardStyle()
     }
     
     private var recordingSection: some View {
@@ -193,7 +191,7 @@ struct CueDetailView: View {
             }
             
             Text(Strings.Recording.historySectionTitle)
-                .font(Typography.heading)
+                .font(Typography.headingLarge)
                 .foregroundColor(AppColors.textPrimary)
             
             ForEach(groupedRecordings, id: \.date) { group in
@@ -205,25 +203,15 @@ struct CueDetailView: View {
     private func recordingGroupView(group: RecordingGroup) -> some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             HStack(spacing: Spacing.sm) {
-                HStack(spacing: 4) {
-                    Image(systemName: "calendar")
-                        .font(.caption2)
-                    Text(formatGroupDate(group.date))
-                        .font(.caption.weight(.medium))
-                }
-                .foregroundColor(AppColors.textPrimary)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(6)
+                Badge(
+                    text: formatGroupDate(group.date),
+                    icon: "calendar"
+                )
                 
-                Text("\(group.recordings.count)")
-                    .font(.caption.weight(.bold))
-                    .foregroundColor(AppColors.textPrimary)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(AppColors.green)
-                    .cornerRadius(6)
+                Badge(
+                    text: "\(group.recordings.count)",
+                    backgroundColor: AppColors.green
+                )
                 
                 Spacer()
             }
@@ -239,16 +227,13 @@ struct CueDetailView: View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             Text(formatRecordingTime(recording.createdAt))
                 .font(Typography.caption)
-                .foregroundColor(AppColors.textPrimary.opacity(0.7))
+                .foregroundColor(AppColors.textTertiary)
             
             if let url = getAudioURL(for: recording.fileId) {
                 AudioPlayerView(url: url, title: "")
             }
         }
-        .padding(.horizontal)
-        .padding(.vertical, Spacing.md)
-        .background(AppColors.darkBeige)
-        .cornerRadius(12)
+        .cardStyle(padding: Spacing.md)
     }
     
     private var recordAnotherTakeButton: some View {

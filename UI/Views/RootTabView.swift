@@ -237,7 +237,7 @@ private struct NetworkLogDetailView: View {
                 }
                 }
                 .padding()
-                .background(AppColors.darkBeige.opacity(0.7))
+                .background(AppColors.cardBackground.opacity(0.7))
                 .cornerRadius(16)
             }
             .padding()
@@ -278,7 +278,7 @@ private struct NetworkLogDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .multilineTextAlignment(.leading)
                 .padding(8)
-                .background(Color.white.opacity(0.5))
+                .background(AppColors.textContrast.opacity(0.5))
                 .cornerRadius(8)
         }
     }

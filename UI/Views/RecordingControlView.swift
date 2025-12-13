@@ -11,7 +11,7 @@ struct RecordingControlView: View {
         VStack(spacing: Spacing.lg) {
             // Timer display
             Text(formattedTime)
-                .font(.system(size: 36, weight: .medium, design: .monospaced))
+                .font(Typography.monospacedTimer)
                 .foregroundColor(AppColors.textPrimary)
             
             // Control buttons based on state
@@ -52,11 +52,11 @@ struct RecordingControlView: View {
             Button(action: startRecording) {
                 ZStack {
                     Circle()
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                        .stroke(AppColors.borderNeutral, lineWidth: 2)
                         .frame(width: 88, height: 88)
                     
                     Circle()
-                        .fill(Color(hex: 0xE74C3C))
+                        .fill(AppColors.recordingRed)
                         .frame(width: 80, height: 80)
                     
                     Image(systemName: "mic.fill")
@@ -68,7 +68,7 @@ struct RecordingControlView: View {
             
             Text("Tap to record")
                 .font(Typography.caption)
-                .foregroundColor(AppColors.textPrimary.opacity(0.6))
+                .foregroundColor(AppColors.textSecondary)
         }
     }
     
@@ -76,12 +76,12 @@ struct RecordingControlView: View {
         Button(action: { recorder.pause() }) {
             ZStack {
                 RoundedRectangle(cornerRadius: 30)
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 3)
+                    .stroke(AppColors.borderNeutral, lineWidth: 3)
                     .frame(width: 144, height: 64)
                 
                 Image(systemName: "pause.fill")
                     .font(.system(size: 28, weight: .semibold))
-                    .foregroundColor(Color(hex: 0xE74C3C))
+                    .foregroundColor(AppColors.recordingRed)
             }
         }
     }
@@ -96,11 +96,11 @@ struct RecordingControlView: View {
                     Text(Strings.Recording.deleteButton)
                         .font(Typography.caption)
                 }
-                .foregroundColor(Color(hex: 0xd98f8f))
+                .foregroundColor(AppColors.recordingRedLight)
                 .frame(width: 90, height: 56)
                 .background(
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color(hex: 0xd98f8f), lineWidth: 2)
+                        .stroke(AppColors.recordingRedLight, lineWidth: 2)
                 )
             }
             
@@ -110,16 +110,16 @@ struct RecordingControlView: View {
             Button(action: { recorder.resume() }) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 30)
-                        .stroke(Color(hex: 0xE74C3C), lineWidth: 3)
+                        .stroke(AppColors.recordingRed, lineWidth: 3)
                         .frame(width: 144, height: 64)
                     
                     RoundedRectangle(cornerRadius: 28)
-                        .fill(Color(hex: 0xE5C4B8))
+                        .fill(AppColors.recordingBackground)
                         .frame(width: 138, height: 58)
                     
                     Text(Strings.Recording.resumeButton.uppercased())
                         .font(Typography.body.weight(.bold))
-                        .foregroundColor(Color(hex: 0xC0392B))
+                        .foregroundColor(AppColors.recordingRedDark)
                 }
             }
             

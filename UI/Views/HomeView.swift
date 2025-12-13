@@ -25,11 +25,10 @@ struct HomeView: View {
                         .progressViewStyle(.circular)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.cues.isEmpty {
-                    Text(Strings.Subjects.emptyState)
-                        .foregroundColor(AppColors.textPrimary)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .multilineTextAlignment(.center)
-                        .padding()
+                    EmptyState(
+                        icon: "rectangle.stack",
+                        title: Strings.Subjects.emptyState
+                    )
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 12) {
@@ -81,9 +80,7 @@ private struct CueCardView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             // Slightly taller than exactly 3 line-heights so three full lines fit comfortably
             .frame(height: 22 * 3.5, alignment: .topLeading)
-            .padding()
-            .background(AppColors.darkBeige)
-            .cornerRadius(12)
+            .cardStyle()
             .accessibilityIdentifier("subjects.cue.\(cue.content.cueContentId).title")
     }
 }

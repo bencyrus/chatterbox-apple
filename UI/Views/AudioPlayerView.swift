@@ -21,13 +21,13 @@ struct AudioPlayerView: View {
                 HStack {
                     Text(formatTime(player.currentTime))
                         .font(Typography.caption)
-                        .foregroundColor(AppColors.textPrimary.opacity(0.7))
+                        .foregroundColor(AppColors.textTertiary)
                     
                     Spacer()
                     
                     Text(formatTime(player.duration))
                         .font(Typography.caption)
-                        .foregroundColor(AppColors.textPrimary.opacity(0.7))
+                        .foregroundColor(AppColors.textTertiary)
                 }
                 
                 HStack(spacing: Spacing.lg) {
@@ -61,7 +61,7 @@ struct AudioPlayerView: View {
                         .scaleEffect(0.8)
                     Text(Strings.AudioPlayer.loading)
                         .font(Typography.caption)
-                        .foregroundColor(AppColors.textPrimary.opacity(0.7))
+                        .foregroundColor(AppColors.textTertiary)
                 }
             } else if case .failed(let message) = player.state {
                 Text("\(Strings.AudioPlayer.error): \(message)")
@@ -70,9 +70,7 @@ struct AudioPlayerView: View {
                     .multilineTextAlignment(.center)
             }
         }
-        .padding(Spacing.md)
-        .background(AppColors.beige)
-        .cornerRadius(12)
+        .cardStyle(backgroundColor: AppColors.surfaceLight)
         .task {
             player.load(url: url)
         }
@@ -82,7 +80,7 @@ struct AudioPlayerView: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(AppColors.textPrimary.opacity(0.2))
+                    .fill(AppColors.divider)
                     .frame(height: 4)
                 
                 Capsule()

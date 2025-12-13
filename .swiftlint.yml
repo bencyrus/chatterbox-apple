@@ -1,0 +1,124 @@
+# SwiftLint Configuration for Chatterbox iOS App
+
+# Paths to exclude from linting
+excluded:
+  - Pods
+  - build
+  - .build
+  - DerivedData
+  - Resources/Assets.xcassets
+  - Tests/Mocks
+
+# Disable specific rules
+disabled_rules:
+  - trailing_whitespace  # Let formatter handle this
+  - todo  # Allow TODO comments during development
+  - line_length  # Handled by line_length config below
+
+# Opt-in rules (not enabled by default)
+opt_in_rules:
+  - empty_count  # Prefer isEmpty over count == 0
+  - explicit_init  # Explicitly call .init() for clarity
+  - first_where  # Prefer .first(where:) over .filter { }.first
+  - sorted_first_last  # Prefer sorted().first/last over min()/max()
+  - force_unwrapping  # Catch force unwraps
+  - discouraged_optional_collection  # Avoid optional collections
+  - redundant_nil_coalescing  # Catch unnecessary ?? nil
+  - closure_spacing  # Consistent closure spacing
+  - operator_usage_whitespace  # Consistent operator spacing
+
+# Line length configuration
+line_length:
+  warning: 120
+  error: 150
+  ignores_comments: true
+  ignores_urls: true
+  ignores_function_declarations: false
+
+# Function body length
+function_body_length:
+  warning: 60
+  error: 100
+
+# Type body length
+type_body_length:
+  warning: 400
+  error: 600
+
+# File length
+file_length:
+  warning: 600
+  error: 1000
+  ignore_comment_only_lines: true
+
+# Nesting depth
+nesting:
+  type_level:
+    warning: 2
+  statement_level:
+    warning: 5
+
+# Identifier naming
+identifier_name:
+  min_length:
+    warning: 2
+    error: 1
+  max_length:
+    warning: 50
+    error: 60
+  excluded:
+    - id
+    - ID
+    - db
+    - me
+    - vc
+    - vm
+    - os
+    - to
+    - in
+    - at
+    - on
+
+# Force unwrapping - make it an error
+force_unwrapping: error
+
+# Force try - make it an error
+force_try: error
+
+# Force cast - make it an error
+force_cast: error
+
+# Large tuples
+large_tuple:
+  warning: 3
+  error: 4
+
+# Cyclomatic complexity
+cyclomatic_complexity:
+  warning: 15
+  error: 25
+  ignores_case_statements: true
+
+# Custom rules
+custom_rules:
+  no_print_statements:
+    name: "No Print Statements"
+    regex: '\bprint\('
+    message: "Use os.Logger instead of print()"
+    severity: warning
+  
+  no_hardcoded_strings:
+    name: "No Hardcoded User-Facing Strings"
+    regex: 'Text\("(?!.*Strings\.).*"\)'
+    message: "Use Strings.* for user-facing text"
+    severity: warning
+  
+  no_force_unwrap_in_production:
+    name: "No Force Unwraps"
+    regex: '!\s*(?!\/\/)'
+    message: "Avoid force unwrapping with !"
+    severity: error
+
+# Reporter
+reporter: "xcode"
+
