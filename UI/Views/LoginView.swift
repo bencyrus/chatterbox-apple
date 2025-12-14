@@ -57,7 +57,7 @@ struct LoginView: View {
             Spacer()
         }
         .padding()
-        .background(AppColors.beige.opacity(0.4).ignoresSafeArea())
+        .background(AppColors.pageBackground.ignoresSafeArea())
         .alert(Strings.Errors.signInErrorTitle, isPresented: $authViewModel.isShowingErrorAlert) {
             if let url = authViewModel.errorAlertLinkURL {
                 Button(Strings.Login.openSupportPage) {

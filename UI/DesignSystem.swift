@@ -24,6 +24,10 @@ enum AppColors {
 
     /// Sand - primary app background.
     static let sand = Color(hex: 0xeeeee6)
+
+    /// Page background token (keep aligned with Android `AppColors.PageBackground` / `@color/chatterbox_page_background`).
+    /// iOS currently uses `beige.opacity(0.4)` in places like Login.
+    static let pageBackground = beige.opacity(0.4)
     
     // MARK: - Recording UI Colors
     
