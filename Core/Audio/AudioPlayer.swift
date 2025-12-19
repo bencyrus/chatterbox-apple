@@ -115,7 +115,9 @@ final class AudioPlayer {
     
     private func configureSession() {
         let session = AVAudioSession.sharedInstance()
-        try? session.setCategory(.playback, mode: .default, options: [.allowAirPlay, .allowBluetoothA2DP])
+        // For playback, allow routing to AirPlay + Bluetooth devices.
+        // (Bluetooth A2DP is typical for playback, but we also allow HFP routing for edge cases.)
+        try? session.setCategory(.playback, mode: .default, options: [.allowAirPlay, .allowBluetoothA2DP, .allowBluetoothHFP])
         try? session.setActive(true)
     }
     

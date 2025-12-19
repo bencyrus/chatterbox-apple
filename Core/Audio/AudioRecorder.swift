@@ -125,7 +125,14 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         try session.setCategory(
             .playAndRecord,
             mode: .spokenAudio,
-            options: [.defaultToSpeaker, .allowBluetoothA2DP]
+            // IMPORTANT:
+            // - `.allowBluetoothHFP` enables Bluetooth HFP, which is what AirPods/headsets use for
+            //   input/output when using `.playAndRecord`.
+            // - Avoid `.defaultToSpeaker` so routing respects the active output (AirPods, etc).
+            //
+            // We also include `.allowBluetoothA2DP` so output can use higher-quality A2DP routes
+            // when available (input recording will still be constrained by the active input).
+            options: [.allowBluetoothHFP, .allowBluetoothA2DP]
         )
         try session.setActive(true)
     }
