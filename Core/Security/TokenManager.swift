@@ -117,6 +117,10 @@ actor SessionController: SessionControllerProtocol {
     }
 
     private func setState(_ newState: SessionState) {
+        // Only yield to the stream when state actually changes.
+        // This prevents infinite loops when token refresh responses
+        // repeatedly call loginSucceeded() while already authenticated.
+        guard newState != currentState else { return }
         currentState = newState
         stateContinuation.yield(newState)
     }

@@ -43,6 +43,17 @@ struct CompositionRootView: View {
                 await MainActor.run {
                     self.isAuthenticated = (state == .authenticated)
                 }
+
+                // Keep SessionManager's cached snapshot in sync with auth state.
+                // This prevents stale `me.activeProfile.profileId` from being reused
+                // after logging out and into a different account.
+                if state == .signedOut {
+                    await MainActor.run {
+                        coordinator.sessionManager.resetForSignOut()
+                    }
+                } else if state == .authenticated {
+                    await coordinator.sessionManager.handleAppBecameActive()
+                }
             }
         }
     }

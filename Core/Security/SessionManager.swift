@@ -55,6 +55,17 @@ final class SessionManager {
         }
     }
 
+    /// Clears any cached, user-scoped session state.
+    ///
+    /// This must be called when the user signs out to prevent stale `me`/profile
+    /// data from being reused after a subsequent login to a different account.
+    func resetForSignOut() {
+        snapshot = nil
+        featureAccessContext.accountEntitlements = AccountEntitlements(flags: [])
+        // Note: we intentionally do not clear `runtimeConfig` here; it is app-wide
+        // and will be refreshed on the next successful bootstrap anyway.
+    }
+
     // MARK: - Internal
 
     /// Re-runs the bootstrap pipeline after a mutation that affects account state
