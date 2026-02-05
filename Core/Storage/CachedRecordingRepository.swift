@@ -94,6 +94,16 @@ final class CachedRecordingRepository: RecordingRepository {
         return response
     }
     
+    func requestTranscription(profileCueRecordingId: Int64) async throws -> TranscriptionRequestResponse {
+        // No caching for transcription requests
+        let response = try await remote.requestTranscription(profileCueRecordingId: profileCueRecordingId)
+        
+        // Clear recording caches since report status will change
+        cache.clear()
+        
+        return response
+    }
+    
     // MARK: - Cache Invalidation
     
     /// Invalidate caches related to recordings

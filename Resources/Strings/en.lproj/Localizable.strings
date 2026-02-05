@@ -90,4 +90,14 @@
 "recording.no_recording_file" = "No recording file available";
 "recording.upload_failed_with_detail" = "Upload failed: %@";
 
+"report.title" = "Report";
+"report.status_none" = "No report";
+"report.status_processing" = "Processing";
+"report.status_ready" = "Ready";
+"report.no_report_message" = "No report available for this recording yet. Request one to get a transcript of your practice.";
+"report.request_button" = "Request Report";
+"report.processing_message" = "Generating your report...";
+"report.processing_hint" = "This may take a few moments. You can wait here or check back later.";
+"report.transcript_title" = "Transcript";
+"report.button_label" = "Report";
 

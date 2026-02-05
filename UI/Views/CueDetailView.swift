@@ -17,6 +17,7 @@ struct CueDetailView: View {
     @State private var pendingNavigationAction: (() -> Void)?
     @State private var isRecordingMode = false
     @State private var isSaving = false
+    @State private var selectedRecordingId: Int64?
     @SwiftUI.Environment(\.dismiss) private var dismiss
     
     // Init for existing cue without recordings (from subjects tab)
@@ -114,6 +115,29 @@ struct CueDetailView: View {
         .onReceive(NotificationCenter.default.publisher(for: .activeProfileDidChange)) { _ in
             viewModel.reloadForActiveProfileChange()
         }
+        .sheet(isPresented: Binding(
+            get: { selectedRecordingId != nil },
+            set: { if !$0 { selectedRecordingId = nil } }
+        )) {
+            if let recordingId = selectedRecordingId,
+               let index = viewModel.recordings.firstIndex(where: { $0.profileCueRecordingId == recordingId }) {
+                CueRecordingReportView(
+                    recording: Binding(
+                        get: { viewModel.recordings[index] },
+                        set: { _ in }
+                    ),
+                    cueTitle: content.title,
+                    onRequestReport: {
+                        await viewModel.requestTranscription(for: recordingId)
+                        // Immediately reload to get updated status
+                        await viewModel.loadRecordingsForCue(cueId: cueId)
+                    },
+                    onRefresh: {
+                        await viewModel.loadRecordingsForCue(cueId: cueId)
+                    }
+                )
+            }
+        }
     }
     
     // MARK: - View Components
@@ -152,6 +176,7 @@ struct CueDetailView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .textSelection(.enabled)
         .cardStyle()
     }
     
@@ -235,8 +260,47 @@ struct CueDetailView: View {
             if let url = getAudioURL(for: recording.fileId) {
                 AudioPlayerView(url: url, title: "")
             }
+            
+            // Full-width report button inside card
+            Button(action: {
+                selectedRecordingId = recording.profileCueRecordingId
+            }) {
+                HStack(spacing: Spacing.sm) {
+                    Image(systemName: reportIcon(for: recording))
+                    Text(reportButtonText(for: recording))
+                }
+                .font(Typography.body.weight(.medium))
+                .foregroundColor(reportButtonForegroundColor(for: recording))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, Spacing.md)
+                .background(reportButtonBackgroundColor(for: recording))
+                .cornerRadius(12)
+            }
         }
         .cardStyle(padding: Spacing.md)
+    }
+    
+    private func reportIcon(for recording: CueRecording) -> String {
+        switch recording.report.status {
+        case .none:
+            return "doc.text.magnifyingglass"
+        case .processing:
+            return "clock.fill"
+        case .ready:
+            return "doc.text.fill"
+        }
+    }
+    
+    private func reportButtonText(for recording: CueRecording) -> String {
+        return "View Report"
+    }
+    
+    private func reportButtonBackgroundColor(for recording: CueRecording) -> Color {
+        return AppColors.darkGreen
+    }
+    
+    private func reportButtonForegroundColor(for recording: CueRecording) -> Color {
+        return AppColors.textContrast
     }
     
     private var recordAnotherTakeButton: some View {
@@ -353,6 +417,9 @@ struct CueDetailView: View {
             
             // Clean up file
             try? FileManager.default.removeItem(at: fileURL)
+            
+            // Reload recordings to show the newly uploaded recording
+            await viewModel.loadRecordingsForCue(cueId: cueId)
             
             // Reset recorder to fresh state for next recording
             self.recorder = AudioRecorder()

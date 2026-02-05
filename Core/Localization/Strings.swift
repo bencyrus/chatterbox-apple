@@ -104,6 +104,18 @@ enum Strings {
         static let noRecordingFile = NSLocalizedString("recording.no_recording_file", comment: "Error message when no recording file is available")
         static let uploadFailedWithDetail = NSLocalizedString("recording.upload_failed_with_detail", comment: "Upload failed with specific error detail")
     }
+    enum Report {
+        static let title = NSLocalizedString("report.title", comment: "Report view title")
+        static let statusNone = NSLocalizedString("report.status_none", comment: "No report status")
+        static let statusProcessing = NSLocalizedString("report.status_processing", comment: "Processing status")
+        static let statusReady = NSLocalizedString("report.status_ready", comment: "Ready status")
+        static let noReportMessage = NSLocalizedString("report.no_report_message", comment: "No report available message")
+        static let requestButton = NSLocalizedString("report.request_button", comment: "Request report button")
+        static let processingMessage = NSLocalizedString("report.processing_message", comment: "Processing message")
+        static let processingHint = NSLocalizedString("report.processing_hint", comment: "Processing hint")
+        static let transcriptTitle = NSLocalizedString("report.transcript_title", comment: "Transcript section title")
+        static let buttonLabel = NSLocalizedString("report.button_label", comment: "Report button label")
+    }
 }
 
 

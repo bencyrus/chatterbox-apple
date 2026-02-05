@@ -51,6 +51,25 @@ final class HistoryViewModel {
         await loadRecordingHistory()
     }
     
+    func requestTranscription(for profileCueRecordingId: Int64) async {
+        do {
+            _ = try await recordingRepository.requestTranscription(profileCueRecordingId: profileCueRecordingId)
+            // Reload to get updated status
+            await loadRecordingHistory()
+        } catch {
+            showError(title: Strings.Errors.subjectsLoadTitle, message: Strings.Errors.subjectsLoadFailed)
+        }
+    }
+    
+    func findRecording(by profileCueRecordingId: Int64) -> Recording? {
+        for group in groupedRecordings {
+            if let recording = group.recordings.first(where: { $0.profileCueRecordingId == profileCueRecordingId }) {
+                return recording
+            }
+        }
+        return nil
+    }
+    
     private func groupRecordingsByDate(_ recordings: [Recording]) -> [GroupedRecordings] {
         let calendar = Calendar.current
         let formatter = ISO8601DateFormatter()

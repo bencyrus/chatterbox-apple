@@ -80,6 +80,7 @@ private struct CueCardView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             // Slightly taller than exactly 3 line-heights so three full lines fit comfortably
             .frame(height: 22 * 3.5, alignment: .topLeading)
+            .textSelection(.enabled)
             .cardStyle()
             .accessibilityIdentifier("subjects.cue.\(cue.content.cueContentId).title")
     }

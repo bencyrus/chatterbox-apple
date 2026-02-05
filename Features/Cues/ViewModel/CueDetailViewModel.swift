@@ -51,6 +51,14 @@ final class CueDetailViewModel {
         activeProfileHelper.clearCache()
     }
     
+    func requestTranscription(for profileCueRecordingId: Int64) async {
+        do {
+            _ = try await recordingRepository.requestTranscription(profileCueRecordingId: profileCueRecordingId)
+        } catch {
+            print("Failed to request transcription: \(error)")
+        }
+    }
+    
     /// Uploads a recording for a cue, associating it with the profile that matches the cue's language.
     /// - Parameters:
     ///   - cueId: The ID of the cue being recorded

@@ -42,6 +42,8 @@
 		82B37D892EE5904E007CD37D /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D852EE5904E007CD37D /* AudioPlayerView.swift */; };
 		82B37D8A2EE5904E007CD37D /* RecordingHistoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D872EE5904E007CD37D /* RecordingHistoryCardView.swift */; };
 		82B37D8C2EE59B2F007CD37D /* CueDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D8B2EE59B2F007CD37D /* CueDetailViewModel.swift */; };
+		82REPORT12FFF000000000001 /* CueRecordingReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82REPORT22FFF000000000001 /* CueRecordingReportView.swift */; };
+		82REPORT32FFF000000000001 /* RecordingReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82REPORT42FFF000000000001 /* RecordingReportView.swift */; };
 		82B37D902EE59BC7007CD37D /* RecordingControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D8F2EE59BC7007CD37D /* RecordingControlView.swift */; };
 		82CACHE012FFF000000000001 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE022FFF000000000001 /* CacheManager.swift */; };
 		82CACHE032FFF000000000001 /* CachedCueRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE042FFF000000000001 /* CachedCueRepository.swift */; };
@@ -107,6 +109,8 @@
 		82B37D862EE5904E007CD37D /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		82B37D872EE5904E007CD37D /* RecordingHistoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingHistoryCardView.swift; sourceTree = "<group>"; };
 		82B37D8B2EE59B2F007CD37D /* CueDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueDetailViewModel.swift; sourceTree = "<group>"; };
+		82REPORT22FFF000000000001 /* CueRecordingReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueRecordingReportView.swift; sourceTree = "<group>"; };
+		82REPORT42FFF000000000001 /* RecordingReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingReportView.swift; sourceTree = "<group>"; };
 		82B37D8F2EE59BC7007CD37D /* RecordingControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingControlView.swift; sourceTree = "<group>"; };
 		82CACHE022FFF000000000001 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		82CACHE042FFF000000000001 /* CachedCueRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedCueRepository.swift; sourceTree = "<group>"; };
@@ -321,6 +325,8 @@
 				82250BFC2EA34BF20023B10D /* RootTabView.swift */,
 				82250BFD2EA34BF20023B10D /* SettingsView.swift */,
 				82A001162EFF000000000002 /* CueDetailView.swift */,
+				82REPORT22FFF000000000001 /* CueRecordingReportView.swift */,
+				82REPORT42FFF000000000001 /* RecordingReportView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -550,6 +556,8 @@
 				82B37D882EE5904E007CD37D /* HistoryView.swift in Sources */,
 				82B37D892EE5904E007CD37D /* AudioPlayerView.swift in Sources */,
 				82B37D8A2EE5904E007CD37D /* RecordingHistoryCardView.swift in Sources */,
+				82REPORT12FFF000000000001 /* CueRecordingReportView.swift in Sources */,
+				82REPORT32FFF000000000001 /* RecordingReportView.swift in Sources */,
 				82FFF0202FFF000000000001 /* AppCoordinator.swift in Sources */,
 				82B37D902EE59BC7007CD37D /* RecordingControlView.swift in Sources */,
 				82FFF0212FFF000000000001 /* LocalizationProvider.swift in Sources */,

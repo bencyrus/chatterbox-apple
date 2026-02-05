@@ -8,6 +8,21 @@ struct RecordingHistoryResponse: Codable {
     let processedFiles: [ProcessedFile]?
 }
 
+// MARK: - Report Status
+
+enum ReportStatus: String, Codable {
+    case none
+    case processing
+    case ready
+}
+
+// MARK: - Recording Report
+
+struct RecordingReport: Codable, Equatable {
+    let status: ReportStatus
+    let transcript: String?
+}
+
 // MARK: - Recording
 
 struct Recording: Codable, Identifiable {
@@ -18,6 +33,7 @@ struct Recording: Codable, Identifiable {
     let createdAt: String
     let file: FileInfo
     let cue: RecordingCue
+    let report: RecordingReport
     
     var id: Int64 { profileCueRecordingId }
 }
@@ -166,6 +182,7 @@ struct CueRecording: Codable, Identifiable, Equatable {
     let fileId: Int64
     let createdAt: String
     let file: FileInfo
+    let report: RecordingReport
     
     var id: Int64 { profileCueRecordingId }
 }
@@ -184,6 +201,13 @@ struct CompleteRecordingUploadResponse: Codable, Equatable {
     let file: FileInfo
     let files: [Int64]
     let processedFiles: [ProcessedFile]
+}
+
+// MARK: - Request Transcription Response
+
+struct TranscriptionRequestResponse: Codable {
+    let status: String  // "started", "in_progress", "already_transcribed"
+    let recordingTranscriptionTaskId: Int64?
 }
 
 
