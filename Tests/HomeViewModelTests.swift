@@ -27,6 +27,11 @@ final class HomeViewModelTests: XCTestCase {
             )
             me = MeResponse(account: me.account, activeProfile: active)
         }
+        
+        func getOrCreateProfile(accountId: Int64, languageCode: String) async throws -> Int64 {
+            // Return a profile ID based on language code for testing
+            return 1
+        }
     }
 
     private final class FakeCueRepository: CueRepository {

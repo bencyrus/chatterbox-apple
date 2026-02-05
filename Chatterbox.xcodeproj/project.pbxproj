@@ -43,6 +43,13 @@
 		82B37D8A2EE5904E007CD37D /* RecordingHistoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D872EE5904E007CD37D /* RecordingHistoryCardView.swift */; };
 		82B37D8C2EE59B2F007CD37D /* CueDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D8B2EE59B2F007CD37D /* CueDetailViewModel.swift */; };
 		82B37D902EE59BC7007CD37D /* RecordingControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B37D8F2EE59BC7007CD37D /* RecordingControlView.swift */; };
+		82CACHE012FFF000000000001 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE022FFF000000000001 /* CacheManager.swift */; };
+		82CACHE032FFF000000000001 /* CachedCueRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE042FFF000000000001 /* CachedCueRepository.swift */; };
+		82CACHE052FFF000000000001 /* CachedRecordingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE062FFF000000000001 /* CachedRecordingRepository.swift */; };
+		82COMP012FFF000000000001 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP022FFF000000000001 /* Card.swift */; };
+		82COMP032FFF000000000001 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP042FFF000000000001 /* Badge.swift */; };
+		82COMP052FFF000000000001 /* EmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP062FFF000000000001 /* EmptyState.swift */; };
+		82COMP072FFF000000000001 /* FormTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP082FFF000000000001 /* FormTextField.swift */; };
 		82D5A0012F0E000000000001 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D5A0002F0E000000000001 /* DesignSystem.swift */; };
 		82FFF0012FFF000000000001 /* FeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0042FFF000000000001 /* FeatureFlag.swift */; };
 		82FFF0022FFF000000000001 /* RuntimeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0052FFF000000000001 /* RuntimeConfig.swift */; };
@@ -56,13 +63,6 @@
 		82FFF01F2FFF000000000001 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF00A2FFF000000000001 /* Endpoints.swift */; };
 		82FFF0202FFF000000000001 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF01A2FFF000000000001 /* AppCoordinator.swift */; };
 		82FFF0212FFF000000000001 /* LocalizationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF01B2FFF000000000001 /* LocalizationProvider.swift */; };
-		82COMP012FFF000000000001 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP022FFF000000000001 /* Card.swift */; };
-		82COMP032FFF000000000001 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP042FFF000000000001 /* Badge.swift */; };
-		82COMP052FFF000000000001 /* EmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP062FFF000000000001 /* EmptyState.swift */; };
-		82COMP072FFF000000000001 /* FormTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82COMP082FFF000000000001 /* FormTextField.swift */; };
-		82CACHE012FFF000000000001 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE022FFF000000000001 /* CacheManager.swift */; };
-		82CACHE032FFF000000000001 /* CachedCueRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE042FFF000000000001 /* CachedCueRepository.swift */; };
-		82CACHE052FFF000000000001 /* CachedRecordingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CACHE062FFF000000000001 /* CachedRecordingRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +108,13 @@
 		82B37D872EE5904E007CD37D /* RecordingHistoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingHistoryCardView.swift; sourceTree = "<group>"; };
 		82B37D8B2EE59B2F007CD37D /* CueDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueDetailViewModel.swift; sourceTree = "<group>"; };
 		82B37D8F2EE59BC7007CD37D /* RecordingControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingControlView.swift; sourceTree = "<group>"; };
+		82CACHE022FFF000000000001 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
+		82CACHE042FFF000000000001 /* CachedCueRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedCueRepository.swift; sourceTree = "<group>"; };
+		82CACHE062FFF000000000001 /* CachedRecordingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedRecordingRepository.swift; sourceTree = "<group>"; };
+		82COMP022FFF000000000001 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		82COMP042FFF000000000001 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
+		82COMP062FFF000000000001 /* EmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyState.swift; sourceTree = "<group>"; };
+		82COMP082FFF000000000001 /* FormTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextField.swift; sourceTree = "<group>"; };
 		82D5A0002F0E000000000001 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		82FFF0042FFF000000000001 /* FeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlag.swift; sourceTree = "<group>"; };
 		82FFF0052FFF000000000001 /* RuntimeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeConfig.swift; sourceTree = "<group>"; };
@@ -121,13 +128,6 @@
 		82FFF0192FFF000000000001 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		82FFF01A2FFF000000000001 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		82FFF01B2FFF000000000001 /* LocalizationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationProvider.swift; sourceTree = "<group>"; };
-		82COMP022FFF000000000001 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
-		82COMP042FFF000000000001 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
-		82COMP062FFF000000000001 /* EmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyState.swift; sourceTree = "<group>"; };
-		82COMP082FFF000000000001 /* FormTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextField.swift; sourceTree = "<group>"; };
-		82CACHE022FFF000000000001 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
-		82CACHE042FFF000000000001 /* CachedCueRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedCueRepository.swift; sourceTree = "<group>"; };
-		82CACHE062FFF000000000001 /* CachedRecordingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedRecordingRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -375,6 +375,17 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		82COMP092FFF000000000001 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				82COMP022FFF000000000001 /* Card.swift */,
+				82COMP042FFF000000000001 /* Badge.swift */,
+				82COMP062FFF000000000001 /* EmptyState.swift */,
+				82COMP082FFF000000000001 /* FormTextField.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		82FFF0092FFF000000000001 /* Observability */ = {
 			isa = PBXGroup;
 			children = (
@@ -420,17 +431,6 @@
 				82FFF0192FFF000000000001 /* Typography.swift */,
 			);
 			path = Theme;
-			sourceTree = "<group>";
-		};
-		82COMP092FFF000000000001 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				82COMP022FFF000000000001 /* Card.swift */,
-				82COMP042FFF000000000001 /* Badge.swift */,
-				82COMP062FFF000000000001 /* EmptyState.swift */,
-				82COMP082FFF000000000001 /* FormTextField.swift */,
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -731,7 +731,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.7;
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chatterboxtalk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -774,7 +774,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.7;
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chatterboxtalk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

@@ -119,27 +119,31 @@ final class SettingsViewModelTests: XCTestCase {
 
 class MockAccountRepository: AccountRepository {
     var shouldSucceed = true
-    var updateLocaleCalled = false
-    var lastUpdatedLocale: String?
+    var setActiveProfileCalled = false
+    var lastLanguageCode: String?
     
-    func fetchAccountDetails() async throws -> MeResponse {
+    func fetchMe() async throws -> MeResponse {
         throw NSError(domain: "test", code: -1)
     }
     
-    func fetchAppConfiguration() async throws -> AppConfigResponse {
+    func fetchAppConfig() async throws -> AppConfigResponse {
         throw NSError(domain: "test", code: -1)
     }
     
-    func updatePreferredLocale(localeCode: String) async throws {
-        updateLocaleCalled = true
-        lastUpdatedLocale = localeCode
+    func setActiveProfile(accountId: Int64, languageCode: String) async throws {
+        setActiveProfileCalled = true
+        lastLanguageCode = languageCode
         
         if !shouldSucceed {
             throw NSError(domain: "test", code: -1)
         }
     }
     
-    func requestAccountDeletion() async throws {
+    func getOrCreateProfile(accountId: Int64, languageCode: String) async throws -> Int64 {
+        return 1
+    }
+    
+    func requestAccountDeletion(accountId: Int64) async throws {
         // Not tested in these scenarios
     }
 }

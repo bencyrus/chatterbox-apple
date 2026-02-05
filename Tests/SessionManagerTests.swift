@@ -57,6 +57,15 @@ final class SessionManagerTests: XCTestCase {
         func setActiveProfile(accountId: Int64, languageCode: String) async throws {
             // Not used in bootstrap tests.
         }
+        
+        func getOrCreateProfile(accountId: Int64, languageCode: String) async throws -> Int64 {
+            // Not used in bootstrap tests.
+            return 1
+        }
+        
+        func requestAccountDeletion(accountId: Int64) async throws {
+            // Not used in bootstrap tests.
+        }
     }
 
     private final class MockConfigProvider: ConfigProviding {

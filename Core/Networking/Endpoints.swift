@@ -100,6 +100,29 @@ enum AccountEndpoints {
         let timeout: TimeInterval = 30
         let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
     }
+    
+    struct GetOrCreateProfile: APIEndpoint {
+        struct Body: Encodable {
+            let accountId: Int64
+            let languageCode: String
+        }
+        
+        struct Response: Decodable {
+            let profileId: Int64
+            let accountId: Int64
+            let languageCode: String
+            let createdAt: String
+        }
+
+        typealias RequestBody = Body
+        typealias ResponseBody = Response
+
+        let path: String = "/rpc/get_or_create_account_profile"
+        let method: HTTPMethod = .post
+        let requiresAuth: Bool = true
+        let timeout: TimeInterval = 30
+        let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
+    }
 }
 
 // MARK: - Cues

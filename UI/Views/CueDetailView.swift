@@ -111,6 +111,9 @@ struct CueDetailView: View {
                 _ = await recorder?.requestPermission()
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .activeProfileDidChange)) { _ in
+            viewModel.reloadForActiveProfileChange()
+        }
     }
     
     // MARK: - View Components
@@ -342,6 +345,7 @@ struct CueDetailView: View {
         do {
             try await viewModel.uploadRecording(
                 cueId: cueId,
+                languageCode: content.languageCode,
                 fileURL: fileURL,
                 cueName: content.title,
                 duration: duration

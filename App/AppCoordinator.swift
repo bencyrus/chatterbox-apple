@@ -125,7 +125,9 @@ final class AppCoordinator {
         )
         return CueDetailViewModel(
             recordingRepository: recordingRepo,
-            activeProfileHelper: activeProfileHelper
+            accountRepository: accountRepo,
+            activeProfileHelper: activeProfileHelper,
+            sessionManager: sessionManager
         )
     }
 }
