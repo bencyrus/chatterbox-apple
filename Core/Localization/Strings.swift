@@ -78,6 +78,10 @@ enum Strings {
     enum CueDetail {
         static let title = NSLocalizedString("cue_detail.title", comment: "Cue detail navigation title")
     }
+    enum CueHistory {
+        static let title = NSLocalizedString("cue_history.title", comment: "Cue recording history navigation title")
+        static let emptyState = NSLocalizedString("cue_history.empty_state", comment: "Empty state shown when cue has no recordings")
+    }
     enum History {
         static let title = NSLocalizedString("history.title", comment: "Recording History tab title")
         static let emptyState = NSLocalizedString("history.empty_state", comment: "No recordings yet message")
@@ -101,6 +105,13 @@ enum Strings {
         static let uploadError = NSLocalizedString("recording.upload_error", comment: "Upload error message")
         static let historySectionTitle = NSLocalizedString("recording.history_section_title", comment: "Title for recordings list in cue detail view")
         static let newRecordingButton = NSLocalizedString("recording.new_recording_button", comment: "Button label for starting a new recording from history")
+        static let viewAll = NSLocalizedString("recording.view_all", comment: "Button label to view all recordings for a cue")
+        static func recordingsCount(_ count: Int) -> String {
+            String(
+                format: NSLocalizedString("recording.recordings_count", comment: "Recordings count label"),
+                count
+            )
+        }
         static let noRecordingFile = NSLocalizedString("recording.no_recording_file", comment: "Error message when no recording file is available")
         static let uploadFailedWithDetail = NSLocalizedString("recording.upload_failed_with_detail", comment: "Upload failed with specific error detail")
     }

@@ -8,6 +8,8 @@ struct RootTabView: View {
     @State private var historyViewModel: HistoryViewModel
     @State private var settingsViewModel: SettingsViewModel
     @State private var cueDetailViewModel: CueDetailViewModel
+    let makeCueHistoryViewModel: () -> CueHistoryViewModel
+    let makeRecordingDetailViewModel: () -> RecordingDetailViewModel
     @State private var selectedTab: String = "subjects"
     @SwiftUI.Environment(FeatureAccessContext.self) private var featureAccessContext
 
@@ -15,12 +17,16 @@ struct RootTabView: View {
         homeViewModel: HomeViewModel,
         historyViewModel: HistoryViewModel,
         settingsViewModel: SettingsViewModel,
-        cueDetailViewModel: CueDetailViewModel
+        cueDetailViewModel: CueDetailViewModel,
+        makeCueHistoryViewModel: @escaping () -> CueHistoryViewModel,
+        makeRecordingDetailViewModel: @escaping () -> RecordingDetailViewModel
     ) {
         _homeViewModel = State(initialValue: homeViewModel)
         _historyViewModel = State(initialValue: historyViewModel)
         _settingsViewModel = State(initialValue: settingsViewModel)
         _cueDetailViewModel = State(initialValue: cueDetailViewModel)
+        self.makeCueHistoryViewModel = makeCueHistoryViewModel
+        self.makeRecordingDetailViewModel = makeRecordingDetailViewModel
         
         // Configure navigation bar appearance
         let appearance = UINavigationBarAppearance()
@@ -53,7 +59,12 @@ struct RootTabView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             NavigationStack {
-                HistoryView(viewModel: historyViewModel, cueDetailViewModel: cueDetailViewModel)
+                HistoryView(
+                    viewModel: historyViewModel,
+                    cueDetailViewModel: cueDetailViewModel,
+                    makeCueHistoryViewModel: makeCueHistoryViewModel,
+                    makeRecordingDetailViewModel: makeRecordingDetailViewModel
+                )
             }
             .tabItem {
                 Image(systemName: "waveform.circle")
@@ -62,7 +73,12 @@ struct RootTabView: View {
             .tag("history")
 
             NavigationStack {
-                HomeView(viewModel: homeViewModel, cueDetailViewModel: cueDetailViewModel)
+                HomeView(
+                    viewModel: homeViewModel,
+                    cueDetailViewModel: cueDetailViewModel,
+                    makeCueHistoryViewModel: makeCueHistoryViewModel,
+                    makeRecordingDetailViewModel: makeRecordingDetailViewModel
+                )
             }
             .tabItem {
                 Image(systemName: "rectangle.stack")

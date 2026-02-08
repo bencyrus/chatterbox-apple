@@ -3,10 +3,19 @@ import SwiftUI
 struct HistoryView: View {
     @State private var viewModel: HistoryViewModel
     let cueDetailViewModel: CueDetailViewModel
+    let makeCueHistoryViewModel: () -> CueHistoryViewModel
+    let makeRecordingDetailViewModel: () -> RecordingDetailViewModel
     
-    init(viewModel: HistoryViewModel, cueDetailViewModel: CueDetailViewModel) {
+    init(
+        viewModel: HistoryViewModel,
+        cueDetailViewModel: CueDetailViewModel,
+        makeCueHistoryViewModel: @escaping () -> CueHistoryViewModel,
+        makeRecordingDetailViewModel: @escaping () -> RecordingDetailViewModel
+    ) {
         _viewModel = State(initialValue: viewModel)
         self.cueDetailViewModel = cueDetailViewModel
+        self.makeCueHistoryViewModel = makeCueHistoryViewModel
+        self.makeRecordingDetailViewModel = makeRecordingDetailViewModel
     }
     
     var body: some View {
@@ -50,9 +59,13 @@ struct HistoryView: View {
                                     // Recordings for this date
                                     ForEach(group.recordings) { recording in
                                         NavigationLink {
-                                            CueDetailView(
-                                                cue: recording.cue,
-                                                viewModel: cueDetailViewModel
+                                            RecordingDetailView(
+                                                recording: recording,
+                                                processedFiles: viewModel.processedFiles,
+                                                viewModel: makeRecordingDetailViewModel(),
+                                                cueDetailViewModel: cueDetailViewModel,
+                                                makeCueHistoryViewModel: makeCueHistoryViewModel,
+                                                makeRecordingDetailViewModel: makeRecordingDetailViewModel
                                             )
                                         } label: {
                                             RecordingHistoryCardView(recording: recording)

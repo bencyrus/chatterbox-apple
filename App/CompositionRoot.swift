@@ -17,7 +17,9 @@ struct CompositionRootView: View {
                     homeViewModel: homeVM,
                     historyViewModel: historyVM,
                     settingsViewModel: settingsVM,
-                    cueDetailViewModel: cueDetailVM
+                    cueDetailViewModel: cueDetailVM,
+                    makeCueHistoryViewModel: coordinator.makeCueHistoryViewModel,
+                    makeRecordingDetailViewModel: coordinator.makeRecordingDetailViewModel
                 )
             } else {
                 let authViewModel = coordinator.makeAuthViewModel()

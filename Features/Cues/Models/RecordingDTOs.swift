@@ -96,7 +96,31 @@ struct FileMetadata: Codable, Equatable {
     
     var duration: TimeInterval? {
         guard let durationString = self["duration"] else { return nil }
-        return Double(durationString)
+        // Preferred format is numeric seconds (e.g. "8" or "8.5")
+        if let seconds = Double(durationString) {
+            return seconds
+        }
+
+        // Backwards/other-clients: allow "MM:SS" or "HH:MM:SS"
+        let parts = durationString.split(separator: ":").map { String($0) }
+        guard parts.count == 2 || parts.count == 3 else { return nil }
+
+        func parse(_ s: String) -> Double? { Double(s.trimmingCharacters(in: .whitespaces)) }
+
+        if parts.count == 2,
+           let minutes = parse(parts[0]),
+           let seconds = parse(parts[1]) {
+            return minutes * 60 + seconds
+        }
+
+        if parts.count == 3,
+           let hours = parse(parts[0]),
+           let minutes = parse(parts[1]),
+           let seconds = parse(parts[2]) {
+            return hours * 3600 + minutes * 60 + seconds
+        }
+
+        return nil
     }
     
     static func == (lhs: FileMetadata, rhs: FileMetadata) -> Bool {
@@ -145,7 +169,11 @@ struct AnyCodableValue: Codable {
     }
     
     var stringValue: String? {
-        value as? String
+        if let s = value as? String { return s }
+        if let i = value as? Int { return String(i) }
+        if let d = value as? Double { return String(d) }
+        if let b = value as? Bool { return String(b) }
+        return nil
     }
 }
 

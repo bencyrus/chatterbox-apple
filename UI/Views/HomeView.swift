@@ -3,10 +3,19 @@ import SwiftUI
 struct HomeView: View {
     @State private var viewModel: HomeViewModel
     let cueDetailViewModel: CueDetailViewModel
+    let makeCueHistoryViewModel: () -> CueHistoryViewModel
+    let makeRecordingDetailViewModel: () -> RecordingDetailViewModel
 
-    init(viewModel: HomeViewModel, cueDetailViewModel: CueDetailViewModel) {
+    init(
+        viewModel: HomeViewModel,
+        cueDetailViewModel: CueDetailViewModel,
+        makeCueHistoryViewModel: @escaping () -> CueHistoryViewModel,
+        makeRecordingDetailViewModel: @escaping () -> RecordingDetailViewModel
+    ) {
         _viewModel = State(initialValue: viewModel)
         self.cueDetailViewModel = cueDetailViewModel
+        self.makeCueHistoryViewModel = makeCueHistoryViewModel
+        self.makeRecordingDetailViewModel = makeRecordingDetailViewModel
     }
 
     var body: some View {
@@ -34,7 +43,12 @@ struct HomeView: View {
                         LazyVStack(spacing: 12) {
                             ForEach(Array(viewModel.cues.enumerated()), id: \.offset) { _, cue in
                                 NavigationLink {
-                                    CueDetailView(cue: cue, viewModel: cueDetailViewModel)
+                                    CueDetailView(
+                                        cue: cue,
+                                        viewModel: cueDetailViewModel,
+                                        historyViewModel: makeCueHistoryViewModel(),
+                                        makeRecordingDetailViewModel: makeRecordingDetailViewModel
+                                    )
                                 } label: {
                                     CueCardView(cue: cue)
                                 }

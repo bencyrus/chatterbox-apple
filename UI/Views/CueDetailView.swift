@@ -4,40 +4,34 @@ struct CueDetailView: View {
     // Display data
     let content: CueContent
     let cueId: Int64
-    let initiallyShowRecordingSection: Bool
-    
+
     // Dependencies
     @Bindable var viewModel: CueDetailViewModel
-    
+    @State private var historyViewModel: CueHistoryViewModel
+    let makeRecordingDetailViewModel: () -> RecordingDetailViewModel
+
     // Recording state
     @State private var recorder: AudioRecorder?
     @State private var recordingURL: URL?
     @State private var showRecordingSuccessMessage = false
     @State private var showNavigationConfirmation = false
     @State private var pendingNavigationAction: (() -> Void)?
-    @State private var isRecordingMode = false
     @State private var isSaving = false
-    @State private var selectedRecordingId: Int64?
+    @State private var showCueHistory = false
+
     @SwiftUI.Environment(\.dismiss) private var dismiss
-    
-    // Init for existing cue without recordings (from subjects tab)
-    init(cue: Cue, viewModel: CueDetailViewModel) {
+
+    init(
+        cue: Cue,
+        viewModel: CueDetailViewModel,
+        historyViewModel: CueHistoryViewModel,
+        makeRecordingDetailViewModel: @escaping () -> RecordingDetailViewModel
+    ) {
         self.content = cue.content
         self.cueId = cue.cueId
-        self.initiallyShowRecordingSection = true
         self.viewModel = viewModel
-    }
-    
-    // Init for cue with recordings (from history tab)
-    init(cue: RecordingCue, viewModel: CueDetailViewModel) {
-        self.content = cue.content
-        self.cueId = cue.cueId
-        self.initiallyShowRecordingSection = false
-        self.viewModel = viewModel
-    }
-    
-    private var showRecordingSection: Bool {
-        initiallyShowRecordingSection || isRecordingMode
+        _historyViewModel = State(initialValue: historyViewModel)
+        self.makeRecordingDetailViewModel = makeRecordingDetailViewModel
     }
     
     private var isRecordingActive: Bool {
@@ -48,29 +42,23 @@ struct CueDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.md) {
                 cueContentCard
-                
-                if showRecordingSection {
-                    recordingSection
-                        .padding(.top, Spacing.lg)
-                    
-                    if showRecordingSuccessMessage {
-                        HStack(spacing: Spacing.sm) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.white)
-                            Text(Strings.Recording.successMessage)
-                                .font(Typography.body.weight(.medium))
-                                .foregroundColor(.white)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(AppColors.darkGreen)
-                        .cornerRadius(12)
-                        .transition(.opacity.combined(with: .scale))
+
+                recordingSection
+                    .padding(.top, Spacing.lg)
+
+                if showRecordingSuccessMessage {
+                    HStack(spacing: Spacing.sm) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.white)
+                        Text(Strings.Recording.successMessage)
+                            .font(Typography.body.weight(.medium))
+                            .foregroundColor(.white)
                     }
-                }
-            
-                if !showRecordingSection {
-                    recordingsHistorySection
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(AppColors.darkGreen)
+                    .cornerRadius(12)
+                    .transition(.opacity.combined(with: .scale))
                 }
             }
             .padding()
@@ -78,9 +66,13 @@ struct CueDetailView: View {
         .background(AppColors.sand.ignoresSafeArea())
         .navigationTitle(Strings.CueDetail.title)
         .navigationBarTitleDisplayMode(.large)
-        .navigationBarBackButtonHidden(showRecordingSection && isRecordingActive)
+        .navigationBarBackButtonHidden(isRecordingActive)
         .toolbar {
-            if showRecordingSection && isRecordingActive {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                recordingsCountButton
+            }
+
+            if isRecordingActive {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { showNavigationConfirmation = true }) {
                         Image(systemName: "chevron.left")
@@ -103,40 +95,22 @@ struct CueDetailView: View {
             }
         }
         .task {
-            if !initiallyShowRecordingSection {
-                await viewModel.loadRecordingsForCue(cueId: cueId)
-            }
-            
-            if initiallyShowRecordingSection {
-                recorder = AudioRecorder()
-                _ = await recorder?.requestPermission()
-            }
+            recorder = AudioRecorder()
+            _ = await recorder?.requestPermission()
+            await historyViewModel.load(cueId: cueId)
         }
         .onReceive(NotificationCenter.default.publisher(for: .activeProfileDidChange)) { _ in
             viewModel.reloadForActiveProfileChange()
+            Task { await historyViewModel.load(cueId: cueId) }
         }
-        .sheet(isPresented: Binding(
-            get: { selectedRecordingId != nil },
-            set: { if !$0 { selectedRecordingId = nil } }
-        )) {
-            if let recordingId = selectedRecordingId,
-               let index = viewModel.recordings.firstIndex(where: { $0.profileCueRecordingId == recordingId }) {
-                CueRecordingReportView(
-                    recording: Binding(
-                        get: { viewModel.recordings[index] },
-                        set: { _ in }
-                    ),
-                    cueTitle: content.title,
-                    onRequestReport: {
-                        await viewModel.requestTranscription(for: recordingId)
-                        // Immediately reload to get updated status
-                        await viewModel.loadRecordingsForCue(cueId: cueId)
-                    },
-                    onRefresh: {
-                        await viewModel.loadRecordingsForCue(cueId: cueId)
-                    }
-                )
-            }
+        .navigationDestination(isPresented: $showCueHistory) {
+            CueHistoryView(
+                cueId: cueId,
+                content: content,
+                viewModel: historyViewModel,
+                cueDetailViewModel: viewModel,
+                makeRecordingDetailViewModel: makeRecordingDetailViewModel
+            )
         }
     }
     
@@ -200,197 +174,22 @@ struct CueDetailView: View {
         }
     }
     
-    @ViewBuilder
-    private var recordingsHistorySection: some View {
-        if viewModel.isLoadingRecordings {
-            ProgressView()
-                .frame(maxWidth: .infinity)
-                .padding()
-        } else if !viewModel.recordings.isEmpty {
-            recordingsHistoryContent
-        }
-    }
-    
-    private var recordingsHistoryContent: some View {
-        VStack(alignment: .leading, spacing: Spacing.md) {
-            HStack {
-                Spacer()
-                recordAnotherTakeButton
+    private var recordingsCountButton: some View {
+        Button {
+            showCueHistory = true
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "chart.bar")
+                Text(Strings.Recording.recordingsCount(historyViewModel.cue?.recordings?.count ?? 0))
+                    .font(.callout.weight(.semibold))
+                Text(Strings.Recording.viewAll)
+                    .font(.callout.weight(.medium))
             }
-            
-            Text(Strings.Recording.historySectionTitle)
-                .font(Typography.headingLarge)
-                .foregroundColor(AppColors.textPrimary)
-            
-            ForEach(groupedRecordings, id: \.date) { group in
-                recordingGroupView(group: group)
-            }
+            .foregroundColor(AppColors.textPrimary)
+            .padding(.horizontal, 8)
         }
-    }
-    
-    private func recordingGroupView(group: RecordingGroup) -> some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
-            HStack(spacing: Spacing.sm) {
-                Badge(
-                    text: formatGroupDate(group.date),
-                    icon: "calendar"
-                )
-                
-                Badge(
-                    text: "\(group.recordings.count)",
-                    backgroundColor: AppColors.green
-                )
-                
-                Spacer()
-            }
-            .padding(.bottom, Spacing.xs)
-            
-            ForEach(group.recordings, id: \.fileId) { recording in
-                recordingCardView(recording: recording)
-            }
-        }
-    }
-    
-    private func recordingCardView(recording: CueRecording) -> some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
-            Text(formatRecordingTime(recording.createdAt))
-                .font(Typography.caption)
-                .foregroundColor(AppColors.textTertiary)
-            
-            if let url = getAudioURL(for: recording.fileId) {
-                AudioPlayerView(url: url, title: "")
-            }
-            
-            // Full-width report button inside card
-            Button(action: {
-                selectedRecordingId = recording.profileCueRecordingId
-            }) {
-                HStack(spacing: Spacing.sm) {
-                    Image(systemName: reportIcon(for: recording))
-                    Text(reportButtonText(for: recording))
-                }
-                .font(Typography.body.weight(.medium))
-                .foregroundColor(reportButtonForegroundColor(for: recording))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.md)
-                .background(reportButtonBackgroundColor(for: recording))
-                .cornerRadius(12)
-            }
-        }
-        .cardStyle(padding: Spacing.md)
-    }
-    
-    private func reportIcon(for recording: CueRecording) -> String {
-        switch recording.report.status {
-        case .none:
-            return "doc.text.magnifyingglass"
-        case .processing:
-            return "clock.fill"
-        case .ready:
-            return "doc.text.fill"
-        }
-    }
-    
-    private func reportButtonText(for recording: CueRecording) -> String {
-        return "View Report"
-    }
-    
-    private func reportButtonBackgroundColor(for recording: CueRecording) -> Color {
-        return AppColors.darkGreen
-    }
-    
-    private func reportButtonForegroundColor(for recording: CueRecording) -> Color {
-        return AppColors.textContrast
-    }
-    
-    private var recordAnotherTakeButton: some View {
-        Button(action: {
-            isRecordingMode = true
-            Task {
-                recorder = AudioRecorder()
-                _ = await recorder?.requestPermission()
-            }
-        }) {
-            HStack(spacing: 6) {
-                Image(systemName: "mic.circle.fill")
-                Text(Strings.Recording.newRecordingButton)
-            }
-            .font(.callout.bold())
-            .foregroundColor(AppColors.textContrast)
-            .padding(.vertical, Spacing.md)
-            .padding(.horizontal, Spacing.xl)
-            .background(AppColors.darkGreen)
-            .cornerRadius(24)
-        }
-    }
-    
-    // MARK: - Computed Properties & Helper Methods
-    
-    struct RecordingGroup {
-        let date: Date
-        let recordings: [CueRecording]
-    }
-    
-    var groupedRecordings: [RecordingGroup] {
-        let calendar = Calendar.current
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        
-        let grouped = Dictionary(grouping: viewModel.recordings) { recording -> Date in
-            guard let date = formatter.date(from: recording.createdAt) else {
-                return Date()
-            }
-            return calendar.startOfDay(for: date)
-        }
-        
-        return grouped.map { date, recordings in
-            RecordingGroup(
-                date: date,
-                recordings: recordings.sorted { rec1, rec2 in
-                    guard let date1 = formatter.date(from: rec1.createdAt),
-                          let date2 = formatter.date(from: rec2.createdAt) else {
-                        return false
-                    }
-                    return date1 > date2
-                }
-            )
-        }.sorted { $0.date > $1.date }
-    }
-    
-    func getAudioURL(for fileId: Int64) -> URL? {
-        guard let processedFile = viewModel.processedFiles.first(where: { $0.fileId == fileId }) else {
-            return nil
-        }
-        return URL(string: processedFile.url)
-    }
-    
-    func formatGroupDate(_ date: Date) -> String {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let compareDate = calendar.startOfDay(for: date)
-        
-        if compareDate == today {
-            return Strings.Common.today
-        } else if compareDate == calendar.date(byAdding: .day, value: -1, to: today) {
-            return Strings.Common.yesterday
-        } else {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "d MMM yyyy"
-            return formatter.string(from: date)
-        }
-    }
-    
-    func formatRecordingTime(_ dateString: String) -> String {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        guard let date = formatter.date(from: dateString) else {
-            return dateString
-        }
-        
-        let displayFormatter = DateFormatter()
-        displayFormatter.timeStyle = .short
-        
-        return displayFormatter.string(from: date)
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("cueDetail.viewCueHistory")
     }
     
     // MARK: - Recording Actions
@@ -418,8 +217,8 @@ struct CueDetailView: View {
             // Clean up file
             try? FileManager.default.removeItem(at: fileURL)
             
-            // Reload recordings to show the newly uploaded recording
-            await viewModel.loadRecordingsForCue(cueId: cueId)
+            // Refresh count/history for this cue (for header + cue history page)
+            await historyViewModel.load(cueId: cueId)
             
             // Reset recorder to fresh state for next recording
             self.recorder = AudioRecorder()

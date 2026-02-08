@@ -55,6 +55,8 @@
 "common.yesterday" = "Yesterday";
 
 "cue_detail.title" = "Card";
+"cue_history.title" = "Recording History";
+"cue_history.empty_state" = "No recordings yet";
 
 "debug.network_log_title" = "Network debug";
 "debug.network_log_detail_title" = "Request details";
@@ -87,6 +89,8 @@
 "recording.upload_error" = "Failed to upload recording. Please try again.";
 "recording.history_section_title" = "Your recordings";
 "recording.new_recording_button" = "New recording";
+"recording.view_all" = "View →";
+"recording.recordings_count" = "Recordings: %d";
 "recording.no_recording_file" = "No recording file available";
 "recording.upload_failed_with_detail" = "Upload failed: %@";
 
