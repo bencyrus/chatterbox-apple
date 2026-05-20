@@ -9,6 +9,7 @@ protocol RecordingRepository {
     func uploadRecording(to url: URL, fileURL: URL) async throws
     func completeRecordingUpload(uploadIntentId: Int64, metadata: [String: String]?) async throws -> CompleteRecordingUploadResponse
     func requestTranscription(profileCueRecordingId: Int64) async throws -> TranscriptionRequestResponse
+    func requestEvaluation(profileCueRecordingId: Int64) async throws -> EvaluationRequestResponse
 }
 
 // MARK: - Postgrest Implementation
@@ -103,6 +104,14 @@ final class PostgrestRecordingRepository: RecordingRepository {
     func requestTranscription(profileCueRecordingId: Int64) async throws -> TranscriptionRequestResponse {
         let endpoint = RecordingEndpoints.RequestRecordingTranscription()
         let body = RecordingEndpoints.RequestRecordingTranscription.Body(
+            profileCueRecordingId: profileCueRecordingId
+        )
+        return try await client.send(endpoint, body: body)
+    }
+
+    func requestEvaluation(profileCueRecordingId: Int64) async throws -> EvaluationRequestResponse {
+        let endpoint = RecordingEndpoints.RequestRecordingEvaluation()
+        let body = RecordingEndpoints.RequestRecordingEvaluation.Body(
             profileCueRecordingId: profileCueRecordingId
         )
         return try await client.send(endpoint, body: body)

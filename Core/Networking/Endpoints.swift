@@ -242,6 +242,21 @@ enum RecordingEndpoints {
         let timeout: TimeInterval = 30
         let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
     }
+
+    struct RequestRecordingEvaluation: APIEndpoint {
+        struct Body: Encodable {
+            let profileCueRecordingId: Int64
+        }
+
+        typealias RequestBody = Body
+        typealias ResponseBody = EvaluationRequestResponse
+
+        let path: String = "/rpc/request_recording_evaluation"
+        let method: HTTPMethod = .post
+        let requiresAuth: Bool = true
+        let timeout: TimeInterval = 30
+        let idempotencyKeyStrategy: IdempotencyKeyStrategy = .none
+    }
 }
 
 

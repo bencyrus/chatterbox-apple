@@ -105,3 +105,14 @@
 "report.transcript_title" = "Transcript";
 "report.button_label" = "Report";
 
+"evaluation.title" = "Evaluation";
+"evaluation.request_button" = "Evaluate Performance";
+"evaluation.processing_message" = "Evaluating your performance...";
+"evaluation.processing_hint" = "Checking grammar, phrasing, and word choices";
+"evaluation.grammar_mistakes_title" = "Grammar Mistakes";
+"evaluation.unnatural_phrases_title" = "Unnatural Phrases";
+"evaluation.word_choices_title" = "Word Choices";
+"evaluation.improved_version_title" = "Improved Version";
+"evaluation.status_evaluated" = "Evaluated";
+"evaluation.status_evaluating" = "Evaluating";
+

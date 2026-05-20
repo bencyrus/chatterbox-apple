@@ -88,6 +88,9 @@ struct RecordingDetailView: View {
                     onRequestReport: {
                         await viewModel.requestTranscription(profileCueRecordingId: viewModel.recording!.profileCueRecordingId)
                     },
+                    onRequestEvaluation: {
+                        await viewModel.requestEvaluation(profileCueRecordingId: viewModel.recording!.profileCueRecordingId)
+                    },
                     onRefresh: {
                         await viewModel.refreshRecording()
                     }

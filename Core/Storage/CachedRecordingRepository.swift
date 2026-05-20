@@ -103,6 +103,14 @@ final class CachedRecordingRepository: RecordingRepository {
         
         return response
     }
+
+    func requestEvaluation(profileCueRecordingId: Int64) async throws -> EvaluationRequestResponse {
+        let response = try await remote.requestEvaluation(profileCueRecordingId: profileCueRecordingId)
+        
+        cache.clear()
+        
+        return response
+    }
     
     // MARK: - Cache Invalidation
     

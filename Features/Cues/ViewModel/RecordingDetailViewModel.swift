@@ -74,5 +74,13 @@ final class RecordingDetailViewModel {
         // Refresh so status updates from .none -> .processing, etc.
         await refreshRecording()
     }
+
+    func requestEvaluation(profileCueRecordingId: Int64) async {
+        do {
+            _ = try await recordingRepository.requestEvaluation(profileCueRecordingId: profileCueRecordingId)
+        } catch { }
+
+        await refreshRecording()
+    }
 }
 

@@ -127,6 +127,18 @@ enum Strings {
         static let transcriptTitle = NSLocalizedString("report.transcript_title", comment: "Transcript section title")
         static let buttonLabel = NSLocalizedString("report.button_label", comment: "Report button label")
     }
+    enum Evaluation {
+        static let title = NSLocalizedString("evaluation.title", comment: "Evaluation section title")
+        static let requestButton = NSLocalizedString("evaluation.request_button", comment: "Request evaluation button")
+        static let processingMessage = NSLocalizedString("evaluation.processing_message", comment: "Evaluation processing message")
+        static let processingHint = NSLocalizedString("evaluation.processing_hint", comment: "Evaluation processing hint")
+        static let grammarMistakesTitle = NSLocalizedString("evaluation.grammar_mistakes_title", comment: "Grammar mistakes section title")
+        static let unnaturalPhrasesTitle = NSLocalizedString("evaluation.unnatural_phrases_title", comment: "Unnatural phrases section title")
+        static let wordChoicesTitle = NSLocalizedString("evaluation.word_choices_title", comment: "Word choices section title")
+        static let improvedVersionTitle = NSLocalizedString("evaluation.improved_version_title", comment: "Improved version section title")
+        static let statusEvaluated = NSLocalizedString("evaluation.status_evaluated", comment: "Evaluated status badge")
+        static let statusEvaluating = NSLocalizedString("evaluation.status_evaluating", comment: "Evaluating status badge")
+    }
 }
 
 

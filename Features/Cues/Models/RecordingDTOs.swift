@@ -16,11 +16,56 @@ enum ReportStatus: String, Codable {
     case ready
 }
 
+// MARK: - Evaluation
+
+enum EvaluationStatus: String, Codable {
+    case none
+    case processing
+    case ready
+}
+
+struct GrammarMistake: Codable, Equatable {
+    let original: String
+    let correction: String
+    let explanation: String
+}
+
+struct UnnaturalPhrase: Codable, Equatable {
+    let phrase: String
+    let naturalReplacement: String
+    let explanation: String
+}
+
+struct UnnaturalWord: Codable, Equatable {
+    let word: String
+    let betterWord: String
+    let explanation: String
+}
+
+struct EvaluationResult: Codable, Equatable {
+    let cefrLevel: String
+    let summary: String
+    let strengths: [String]
+    let improvementAreas: [String]
+    let recommendedNextSteps: [String]
+    let grammarMistakes: [GrammarMistake]
+    let unnaturalPhrases: [UnnaturalPhrase]
+    let unnaturalWords: [UnnaturalWord]
+    let improvedVersion: String
+    let createdAt: String?
+}
+
+struct RecordingEvaluation: Codable, Equatable {
+    let status: EvaluationStatus
+    let result: EvaluationResult?
+}
+
 // MARK: - Recording Report
 
 struct RecordingReport: Codable, Equatable {
     let status: ReportStatus
     let transcript: String?
+    let evaluation: RecordingEvaluation?
 }
 
 // MARK: - Recording
@@ -236,6 +281,13 @@ struct CompleteRecordingUploadResponse: Codable, Equatable {
 struct TranscriptionRequestResponse: Codable {
     let status: String  // "started", "in_progress", "already_transcribed"
     let recordingTranscriptionTaskId: Int64?
+}
+
+// MARK: - Request Evaluation Response
+
+struct EvaluationRequestResponse: Codable {
+    let status: String  // "started", "in_progress", "already_evaluated", "transcript_not_ready"
+    let recordingEvaluationTaskId: Int64?
 }
 
 
